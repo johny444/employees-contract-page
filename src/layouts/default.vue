@@ -4,10 +4,10 @@
       <router-view />
     </v-main>
 
-    <AppFooter />
+    <!-- <AppFooter /> -->
   </v-app>
 </template>
 
 <script setup>
-  //
+//
 </script>

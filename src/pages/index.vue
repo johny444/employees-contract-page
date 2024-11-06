@@ -66,7 +66,6 @@ import axios from "axios";
 // });
 // const nuxtApp = useNuxtApp();
 const storeUser = useUserStore();
-const route = useRoute();
 const myForm = ref(null);
 const router = useRouter();
 const txtUseremail = ref("teacher2@gmail.com");
@@ -95,8 +94,7 @@ const onSubmit = async () => {
     switch (storeUser.getuserList.user[0].role) {
       case "teacher":
         localStorage.setItem("token", respone.data.token);
-
-        navigateTo(`/dashboard`);
+        router.push("/dashboard");
         break;
       case "student":
         localStorage.setItem("token", respone.data.token);
