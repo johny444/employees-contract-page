@@ -41,14 +41,16 @@ import { routes } from "vue-router/auto-routes"; // Auto-generated routes
 
 // Manually add `meta` to each route
 const routesWithMeta = routes.map((route) => {
-  // Check if this is the dashboard route, or its children
-  if (route.path === "/dashboard" || route.name === "/dashboard/") {
-    route.meta = { requiresAuth: true }; // Add requiresAuth for protected routes
+  // Check if the route is NOT the login route ("/")
+  // console.log("route", route);
+  if (route.path !== "/") {
+    route.meta = { requiresAuth: true }; // Set requiresAuth for all routes except login
   }
+
   // Check for child routes and apply meta to them as well
   if (route.children && route.children.length) {
     route.children.forEach((childRoute) => {
-      if (childRoute.path === "") {
+      if (childRoute.path !== "/") {
         childRoute.meta = { requiresAuth: true };
       }
     });

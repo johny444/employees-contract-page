@@ -1,7 +1,6 @@
 <template>
   <div>
-    <h1>dashboard</h1>
-    <!-- <v-row>
+    <v-row>
       <v-col>
         <h1>DashBoard</h1>
       </v-col>
@@ -31,7 +30,7 @@
           </v-row>
         </v-container>
       </v-sheet>
-    </v-row> -->
+    </v-row>
   </div>
 </template>
 

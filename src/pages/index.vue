@@ -61,10 +61,9 @@
 <script setup>
 import { useUserStore } from "@/stores/user";
 import axios from "axios";
-// definePageMeta({
-//   middleware: "already-auth",
-// });
-// const nuxtApp = useNuxtApp();
+import { useI18n } from "vue-i18n";
+
+const { locale } = useI18n();
 const storeUser = useUserStore();
 const myForm = ref(null);
 const router = useRouter();
@@ -73,7 +72,9 @@ const txtPassword = ref("12345");
 
 const showPw = ref(false);
 const userlist = ref([]);
-
+onMounted(() => {
+  locale.value = localStorage.getItem("i18n");
+});
 const onSubmit = async () => {
   // console.log("Count");
   const respone = await axios
@@ -124,7 +125,7 @@ const onSubmit = async () => {
   /* background: linear-gradient(145deg, rgb(74, 94, 137) 15%, #b61924 70%); */
   /* background: linear-gradient(145deg, #35a2ff 0%, #014a88 100%) */
   background: radial-gradient(circle, #35a2ff 0%, #28c2e5 100%);
-  background-image: url(~/assets/images/background.jpg);
+  background-image: url(@/assets/images/background.jpg);
 }
 .loginCard {
   position: absolute;

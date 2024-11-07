@@ -8,6 +8,6 @@ const locale = localStorage.getItem("lang") || "en"; // Default to 'en' if not s
 // Create the i18n instance
 export const i18n = createI18n({
   locale, // Set the initial language from localStorage or fallback
-  fallbackLocale: "la", // Fallback language
+  fallbackLocale: "en", // Fallback language
   messages, // Your translations
 });

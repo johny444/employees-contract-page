@@ -34,18 +34,18 @@ import { useUserStore } from "@/stores/user";
 import { useClassStore } from "@/stores/class";
 export default {
   setup() {
-    const storeUser = useUserStore();
+    // const storeUser = useUserStore();
     const router = useRouter();
-    const nuxtApp = useNuxtApp();
+    // const nuxtApp = useNuxtApp();
     const user = ref("");
 
     onMounted(async () => {
-      try {
-        await storeUser.acGetuserList(localStorage.getItem("token"));
-      } catch (error) {
-        nuxtApp.$openDialog("E", error);
-      }
-      user.value = storeUser.getuserList.user[0];
+      // try {
+      //   await storeUser.acGetuserList(localStorage.getItem("token"));
+      // } catch (error) {
+      //   // nuxtApp.$openDialog("E", error);
+      // }
+      // user.value = storeUser.getuserList.user[0];
     });
     const logout = () => {
       // localStorage.removeItem("user");
@@ -60,7 +60,7 @@ export default {
       //   console.log("Error:", error);
       // }
       // nuxtApp.$router.push("/exam");
-      navigateTo("/");
+      router.push("/");
     };
     return { logout, user };
   },
