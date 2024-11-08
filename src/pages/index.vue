@@ -73,7 +73,7 @@ const txtPassword = ref("12345");
 const showPw = ref(false);
 const userlist = ref([]);
 onMounted(() => {
-  locale.value = localStorage.getItem("i18n");
+  // locale.value = localStorage.getItem("i18n");
 });
 const onSubmit = async () => {
   // console.log("Count");

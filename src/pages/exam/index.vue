@@ -1,10 +1,10 @@
 <template>
   <teacherlayout>
-    <Class />
+    <Exam />
   </teacherlayout>
 </template>
-<script setup>
+  <script setup>
 import teacherlayout from "@/layouts/teacherlayout.vue";
 </script>
-<style>
+  <style>
 </style>

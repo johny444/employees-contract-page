@@ -33,7 +33,9 @@
 </template>
   
 <script setup >
-// const store = useUserStore();
+import { useLoadingStore } from "@/stores/loadingStore";
+const loadingStore = useLoadingStore();
+
 const drawer = ref(null);
 const route = useRoute();
 const logined = ref();
@@ -44,10 +46,12 @@ const links = [
   ["fa-solid fa-gear", "result", "/result"],
 ];
 
-// onMounted(() => {
-//   logined.value = store.getLoginState;
-//   console.log("store test", logined.value);
-// });
+onMounted(() => {
+  // loadingStore.openLoading();
+  // loadingStore.open = true;
+  console.log("loading", loadingStore.open);
+  // loadingStore.closeLoading();
+});
 const onClick = () => {
   console.log("route.params", route.params);
 };

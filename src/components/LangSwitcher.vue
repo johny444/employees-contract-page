@@ -43,7 +43,7 @@ export default {
 
     onMounted(() => {
       // lang.value = localStorage.getItem("i18n");
-      locale.value = localStorage.getItem("i18n");
+      locale.value = localStorage.getItem("i18n") || "en";
     });
 
     const onSetLanguage = (v) => {

@@ -40,6 +40,7 @@ export default {
     const user = ref("");
 
     onMounted(async () => {
+      console.log("profile mount");
       // try {
       //   await storeUser.acGetuserList(localStorage.getItem("token"));
       // } catch (error) {

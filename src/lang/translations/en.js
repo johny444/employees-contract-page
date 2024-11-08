@@ -77,4 +77,5 @@ export default {
     "You're not allowed to Moved out from Exam page. Your chance remain {chance} time",
   Teacher: "Teacher",
   Student: "Student",
+  Dashboard: "Dashboard",
 };

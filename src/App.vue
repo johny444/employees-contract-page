@@ -1,4 +1,5 @@
 <template>
+  <loading />
   <v-app>
     <v-main>
       <router-view />
@@ -9,3 +10,5 @@
 <script setup>
 //
 </script>
+<style>
+</style>
