@@ -1,7 +1,7 @@
 <template>
-  <teacherlayout>
+  <div>
     <Exam />
-  </teacherlayout>
+  </div>
 </template>
   <script setup>
 import teacherlayout from "@/layouts/teacherlayout.vue";

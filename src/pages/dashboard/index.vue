@@ -1,7 +1,7 @@
 <template>
-  <teacherlayout>
+  <div>
     <dashboard />
-  </teacherlayout>
+  </div>
 </template>
 
 <script  setup>

@@ -139,7 +139,7 @@ export default {
           tableData.value.push(newArray[i]);
         }
       }
-      console.log("ExamlistRS:", storeResult.ExamlistRS);
+      // console.log("ExamlistRS:", storeResult.ExamlistRS);
     };
     // const getExam = async () => {
     //   await storeclass.CRUDCLASSEXAM({ ACTION: "GETAll" });

@@ -10,7 +10,6 @@
       <v-card class="loginCard rounded-lg" align="center">
         <v-card-text>
           <div class="mt-4" style="text-align: center">
-            <!-- <img src="@/assets/images/LaoVietBank.png" :width="200" /><br /> -->
             <h1 class="text-secondary" style="font-size: 2.5rem">
               {{ $t("examinationSystem") }}
             </h1>
@@ -20,11 +19,6 @@
             <img src="@/assets/images/examLogo.png" :width="300" />
           </div>
           <div class="ml-4" style="min-width: 40%">
-            <!-- <div class="text-secondary text-center">
-              <div class="ma-6 text-h5">
-                <span> Project name</span>
-              </div>
-            </div> -->
             <v-form @submit.prevent="onSubmit">
               <v-text-field
                 v-model="txtUseremail"
@@ -46,9 +40,6 @@
                   prepend-icon="fas fa-right-to-bracket"
                   >{{ $t("login") }}
                 </v-btn>
-                <!-- <Cbtn prependIOcon="fas fa-right-to-bracket">
-                  <template v-slot:lable>{{ $t("login") }} </template>
-                </Cbtn> -->
               </v-row>
             </v-form>
           </div>
@@ -120,10 +111,7 @@ const onSubmit = async () => {
   padding: 0px;
   overflow: hidden;
 }
-
 .normal_gradient {
-  /* background: linear-gradient(145deg, rgb(74, 94, 137) 15%, #b61924 70%); */
-  /* background: linear-gradient(145deg, #35a2ff 0%, #014a88 100%) */
   background: radial-gradient(circle, #35a2ff 0%, #28c2e5 100%);
   background-image: url(@/assets/images/background.jpg);
 }
@@ -134,3 +122,5 @@ const onSubmit = async () => {
   box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
 }
 </style>
+
+

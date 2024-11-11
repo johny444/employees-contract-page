@@ -38,30 +38,47 @@
 import { createRouter, createWebHistory } from "vue-router/auto";
 import { setupLayouts } from "virtual:generated-layouts";
 import { routes } from "vue-router/auto-routes"; // Auto-generated routes
+import Teacherlayout from "@/layouts/teacherlayout.vue";
 
 // Manually add `meta` to each route
 const routesWithMeta = routes.map((route) => {
   // Check if the route is NOT the login route ("/")
-  // console.log("route", route);
   if (route.path !== "/") {
-    route.meta = { requiresAuth: true }; // Set requiresAuth for all routes except login
+    route.meta = {
+      ...(route.meta || {}),
+      requiresAuth: true,
+      layout: Teacherlayout, // Add LayoutA as default layout for authenticated routes
+    };
   }
 
   // Check for child routes and apply meta to them as well
   if (route.children && route.children.length) {
-    route.children.forEach((childRoute) => {
+    route.children = route.children.map((childRoute) => {
       if (childRoute.path !== "/") {
-        childRoute.meta = { requiresAuth: true };
+        childRoute.meta = {
+          ...(childRoute.meta || {}),
+          requiresAuth: true,
+          layout: Teacherlayout, // Set layout for child routes as well
+        };
       }
+      return childRoute;
     });
   }
 
   return route;
 });
-
+// console.log("route", routesWithMeta);
+const routesWithCatchAll = [
+  ...setupLayouts(routesWithMeta),
+  {
+    path: "/:catchAll(.*)", // Catch-all path for undefined routes
+    name: "NotFound",
+    component: () => import("@/pages/404.vue"), // Lazy-load the 404 page component
+  },
+];
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: setupLayouts(routesWithMeta), // Pass the modified routes
+  routes: setupLayouts(routesWithCatchAll), // Pass the modified routes
 });
 
 // Global navigation guard to check for authentication

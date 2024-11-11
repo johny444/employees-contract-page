@@ -127,9 +127,9 @@ export default {
       nuxtApp.$openLoading();
       await store.StudentFILER(currentRoute.value.params.student);
       nuxtApp.$closeLoading();
-      console.log("store:", store.studentfilter);
+      // console.log("store:", store.studentfilter);
       newArray.value = store.studentfilter;
-      console.log("newArray", newArray.value.length);
+      // console.log("newArray", newArray.value.length);
       tableData.value = [];
       for (var i = 0; i < perPage.value; i++) {
         if (i < newArray.value.length) {
