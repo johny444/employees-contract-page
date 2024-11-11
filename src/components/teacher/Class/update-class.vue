@@ -74,7 +74,6 @@ export default {
   emit: ["updateclass"],
   setup(props, { emit }) {
     const store = useClassStore();
-    const { getTime } = useGetDate();
     // const nuxtApp = useNuxtApp();
     const dialog = ref(false);
     const subjectbinding = ref("");
@@ -105,31 +104,31 @@ export default {
 
     const onSubmit = async () => {
       console.log("getTime()", getTime());
-      let body = {
-        id: props.data.id,
-        subjectExam: subjectbinding.value,
-        classExam: classbinding.value,
-        status: props.data.status,
-        time: getTime(),
-        teacherID: props.data.teacherID,
-        ACTION: "UPDATE",
-      };
-      console.log("body", body);
-      // ------------------------------------
-      nuxtApp.$openLoading();
-      var result = await store.CRUDCLASSEXAM(body);
-      if (result.status == "200") {
-        console.log("result", result);
-        nuxtApp
-          .$openAlert("S", nuxtApp.$t("updateDataSuccess"))
-          .then(async (r) => {
-            nuxtApp.$closeLoading();
-            emit("updateclass", "updated");
-          });
-      } else {
-        nuxtApp.$closeLoading();
-        nuxtApp.$openAlert("E", result.status);
-      }
+      // let body = {
+      //   id: props.data.id,
+      //   subjectExam: subjectbinding.value,
+      //   classExam: classbinding.value,
+      //   status: props.data.status,
+      //   time: getTime(),
+      //   teacherID: props.data.teacherID,
+      //   ACTION: "UPDATE",
+      // };
+      // console.log("body", body);
+      // // ------------------------------------
+      // nuxtApp.$openLoading();
+      // var result = await store.CRUDCLASSEXAM(body);
+      // if (result.status == "200") {
+      //   console.log("result", result);
+      //   nuxtApp
+      //     .$openAlert("S", nuxtApp.$t("updateDataSuccess"))
+      //     .then(async (r) => {
+      //       nuxtApp.$closeLoading();
+      //       emit("updateclass", "updated");
+      //     });
+      // } else {
+      //   nuxtApp.$closeLoading();
+      //   nuxtApp.$openAlert("E", result.status);
+      // }
     };
     return {
       WarningTxT,

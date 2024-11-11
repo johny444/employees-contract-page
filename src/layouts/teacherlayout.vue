@@ -49,7 +49,7 @@ const links = [
 onMounted(() => {
   // loadingStore.openLoading();
   // loadingStore.open = true;
-  console.log("teacherlayout.................");
+  console.log("layout");
   // loadingStore.closeLoading();
 });
 const onClick = () => {

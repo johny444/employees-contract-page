@@ -47,9 +47,9 @@
               </td>
               <td width="5%">
                 <v-row justify="center" style="margin: 1rem">
-                  <ClassUpdateClass :data="item" @updateclass="receiveCUD" />
+                  <update-class :data="item" @updateclass="receiveCUD" />
                   <v-spacer></v-spacer>
-                  <ClassDelClass :item="item.id" @Delclass="receiveCUD" />
+                  <del-class :item="item.id" @Delclass="receiveCUD" />
                 </v-row>
               </td>
             </tr>

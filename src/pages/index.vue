@@ -53,7 +53,8 @@
 import { useUserStore } from "@/stores/user";
 import axios from "axios";
 import { useI18n } from "vue-i18n";
-
+import { useLoadingStore } from "@/stores/loadingStore";
+const loadingStore = useLoadingStore();
 const { locale } = useI18n();
 const storeUser = useUserStore();
 const myForm = ref(null);

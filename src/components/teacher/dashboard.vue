@@ -35,9 +35,18 @@
 </template>
 
 <script setup>
+import { getCurrentInstance, onMounted } from "vue";
+
 onMounted(() => {
-  console.log("dashboard helllo");
+  const instance = getCurrentInstance();
+  console.log("instance", instance.proxy);
+  if (instance) {
+    // Accessing the mixin method from the instance
+    const time = instance.proxy.getTime();
+    console.log("dashboard hello", time); // This should print the current time
+  }
 });
+
 const list = [
   ["cyan-accent-4", "Student", "50", "fa-regular fa-user"],
   ["pink-accent-3", "Teacher", "2", "fa-solid fa-user-tie"],
