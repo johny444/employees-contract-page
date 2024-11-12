@@ -15,34 +15,38 @@
 </template>
 
 <script>
-import { useClassStore } from "@/stores/class";
+import { useClassStore } from "@/stores/class"; // Import Pinia store
+
 export default {
   props: ["item"],
-  emit: ["Delclass"],
-  setup(props, { emit }) {
-    const store = useClassStore();
-    // const nuxtApp = useNuxtApp();
-    const onDel = async () => {
-      nuxtApp
-        .$openAlert("Q", nuxtApp.$t("areYouSureToDelete"))
+  emits: ["Delclass"],
+  data() {
+    return {
+      store: useClassStore(), // Access the store
+    };
+  },
+  methods: {
+    async onDel() {
+      this.$openAlert("Q", this.$t("areYouSureToDelete")) // Open confirmation alert
         .then(async (res) => {
-          nuxtApp.$openLoading();
-          let result = await store.CRUDCLASSEXAM({
-            id: props.item,
-            ACTION: "DELETE",
+          this.$openLoading(); // Open loading indicator
+
+          let result = await this.store.CRUDCLASSEXAM({
+            id: this.item, // Pass the item ID
+            ACTION: "DELETE", // Delete action
           });
+
           if (result.status == "200") {
             console.log("Emit");
-            nuxtApp
-              .$openAlert("S", nuxtApp.$t("deleteDataSuccess"))
+            this.$openAlert("S", this.$t("deleteDataSuccess")) // Success alert
               .then(async (r) => {
-                emit("Delclass", "Deled");
+                this.$emit("Delclass", "Deled"); // Emit event
                 console.log("Delclass success");
-                nuxtApp.$closeLoading();
+                this.$closeLoading(); // Close loading
               });
           } else {
-            nuxtApp.$closeLoading();
-            nuxtApp.$openAlert("E", result.message);
+            this.$closeLoading(); // Close loading if error
+            this.$openAlert("E", result.message); // Error alert
           }
         })
         .catch((err) => {
@@ -60,11 +64,13 @@ export default {
       //   nuxtApp.$closeLoading();
       //   nuxtApp.$openAlert("E", result.message);
       // }
-    };
-    const receiveDel = () => {};
-    return { onDel, receiveDel, props };
+    },
+    receiveDel() {
+      // Logic for receiveDel can go here if needed
+    },
   },
 };
 </script>
+
 
 <style lang="scss" scoped></style>

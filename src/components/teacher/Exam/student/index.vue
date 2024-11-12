@@ -112,102 +112,95 @@
 <script>
 import { useStudentStore } from "@/stores/student";
 export default {
-  setup() {
-    // const nuxtApp = useNuxtApp();
-    const store = useStudentStore();
-    const tableData = ref([]);
-    const selected = ref([]);
-    const allChecked = ref(false);
-    const perPage = ref(10);
-    const router = useRouter();
-    const currentRoute = router.currentRoute;
-    console.log("currentRoute.path", currentRoute.value.params.student);
-    const newArray = ref([]);
-    const ClassExam = async () => {
-      nuxtApp.$openLoading();
-      await store.StudentFILER(currentRoute.value.params.student);
-      nuxtApp.$closeLoading();
-      // console.log("store:", store.studentfilter);
-      newArray.value = store.studentfilter;
-      // console.log("newArray", newArray.value.length);
-      tableData.value = [];
-      for (var i = 0; i < perPage.value; i++) {
-        if (i < newArray.value.length) {
-          tableData.value.push(newArray.value[i]);
+  data() {
+    return {
+      tableData: [],
+      selected: [],
+      allChecked: false,
+      perPage: 10,
+      newArray: [],
+      items: Array.from({ length: 50 }, (k, v) => v + 1),
+      store: useStudentStore(),
+    };
+  },
+  computed: {
+    currentRoute() {
+      return this.$router.currentRoute;
+    },
+  },
+  methods: {
+    async ClassExam() {
+      this.$nuxt.$openLoading();
+      await this.store.StudentFILER(this.currentRoute.value.params.student);
+      this.$nuxt.$closeLoading();
+      this.newArray = this.store.studentfilter;
+      this.tableData = [];
+      for (let i = 0; i < this.perPage; i++) {
+        if (i < this.newArray.length) {
+          this.tableData.push(this.newArray[i]);
         }
       }
-    };
-    onMounted(async () => {
-      ClassExam();
-    });
-    const receiveCUD = async (v) => {
+    },
+    async receiveCUD(v) {
       console.log("CRUD", v);
-      ClassExam();
-      selected.value = [];
-      allChecked.value = false;
-    };
-    const onTableSearch = () => {
-      var newArray = [];
-      if (searchText.value != "") {
+      await this.ClassExam();
+      this.selected = [];
+      this.allChecked = false;
+    },
+    onTableSearch() {
+      let newArray = [];
+      if (this.searchText !== "") {
         try {
-          var lowSearch = searchText.value.toLowerCase();
-          newArray = store.getstudentList.filter((wine) =>
-            Object.values(wine).some((val) =>
+          let lowSearch = this.searchText.toLowerCase();
+          newArray = this.store.getstudentList.filter((student) =>
+            Object.values(student).some((val) =>
               String(val).toLowerCase().includes(lowSearch)
             )
           );
-        } catch {}
+        } catch (e) {
+          console.log("Error during search", e);
+        }
       } else {
-        newArray = store.getstudentList;
+        newArray = this.store.getstudentList;
       }
-      tableData.value = [];
-      for (var i = 0; i < perPage.value; i++) {
+      this.tableData = [];
+      for (let i = 0; i < this.perPage; i++) {
         if (i < newArray.length) {
-          tableData.value.push(newArray[i]);
+          this.tableData.push(newArray[i]);
         }
       }
-    };
-    const onPageChange = (v) => {
-      var a = v.currenPage * v.perPage - v.perPage;
-      tableData.value = [];
+    },
+    onPageChange(v) {
+      const start = v.currentPage * v.perPage - v.perPage;
+      this.tableData = [];
       try {
-        for (var i = a; i < a + v.perPage; i++) {
-          if (i < newArray.value.length) {
-            tableData.value.push(newArray.value[i]);
+        for (let i = start; i < start + v.perPage; i++) {
+          if (i < this.newArray.length) {
+            this.tableData.push(this.newArray[i]);
           }
         }
       } catch (e) {
-        i = a + v.perPage;
+        console.log("Pagination error", e);
       }
-    };
-    watch(allChecked, (currentValue, oldValue) => {
+    },
+  },
+  watch: {
+    allChecked(currentValue, oldValue) {
       if (currentValue) {
-        tableData.value.map((v) => {
-          if (selected.value.indexOf(v.id) === -1) {
-            selected.value.push(v.id);
+        this.tableData.forEach((v) => {
+          if (!this.selected.includes(v.id)) {
+            this.selected.push(v.id);
           }
         });
       } else {
-        selected.value = [];
+        this.selected = [];
       }
-      console.log("length ", selected.value.length);
-    });
-
-    return {
-      tableData,
-      store,
-      perPage,
-      newArray,
-      currentRoute,
-      selected,
-      allChecked,
-      onPageChange,
-      receiveCUD,
-    };
+      console.log("length ", this.selected.length);
+    },
   },
-  data: () => ({
-    items: Array.from({ length: 50 }, (k, v) => v + 1),
-  }),
+  mounted() {
+    this.ClassExam();
+  },
 };
 </script>
 

@@ -6,7 +6,7 @@
       >
       <v-spacer></v-spacer>
       <v-col style="text-align: end">
-        <ExamAddExam
+        <add-exam
           @addExam="receiveCUD"
           :data="{
             classExam: storeclass.examclassfilter,
@@ -39,7 +39,7 @@
               </td>
               <td width="12%">
                 <v-row justify="center" style="margin: 1rem">
-                  <ExamUpdateExam
+                  <update-exam
                     :data="item"
                     :classlist="storeclass.examclassfilter"
                     @updateExam="receiveCUD"
@@ -62,7 +62,7 @@
                   <ExamQuestion :examID="item.id" />
 
                   <v-spacer></v-spacer>
-                  <ExamDelExam :item="item.id" @DelExam="receiveCUD" />
+                  <del-exam :item="item.id" @DelExam="receiveCUD" />
                 </v-row>
               </td>
             </tr>
@@ -93,109 +93,107 @@ import { useClassStore } from "@/stores/class";
 import { useUserStore } from "@/stores/user";
 import { useResultStore } from "@/stores/result";
 import { useLoadingStore } from "@/stores/loadingStore";
+import ExamQuestion from "@/components/teacher/Exam/Question/index.vue";
 export default {
-  setup() {
-    // const nuxtApp = useNuxtApp();
-    const store = useExamStore();
-    const storeclass = useClassStore();
-    const storeUser = useUserStore();
-    const storeResult = useResultStore();
-    const loadingStore = useLoadingStore();
-    const tableData = ref([]);
-    const perPage = ref(10);
-
-    const ClassExam = async () => {
-      // loadingStore.openLoading();
-      console.log("Loading has mmount");
-      await store.CRUDEXAM({ ACTION: "GETAll" });
-      //Filter classExam
-      await storeUser.acGetuserList(localStorage.getItem("token"));
-      await storeclass.CRUDCLASSEXAM({
+  components: {
+    ExamQuestion,
+  },
+  data() {
+    return {
+      tableData: [],
+      perPage: 10,
+      searchText: "",
+    };
+  },
+  computed: {
+    store() {
+      return useExamStore();
+    },
+    storeclass() {
+      return useClassStore();
+    },
+    storeUser() {
+      return useUserStore();
+    },
+    storeResult() {
+      return useResultStore();
+    },
+  },
+  methods: {
+    async ClassExam() {
+      console.log("Loading has mounted");
+      await this.store.CRUDEXAM({ ACTION: "GETAll" });
+      await this.storeUser.acGetuserList(localStorage.getItem("token"));
+      await this.storeclass.CRUDCLASSEXAM({
         ACTION: "GETBYTEACHERID",
-        teacherID: storeUser.getuserList.user[0].id,
+        teacherID: this.storeUser.getuserList.user[0].id,
       });
-      storeclass.CLASSEXAMFILER(
-        storeclass.getclassExamList.DATA,
-        storeUser.getuserList.user[0].id
+      this.storeclass.CLASSEXAMFILER(
+        this.storeclass.getclassExamList.DATA,
+        this.storeUser.getuserList.user[0].id
       );
-      // loadingStore.closeLoading();
-      // console.log("examfilter", storeclass.examclassfilter);
-      //add object to classExamid
-      const matching = InsertClassExamInfoToExam(
-        store.examList.DATA,
-        storeclass.examclassfilter
+
+      const matching = this.InsertClassExamInfoToExam(
+        this.store.examList.DATA,
+        this.storeclass.examclassfilter
       );
-      // console.log("matching:", matching);
       matching.forEach((item) => {
-        item.classExamid = storeclass.examclassfilter.find(
+        item.classExamid = this.storeclass.examclassfilter.find(
           (exam) => exam.id === item.classExamid
         );
       });
+
       let newArray = matching;
-      storeResult.GetExamlistRS(newArray);
-      tableData.value = [];
-      for (var i = 0; i < perPage.value; i++) {
+      this.storeResult.GetExamlistRS(newArray);
+
+      this.tableData = [];
+      for (let i = 0; i < this.perPage; i++) {
         if (i < newArray.length) {
-          tableData.value.push(newArray[i]);
+          this.tableData.push(newArray[i]);
         }
       }
-      // console.log("ExamlistRS:", storeResult.ExamlistRS);
-    };
-    // const getExam = async () => {
-    //   await storeclass.CRUDCLASSEXAM({ ACTION: "GETAll" });
-    // };
-    onMounted(async () => {
-      // getExam();
-      ClassExam();
-      console.log("Exam component");
-    });
-    const receiveCUD = async (v) => {
+    },
+    receiveCUD(v) {
       console.log("Added", v);
-      ClassExam();
-    };
-    const onTableSearch = () => {
-      var newArray = [];
-      if (searchText.value != "") {
-        try {
-          var lowSearch = searchText.value.toLowerCase();
-          newArray = store.getstudentList.filter((wine) =>
-            Object.values(wine).some((val) =>
-              String(val).toLowerCase().includes(lowSearch)
-            )
-          );
-        } catch {}
+      this.ClassExam();
+    },
+    onTableSearch() {
+      let newArray = [];
+      if (this.searchText !== "") {
+        const lowSearch = this.searchText.toLowerCase();
+        newArray = this.store.getstudentList.filter((item) =>
+          Object.values(item).some((val) =>
+            String(val).toLowerCase().includes(lowSearch)
+          )
+        );
       } else {
-        newArray = store.getstudentList;
+        newArray = this.store.getstudentList;
       }
-      tableData.value = [];
-      for (var i = 0; i < perPage.value; i++) {
+
+      this.tableData = [];
+      for (let i = 0; i < this.perPage; i++) {
         if (i < newArray.length) {
-          tableData.value.push(newArray[i]);
+          this.tableData.push(newArray[i]);
         }
       }
-    };
-    const onPageChange = (v) => {
-      var a = v.currenPage * v.perPage - v.perPage;
-      tableData.value = [];
+    },
+    onPageChange(v) {
+      const a = v.currenPage * v.perPage - v.perPage;
+      this.tableData = [];
       try {
-        for (var i = a; i < a + v.perPage; i++) {
-          if (i < store.getexamList.length) {
-            tableData.value.push(store.getexamList[i]);
+        for (let i = a; i < a + v.perPage; i++) {
+          if (i < this.store.getexamList.length) {
+            this.tableData.push(this.store.getexamList[i]);
           }
         }
       } catch (e) {
-        i = a + v.perPage;
+        console.error(e);
       }
-    };
-    return {
-      tableData,
-      store,
-      storeclass,
-      storeUser,
-      perPage,
-      onPageChange,
-      receiveCUD,
-    };
+    },
+  },
+  mounted() {
+    this.ClassExam();
+    console.log("Exam component mounted");
   },
 };
 </script>

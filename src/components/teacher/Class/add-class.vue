@@ -62,62 +62,63 @@
 </template>
 
 <script>
+import { useClassStore } from "@/stores/class"; // Import your Pinia store
 import { v4 as uuid } from "uuid";
-import { useClassStore } from "@/stores/class";
+
 export default {
   props: ["userInfo"],
-  emit: ["addclass"],
-  setup(props, { emit }) {
-    const { getTime } = useGetDate();
-    // const nuxtApp = useNuxtApp();
-    const store = useClassStore();
-    const dialog = ref(false);
-    const subjectbinding = ref("");
-    const classbinding = ref("");
-    const rules = ref({
-      required: (value) => !!value || nuxtApp.$t("requiredInsert"),
-      counter: (value) => value.length <= 20 || "Max 20 characters",
-      email: (value) => {
-        const pattern =
-          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return pattern.test(value) || nuxtApp.$t("InvalidEmail");
+  emits: ["addclass"],
+  data() {
+    return {
+      dialog: false,
+      subjectbinding: "",
+      classbinding: "",
+      rules: {
+        required: (value) => !!value || this.$t("requiredInsert"),
+        counter: (value) => value.length <= 20 || "Max 20 characters",
+        email: (value) => {
+          const pattern =
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          return pattern.test(value) || this.$t("InvalidEmail");
+        },
       },
-    });
-    const Onopen = () => {
-      subjectbinding.value = "";
-      classbinding.value = "";
     };
-    const onSubmit = async () => {
+  },
+  methods: {
+    Onopen() {
+      this.subjectbinding = "";
+      this.classbinding = "";
+    },
+    async onSubmit() {
+      const store = useClassStore(); // Access your Pinia store here
+      const { getTime } = store; // Access methods or state from your store
+
       let body = {
         id: uuid(),
-        subjectExam: subjectbinding.value,
+        subjectExam: this.subjectbinding,
         status: "A",
-        classExam: classbinding.value,
+        classExam: this.classbinding,
         time: getTime(),
-        teacherID: props.userInfo[0].id,
+        teacherID: this.userInfo[0].id,
         ACTION: "INSERT",
       };
+
       if (body.subjectExam && body.classExam !== "") {
-        nuxtApp.$openDialog("S", nuxtApp.$t("insertDataSuccess"));
-        await store.CRUDCLASSEXAM(body);
-        emit("addclass", "added");
+        this.$openDialog("S", this.$t("insertDataSuccess"));
+        await store.CRUDCLASSEXAM(body); // Use the store's method
+        this.$emit("addclass", "added");
         console.log("body");
         setTimeout(() => {
-          nuxtApp.$closeDialog();
+          this.$closeDialog();
         }, 800);
       }
-    };
-
-    return {
-      dialog,
-      classbinding,
-      subjectbinding,
-      rules,
-      Onopen,
-      onSubmit,
-    };
+    },
+  },
+  mounted() {
+    // Any initialization logic you need can go here
   },
 };
 </script>
+
 
 <style lang="scss" scoped></style>

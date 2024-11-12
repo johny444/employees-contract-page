@@ -141,100 +141,86 @@
 <script>
 import moment from "moment";
 import { useStudentStore } from "@/stores/student";
+
 export default {
   props: ["items", "examid"],
   emit: ["updatestd"],
-  setup(props, { emit }) {
-    const store = useStudentStore();
-    // const nuxtApp = useNuxtApp();
-    const dialog = ref(false);
-    const password = ref("");
-    const Dateformat = ref("");
-    const studentName = ref("");
-    const studentCode = ref("");
-    const email = ref("");
-    const gender = ref("");
-    const birthday = ref("");
-
-    const { getTime } = useGetDate();
-    const { generatePassword } = useGeneratepassword();
-    const dateFormat = (str) => {
-      let parts = str.split("-");
-
-      let formattedDate = parts[2] + "-" + parts[1] + "-" + parts[0];
-      return formattedDate;
-    };
-    const onOpen = () => {
-      console.log("object", props.items);
-      birthday.value = dateFormat(props.items.birthday);
-      password.value = props.items.password;
-      studentName.value = props.items.name;
-      studentCode.value = props.items.studentCode;
-      email.value = props.items.email;
-      gender.value = props.items.gender;
-    };
-    const Generate = () => {
-      password.value = generatePassword();
-    };
-    const generateEmail = computed(() => {
-      if (studentName.value) {
-        email.value = studentName.value + "@gmail.com";
-        return studentName.value + "@gmail.com";
-      }
-    });
-    const onSubmit = async () => {
-      let body = {
-        id: props.items.id,
-        role: "student",
-        name: studentName.value,
-        email: email.value,
-        gender: gender.value,
-        password: password.value,
-        studentCode: studentCode.value,
-        birthday: moment(birthday.value).format("DD-MM-YYYY"),
-        time: getTime(),
-        ExamId: props.examid,
-        ACTION: "UPDATE",
-      };
-      console.log("Body", body);
-      nuxtApp.$openLoading();
-      var result = await store.CRUDStudent(body);
-      console.log("result", result);
-      if (result.status == "200") {
-        console.log("result", result);
-        nuxtApp
-          .$openAlert("S", nuxtApp.$t("updateDataSuccess"))
-          .then(async (r) => {
-            nuxtApp.$closeLoading();
-            emit("updatestd", "updated");
-          });
-      } else {
-        nuxtApp.$closeLoading();
-        nuxtApp.$openAlert("E", result.status);
-      }
-    };
-    return {
-      generateEmail,
-      props,
-      dialog,
-      Dateformat,
-      password,
-      studentName,
-      studentCode,
-      email,
-      gender,
-      birthday,
-      onSubmit,
-      onOpen,
-      Generate,
-    };
-  },
   data() {
     return {
+      dialog: false,
+      password: "",
+      Dateformat: "",
+      studentName: "",
+      studentCode: "",
+      email: "",
+      gender: "",
+      birthday: "",
       model: true,
+      store: useStudentStore(), // Initialize store
     };
+  },
+  computed: {
+    generateEmail() {
+      if (this.studentName) {
+        this.email = this.studentName + "@gmail.com";
+        return this.studentName + "@gmail.com";
+      }
+    },
+  },
+  methods: {
+    dateFormat(str) {
+      let parts = str.split("-");
+      let formattedDate = parts[2] + "-" + parts[1] + "-" + parts[0];
+      return formattedDate;
+    },
+    onOpen() {
+      console.log("object", this.items);
+      this.birthday = this.dateFormat(this.items.birthday);
+      this.password = this.items.password;
+      this.studentName = this.items.name;
+      this.studentCode = this.items.studentCode;
+      this.email = this.items.email;
+      this.gender = this.items.gender;
+    },
+    Generate() {
+      this.password = this.$nuxt.$generatePassword();
+    },
+    async onSubmit() {
+      let body = {
+        id: this.items.id,
+        role: "student",
+        name: this.studentName,
+        email: this.email,
+        gender: this.gender,
+        password: this.password,
+        studentCode: this.studentCode,
+        birthday: moment(this.birthday).format("DD-MM-YYYY"),
+        time: this.$nuxt.$getTime(),
+        ExamId: this.examid,
+        ACTION: "UPDATE",
+      };
+
+      console.log("Body", body);
+      this.$nuxt.$openLoading();
+      var result = await this.store.CRUDStudent(body);
+      console.log("result", result);
+
+      if (result.status == "200") {
+        console.log("result", result);
+        this.$nuxt
+          .$openAlert("S", this.$nuxt.$t("updateDataSuccess"))
+          .then(async () => {
+            this.$nuxt.$closeLoading();
+            this.$emit("updatestd", "updated");
+          });
+      } else {
+        this.$nuxt.$closeLoading();
+        this.$nuxt.$openAlert("E", result.status);
+      }
+    },
+  },
+  mounted() {
+    this.onOpen();
   },
 };
 </script>
-
-<style lang="scss" scoped></style>

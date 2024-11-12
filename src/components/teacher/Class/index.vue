@@ -5,7 +5,7 @@
         <h1>{{ $t("classExam") }}</h1>
       </v-col>
       <v-col style="text-align: end">
-        <ClassAddClass
+        <add-class
           @addclass="receiveCUD"
           :userInfo="storeUser.getuserList.user"
         />
@@ -78,124 +78,104 @@
 import { useClassStore } from "@/stores/class";
 import { useUserStore } from "@/stores/user";
 import { useLoadingStore } from "@/stores/loadingStore";
-export default {
-  setup() {
-    // const { getTime } = useGetDate();
-    // const nuxtApp = useNuxtApp();
-    const loadingStore = useLoadingStore();
-    const store = useClassStore();
-    const storeUser = useUserStore();
-    const tableData = ref([]);
-    const perPage = ref(10);
-    const Status = ref("");
-    const token = ref("");
-    const ClassExam = async () => {
-      try {
-        token.value = localStorage.getItem("token");
-        // loadingStore.openLoading();
-        console.log("storeUser", storeUser.getuserList);
-        await storeUser.acGetuserList(token.value);
-        await store.CRUDCLASSEXAM({
-          ACTION: "GETBYTEACHERID",
-          teacherID: storeUser.getuserList.user[0].id,
-        });
-        // loadingStore.closeLoading();
-        console.log("Class: ", store.getclassExamList.DATA);
 
-        let newArray = store.getclassExamList.DATA.filter((v) => {
-          return v.teacherID === storeUser.getuserList.user[0].id;
+export default {
+  data() {
+    return {
+      tableData: [], // Replaces ref([])
+      perPage: 10, // Replaces ref(10)
+      Status: "", // Replaces ref("")
+      token: "", // Replaces ref("")
+      store: useClassStore(),
+      storeUser: useUserStore(),
+    };
+  },
+  mounted() {
+    this.ClassExam(); // Equivalent to onMounted
+  },
+  methods: {
+    async ClassExam() {
+      try {
+        this.token = localStorage.getItem("token");
+
+        // loadingStore.openLoading();
+        console.log("storeUser", this.storeUser.getuserList);
+        await this.storeUser.acGetuserList(this.token);
+
+        await this.store.CRUDCLASSEXAM({
+          ACTION: "GETBYTEACHERID",
+          teacherID: this.storeUser.getuserList.user[0].id,
         });
-        tableData.value = [];
-        for (var i = 0; i < perPage.value; i++) {
+
+        // loadingStore.closeLoading();
+        console.log("Class: ", this.store.getclassExamList.DATA);
+
+        let newArray = this.store.getclassExamList.DATA.filter((v) => {
+          return v.teacherID === this.storeUser.getuserList.user[0].id;
+        });
+        this.tableData = [];
+        for (let i = 0; i < this.perPage; i++) {
           if (i < newArray.length) {
-            tableData.value.push(newArray[i]);
+            this.tableData.push(newArray[i]);
           }
         }
-        // console.log("store class", store.getclassExamList);
       } catch (error) {
-        console.log("cath error:", error);
+        console.log("catch error:", error);
         // nuxtApp.$openDialog("E", error);
       }
-    };
-    onMounted(() => {
-      ClassExam();
-    });
-    const receiveCUD = async (v) => {
+    },
+    async receiveCUD(v) {
       console.log("Added", v);
-      ClassExam();
-    };
-    const onTableSearch = () => {
-      var newArray = [];
-      if (searchText.value != "") {
+      this.ClassExam();
+    },
+    onTableSearch() {
+      let newArray = [];
+      if (this.searchText !== "") {
         try {
-          var lowSearch = searchText.value.toLowerCase();
-          newArray = store.getstudentList.filter((wine) =>
+          let lowSearch = this.searchText.toLowerCase();
+          newArray = this.store.getstudentList.filter((wine) =>
             Object.values(wine).some((val) =>
               String(val).toLowerCase().includes(lowSearch)
             )
           );
-        } catch {}
+        } catch (error) {}
       } else {
-        newArray = store.getstudentList;
+        newArray = this.store.getstudentList;
       }
-      tableData.value = [];
-      for (var i = 0; i < perPage.value; i++) {
+
+      this.tableData = [];
+      for (let i = 0; i < this.perPage; i++) {
         if (i < newArray.length) {
-          tableData.value.push(newArray[i]);
+          this.tableData.push(newArray[i]);
         }
       }
-    };
-    const onPageChange = (v) => {
-      var a = v.currenPage * v.perPage - v.perPage;
-      tableData.value = [];
+    },
+    onPageChange(v) {
+      let a = v.currenPage * v.perPage - v.perPage;
+      this.tableData = [];
       try {
-        for (var i = a; i < a + v.perPage; i++) {
-          if (i < store.getclassExamList.length) {
-            tableData.value.push(store.getclassExamList[i]);
+        for (let i = a; i < a + v.perPage; i++) {
+          if (i < this.store.getclassExamList.length) {
+            this.tableData.push(this.store.getclassExamList[i]);
           }
         }
       } catch (e) {
         i = a + v.perPage;
       }
-    };
-
-    const clickStatus = async (data) => {
-      if (data.status === "A") {
-        let body = {
-          id: data.id,
-          subjectExam: data.subjectExam,
-          classExam: data.classExam,
-          status: "D",
-          time: getTime(),
-          teacherID: storeUser.getuserList.user[0].id,
-          ACTION: "UPDATE",
-        };
-        await store.CRUDCLASSEXAM(body);
-      } else {
-        let body = {
-          id: data.id,
-          subjectExam: data.subjectExam,
-          classExam: data.classExam,
-          status: "A",
-          time: getTime(),
-          teacherID: storeUser.getuserList.user[0].id,
-          ACTION: "UPDATE",
-        };
-        await store.CRUDCLASSEXAM(body);
-      }
-      ClassExam();
-    };
-
-    return {
-      tableData,
-      store,
-      perPage,
-      Status,
-      clickStatus,
-      onPageChange,
-      receiveCUD,
-      storeUser,
-    };
+    },
+    async clickStatus(data) {
+      let body = {
+        id: data.id,
+        subjectExam: data.subjectExam,
+        classExam: data.classExam,
+        status: data.status === "A" ? "D" : "A",
+        time: this.getTime(),
+        teacherID: this.storeUser.getuserList.user[0].id,
+        ACTION: "UPDATE",
+      };
+      await this.store.CRUDCLASSEXAM(body);
+      this.ClassExam();
+    },
   },
 };
 </script>

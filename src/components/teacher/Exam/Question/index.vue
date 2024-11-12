@@ -42,13 +42,10 @@
         <v-card-text>
           <v-window v-model="tab">
             <v-window-item value="one" align="center">
-              <ExamQuestionQTList :examID="props.examID" />
+              <QTList :examID="props.examID" />
             </v-window-item>
             <v-window-item value="two">
-              <ExamQuestionQTImport
-                :examID="props.examID"
-                @DL="receiveDialog"
-              />
+              <QTImport :examID="props.examID" @DL="receiveDialog" />
             </v-window-item>
           </v-window>
         </v-card-text>
@@ -59,36 +56,40 @@
 
 <script>
 import { useQuestionStore } from "@/stores/question";
+import QTList from "./QT-List.vue";
+import QTImport from "./QT-import.vue";
+
 export default {
-  props: ["examID"],
-  setup(props) {
-    const store = useQuestionStore();
-    const dialog = ref(false);
-    const choice = ref({});
-    const Qlist = ref([]);
-    const selected = ref([]);
-    const onOpen = async () => {
-      choice.value = {};
-      selected.value = [];
-      // await store.QUESTIONFILER(props.examID);
-      // console.log("store.questionfilter", store.questionfilter);
-      // Qlist.value = store.questionfilter;
-    };
-    const receiveDialog = (v) => {
-      console.log("receiveDialog", v);
-      dialog.value = v;
-    };
+  components: {
+    QTList,
+    QTImport,
+  },
+  data() {
     return {
-      receiveDialog,
-      dialog,
-      onOpen,
-      props,
+      dialog: false,
+      choice: {},
+      Qlist: [],
+      selected: [],
+      checkbox1: false,
+      items: Array.from({ length: 50 }, (k, v) => v + 1),
+      tab: null,
     };
   },
-  data: () => ({
-    checkbox1: false,
-    items: Array.from({ length: 50 }, (k, v) => v + 1),
-    tab: null,
-  }),
+  methods: {
+    async onOpen() {
+      this.choice = {};
+      this.selected = [];
+      // await this.store.QUESTIONFILER(this.examID);
+      // console.log("store.questionfilter", this.store.questionfilter);
+      // this.Qlist = this.store.questionfilter;
+    },
+    receiveDialog(v) {
+      console.log("receiveDialog", v);
+      this.dialog = v;
+    },
+  },
+  created() {
+    this.store = useQuestionStore();
+  },
 };
 </script>

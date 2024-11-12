@@ -69,78 +69,79 @@
 </template>
 <script>
 import { useClassStore } from "@/stores/class";
+
 export default {
   props: ["data"],
   emit: ["updateclass"],
-  setup(props, { emit }) {
-    const store = useClassStore();
-    // const nuxtApp = useNuxtApp();
-    const dialog = ref(false);
-    const subjectbinding = ref("");
-    const classbinding = ref("");
-    const WarningTxT = ref({
-      s: [
-        (v) => {
-          if (v) {
-            return true;
-          }
-          return nuxtApp.$t("pleaseEntersubject");
-        },
-      ],
-      c: [
-        (v) => {
-          if (v) {
-            return true;
-          }
-          return nuxtApp.$t("pleaseEnterclass");
-        },
-      ],
-    });
-    const onOpen = () => {
-      console.log("user", props.data);
-      subjectbinding.value = props.data.subjectExam;
-      classbinding.value = props.data.classExam;
+  data() {
+    return {
+      store: useClassStore(),
+      dialog: false, // Replaces ref(false)
+      subjectbinding: "", // Replaces ref("")
+      classbinding: "", // Replaces ref("")
+      WarningTxT: {
+        s: [
+          (v) => {
+            if (v) {
+              return true;
+            }
+            return this.$t("pleaseEntersubject");
+          },
+        ],
+        c: [
+          (v) => {
+            if (v) {
+              return true;
+            }
+            return this.$t("pleaseEnterclass");
+          },
+        ],
+      },
     };
+  },
+  methods: {
+    onOpen() {
+      console.log("user", this.data);
+      this.subjectbinding = this.data.subjectExam;
+      this.classbinding = this.data.classExam;
+    },
+    async onSubmit() {
+      console.log("getTime()", this.getTime());
 
-    const onSubmit = async () => {
-      console.log("getTime()", getTime());
       // let body = {
-      //   id: props.data.id,
-      //   subjectExam: subjectbinding.value,
-      //   classExam: classbinding.value,
-      //   status: props.data.status,
-      //   time: getTime(),
-      //   teacherID: props.data.teacherID,
+      //   id: this.data.id, // Accessing props.data
+      //   subjectExam: this.subjectbinding, // Accessing local variable
+      //   classExam: this.classbinding, // Accessing local variable
+      //   status: this.data.status, // Accessing props.data
+      //   time: this.getTime(), // Calling the method
+      //   teacherID: this.data.teacherID, // Accessing props.data
       //   ACTION: "UPDATE",
       // };
+
       // console.log("body", body);
-      // // ------------------------------------
-      // nuxtApp.$openLoading();
-      // var result = await store.CRUDCLASSEXAM(body);
+
+      // // Loading indicator start
+      // this.$nuxt.$openLoading();
+
+      // // Making the request
+      // var result = await this.store.CRUDCLASSEXAM(body);
+
+      // // Handling the response
       // if (result.status == "200") {
       //   console.log("result", result);
-      //   nuxtApp
-      //     .$openAlert("S", nuxtApp.$t("updateDataSuccess"))
-      //     .then(async (r) => {
-      //       nuxtApp.$closeLoading();
-      //       emit("updateclass", "updated");
-      //     });
+
+      //   this.$nuxt.$openAlert("S", this.$t("updateDataSuccess")).then(() => {
+      //     this.$nuxt.$closeLoading();
+      //     this.$emit("updateclass", "updated");
+      //   });
       // } else {
-      //   nuxtApp.$closeLoading();
-      //   nuxtApp.$openAlert("E", result.status);
+      //   this.$nuxt.$closeLoading();
+      //   this.$nuxt.$openAlert("E", result.status);
       // }
-    };
-    return {
-      WarningTxT,
-      dialog,
-      props,
-      subjectbinding,
-      classbinding,
-      onSubmit,
-      onOpen,
-    };
+    },
   },
 };
 </script>
+
 
 <style lang="scss" scoped></style>

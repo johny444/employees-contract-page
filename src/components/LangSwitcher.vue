@@ -34,25 +34,32 @@
   </div>
 </template>
 <script>
-import { useI18n } from "vue-i18n";
-
 export default {
-  setup() {
-    const { locale } = useI18n();
-    const lang = ref("");
-
-    onMounted(() => {
-      // lang.value = localStorage.getItem("i18n");
-      locale.value = localStorage.getItem("i18n") || "en";
-    });
-
-    const onSetLanguage = (v) => {
-      console.log("object", v);
-      localStorage.setItem("i18n", v);
-      locale.value = v;
-      lang.value = v;
+  name: "langSwitcher",
+  data() {
+    return {
+      lang: "", // Store the language value in data
     };
-    return { lang, locale, onSetLanguage };
+  },
+
+  computed: {
+    locale() {
+      return this.$i18n.locale; // Access the locale using this.$i18n in Options API
+    },
+  },
+  methods: {
+    onSetLanguage(v) {
+      console.log("object", v);
+      localStorage.setItem("i18n", v); // Store language preference in localStorage
+      this.$i18n.locale = v; // Set the locale value using this.$i18n
+      this.lang = v; // Set the language value
+    },
+  },
+  mounted() {
+    // Set the initial locale when the component is mounted
+    this.$i18n.locale = localStorage.getItem("i18n") || "en";
+    this.lang = this.$i18n.locale; // Initialize lang with the current locale
   },
 };
 </script>
+

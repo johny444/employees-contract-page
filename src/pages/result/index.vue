@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Exam />
+    <Result />
   </div>
 </template>
   <script setup>

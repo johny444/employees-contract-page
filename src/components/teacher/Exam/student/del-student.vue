@@ -15,47 +15,51 @@
 
 <script>
 import { useStudentStore } from "@/stores/student";
+
 export default {
   props: ["item"],
   emit: ["Delstudent"],
-  setup(props, { emit }) {
-    const store = useStudentStore();
-    // const nuxtApp = useNuxtApp();
-    const onDel = async () => {
-      // console.log("props.items", props.item);
-      // await store.acDelclassExam(props.item);
-      // emit("Delclass", "Deled");
-      nuxtApp
-        .$openAlert("Q", nuxtApp.$t("areYouSureToDelete"))
+  data() {
+    return {
+      store: useStudentStore(), // Store initialization
+    };
+  },
+  methods: {
+    async onDel() {
+      // Opening confirmation dialog
+      this.$nuxt
+        .$openAlert("Q", this.$nuxt.$t("areYouSureToDelete"))
         .then(async (res) => {
-          nuxtApp.$openLoading();
-          var result = await store.CRUDStudent({
-            id: props.item,
+          this.$nuxt.$openLoading();
+          // Perform the delete operation
+          var result = await this.store.CRUDStudent({
+            id: this.item,
             ACTION: "DELETE",
           });
           console.log("result.status", result.status);
-          if (result.status == "200") {
-            console.log("Emit");
-            nuxtApp
-              .$openAlert("S", nuxtApp.$t("deleteDataSuccess"))
+          if (result.status === "200") {
+            // If delete is successful, show success alert and emit event
+            this.$nuxt
+              .$openAlert("S", this.$nuxt.$t("deleteDataSuccess"))
               .then(async (r) => {
-                emit("Delstudent", "Deled");
+                this.$emit("Delstudent", "Deled");
                 console.log("Delclass success");
-                nuxtApp.$closeLoading();
+                this.$nuxt.$closeLoading();
               });
           } else {
-            nuxtApp.$closeLoading();
-            nuxtApp.$openAlert("E", result.message);
+            // If delete fails, show error alert
+            this.$nuxt.$closeLoading();
+            this.$nuxt.$openAlert("E", result.message);
           }
         })
         .catch((err) => {
           console.log("Error:", err);
         });
-    };
-    const receiveDel = () => {};
-    return { onDel, receiveDel, props };
+    },
+    receiveDel() {
+      // You can implement logic if needed after receiving a delete confirmation
+    },
   },
 };
 </script>
 
-<style lang="scss" scoped></style>

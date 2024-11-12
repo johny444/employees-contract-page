@@ -10,15 +10,24 @@
   </v-app>
 </template>
 
-<script setup>
-import { computed } from "vue";
-import { useRoute } from "vue-router";
+<script>
 import DefaultLayout from "@/layouts/DefaultLayout.vue"; // Fallback layout
 
-// Get the current route to determine the layout component
-const route = useRoute();
-const currentLayout = computed(() => route.meta.layout || DefaultLayout);
+export default {
+  data() {
+    return {
+      route: useRoute(), // Store the current route in data
+    };
+  },
+  computed: {
+    currentLayout() {
+      // Computed property to get the layout from route meta or fallback to DefaultLayout
+      return this.$route.meta.layout || DefaultLayout;
+    },
+  },
+};
 </script>
+
 
 <style>
 /* You can add any styles specific to App.vue here */

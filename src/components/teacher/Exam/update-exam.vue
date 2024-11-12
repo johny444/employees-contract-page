@@ -89,66 +89,65 @@ import { v4 as uuid } from "uuid";
 import { useExamStore } from "@/stores/exam";
 
 export default {
+  name: "update-exam",
   props: ["data", "classlist"],
   emit: ["updateExam"],
-  setup(props, { emit }) {
-    const { getTime } = useGetDate();
-    // const nuxtApp = useNuxtApp();
-    const storeExam = useExamStore();
-    const dialog = ref(false);
-    const subjectbinding = ref("");
-    const classbinding = ref("");
-    const termbinding = ref("mid");
-    const temp = ref();
-    const rules = ref({
-      required: (value) => !!value || nuxtApp.$t("requiredInsert"),
-    });
-    const onOpen = async () => {
-      console.log("props", props.data);
-      subjectbinding.value = props.data.classExamid;
-      classbinding.value = props.data.classExamid.classExam;
-      termbinding.value = props.data.term;
-      temp.value = props.classlist;
-      console.log("temp", temp.value);
+  data() {
+    return {
+      dialog: false,
+      subjectbinding: "",
+      classbinding: "",
+      termbinding: "mid",
+      temp: null,
+      rules: {
+        required: (value) => !!value || this.$t("requiredInsert"),
+      },
     };
-    const onSubmit = async () => {
-      console.log("subjectbing", subjectbinding.value);
+  },
+  methods: {
+    async onOpen() {
+      console.log("props", this.data);
+      this.subjectbinding = this.data.classExamid;
+      this.classbinding = this.data.classExamid.classExam;
+      this.termbinding = this.data.term;
+      this.temp = this.classlist;
+      console.log("temp", this.temp);
+    },
+    async onSubmit() {
+      console.log("subjectbinding", this.subjectbinding);
       let body = {
-        id: props.data.id,
-        classExamid: subjectbinding.value.id,
-        term: termbinding.value,
-        time: getTime(),
+        id: this.data.id,
+        classExamid: this.subjectbinding.id,
+        term: this.termbinding,
+        time: this.getTime(),
         ACTION: "UPDATE",
       };
       console.log("body:", body);
       if (body.classExamid && body.term !== "") {
-        nuxtApp.$openDialog("U", nuxtApp.$t("updateDataSuccess"));
-        await storeExam.CRUDEXAM(body);
-        emit("updateExam", "updated");
+        this.$openDialog("U", this.$t("updateDataSuccess"));
+        await this.storeExam.CRUDEXAM(body);
+        this.$emit("updateExam", "updated");
         console.log("body");
         setTimeout(() => {
-          nuxtApp.$closeDialog();
+          this.$closeDialog();
         }, 800);
       }
-    };
-    const OnSelect = async () => {
-      console.log("subjectbinding", subjectbinding.value);
-      classbinding.value = subjectbinding.value.ClassExam;
-    };
-    return {
-      temp,
-      classbinding,
-      props,
-      termbinding,
-      dialog,
-      subjectbinding,
-      rules,
-      onOpen,
-      onSubmit,
-      OnSelect,
-    };
+    },
+    async OnSelect() {
+      console.log("subjectbinding", this.subjectbinding);
+      this.classbinding = this.subjectbinding.ClassExam;
+    },
+  },
+  computed: {
+    storeExam() {
+      return useExamStore();
+    },
+    getTime() {
+      return useGetDate().getTime;
+    },
   },
 };
 </script>
+
 
 <style lang="scss" scoped></style>

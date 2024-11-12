@@ -104,116 +104,107 @@
 import { v4 as uuid } from "uuid";
 import { useQuestionStore } from "@/stores/question";
 import * as XLSX from "xlsx";
+
 export default {
   props: ["examID"],
-  emit: ["addquestion", "DL"],
-  setup(props, { emit }) {
-    const excelData = ref([]);
-    const store = useQuestionStore();
-    const { getTime } = useGetDate();
-    // const nuxtApp = useNuxtApp();
-    const dialog = ref(false);
-    const choice = ref({});
-    const Qlist = ref([]);
-    const selected = ref([]);
-    const onOpen = async () => {
-      choice.value = {};
-      selected.value = [];
-      // await store.acGetquestionList();
-      Qlist.value = store.getquestionList;
-      Qlist.value.forEach((question, index) => {
-        selectedAnswers.value[index] = [];
+  emits: ["addquestion", "DL"],
+  data() {
+    return {
+      excelData: [],
+      dialog: false,
+      choice: {},
+      Qlist: [],
+      selected: [],
+      selectedAnswers: [],
+      showResults: false,
+      checkbox1: false,
+      items: Array.from({ length: 50 }, (k, v) => v + 1),
+    };
+  },
+  computed: {
+    store() {
+      return useQuestionStore();
+    },
+    getTime() {
+      return this.$getTime(); // Assuming `$getTime()` is a global method
+    },
+  },
+  methods: {
+    async onOpen() {
+      this.choice = {};
+      this.selected = [];
+      this.Qlist = this.store.getquestionList;
+      this.Qlist.forEach((question, index) => {
+        this.selectedAnswers[index] = [];
         question.answers.forEach((answer, answerIndex) => {
-          selectedAnswers.value[index][answerIndex] = false;
+          this.selectedAnswers[index][answerIndex] = false;
         });
       });
-    };
-    const onSubmit = async () => {
-      excelData.value.map((v) => {
-        v.examID = props.examID;
-        v.time = getTime();
+    },
+    async onSubmit() {
+      this.excelData.forEach((v) => {
+        v.examID = this.examID;
+        v.time = this.getTime();
         v.id = uuid();
         v.ACTION = "INSERT";
       });
-      if (excelData.value) {
-        var rs = "";
-        for (let index = 0; index < excelData.value.length; index++) {
-          rs = await store.CRUDQUESTION(excelData.value[index]);
+      if (this.excelData.length > 0) {
+        let rs = "";
+        for (let index = 0; index < this.excelData.length; index++) {
+          rs = await this.store.CRUDQUESTION(this.excelData[index]);
         }
 
         if (rs) {
-          nuxtApp.$openLoading();
+          this.$nuxt.$openLoading();
           setTimeout(() => {
-            nuxtApp.$closeDialog();
-            // emit("addquestion", "added");
-            emit("DL", false);
-            nuxtApp.$closeLoading();
+            this.$nuxt.$closeDialog();
+            this.$emit("DL", false);
+            this.$nuxt.$closeLoading();
           }, 800);
         }
       }
-    };
-    const filecheck = () => {
+    },
+    filecheck() {
       document.getElementById("excelFile").click();
-    };
-    const excelExport = (event) => {
-      var input = event.target;
-      var reader = new FileReader();
+    },
+    excelExport(event) {
+      const input = event.target;
+      const reader = new FileReader();
       reader.onload = () => {
-        var fileData = reader.result;
-        var wb = XLSX.read(fileData, { type: "binary" });
+        const fileData = reader.result;
+        const wb = XLSX.read(fileData, { type: "binary" });
         wb.SheetNames.forEach((sheetName) => {
-          var rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
-          excelData.value = rowObj;
+          const rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
+          this.excelData = rowObj;
         });
       };
       reader.readAsBinaryString(input.files[0]);
-    };
-    watch(dialog, (currentValue, oldValue) => {
-      if (currentValue === false) {
-        excelData.value = [];
-      } else {
-        excelData.value = [];
-      }
-    });
-    const clearfile = () => {
-      excelData.value = [];
-    };
-
-    //----------------------------------
-    const selectedAnswers = ref([]);
-
-    const showResults = ref(false);
-
-    const submitAnswers = () => {
-      showResults.value = true;
-    };
-    const DialogState = () => {
-      emit("DL", false);
-    };
-    const removeData = (question) => {
-      excelData.value = excelData.value.filter((t) => t !== question);
-    };
-    return {
-      removeData,
-      DialogState,
-      selected,
-      clearfile,
-      excelData,
-      filecheck,
-      excelExport,
-      dialog,
-      choice,
-      onSubmit,
-      onOpen,
-      Qlist,
-      submitAnswers,
-      showResults,
-      selectedAnswers,
-    };
+    },
+    clearfile() {
+      this.excelData = [];
+    },
+    submitAnswers() {
+      this.showResults = true;
+    },
+    DialogState() {
+      this.$emit("DL", false);
+    },
+    removeData(question) {
+      this.excelData = this.excelData.filter((t) => t !== question);
+    },
   },
-  data: () => ({
-    checkbox1: false,
-    items: Array.from({ length: 50 }, (k, v) => v + 1),
-  }),
+  watch: {
+    dialog(newValue) {
+      if (newValue === false) {
+        this.excelData = [];
+      } else {
+        this.excelData = [];
+      }
+    },
+  },
+  created() {
+    // Initialize any necessary store data or logic when the component is created
+    this.onOpen();
+  },
 };
 </script>

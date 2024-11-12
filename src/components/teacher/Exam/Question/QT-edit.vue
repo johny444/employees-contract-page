@@ -75,61 +75,57 @@
 </template>
 <script>
 import { useQuestionStore } from "@/stores/question";
+
 export default {
   props: ["examID", "data"],
-  emit: ["updateQT"],
-  setup(props, { emit }) {
-    const { getTime } = useGetDate();
-    // const nuxtApp = useNuxtApp();
-    const store = useQuestionStore();
-    const dialog = ref(false);
-    const questionbinding = ref("");
-    const optionbinding = ref([]);
-    const answer = ref("");
-    const rules = ref({
-      required: (value) => !!value || nuxtApp.$t("requiredInsert"),
-      counter: (value) => value.length <= 20 || "Max 20 characters",
-    });
-    const Onopen = () => {
-      questionbinding.value = props.data.question;
-      answer.value = props.data.answer;
-      optionbinding.value = props.data.options.split(",");
+  emits: ["updateQT"],
+  data() {
+    return {
+      dialog: false,
+      questionbinding: this.data.question,
+      optionbinding: this.data.options.split(","),
+      answer: this.data.answer,
+      rules: {
+        required: (value) => !!value || this.$t("requiredInsert"),
+        counter: (value) => value.length <= 20 || "Max 20 characters",
+      },
+      items: Array.from({ length: 4 }, (k, v) => v + 1),
     };
-    const onSubmit = async () => {
-      let body = {
-        id: props.data.id,
-        question: questionbinding.value,
-        options: optionbinding.value.toString(),
-        answer: answer.value,
-        examID: props.data.examID,
-        time: getTime(),
+  },
+  methods: {
+    Onopen() {
+      this.questionbinding = this.data.question;
+      this.answer = this.data.answer;
+      this.optionbinding = this.data.options.split(",");
+    },
+    async onSubmit() {
+      const body = {
+        id: this.data.id,
+        question: this.questionbinding,
+        options: this.optionbinding.toString(),
+        answer: this.answer,
+        examID: this.data.examID,
+        time: this.getTime(),
         ACTION: "UPDATE",
       };
 
       if (body) {
-        nuxtApp.$openDialog();
-        await store.CRUDQUESTION(body);
-        emit("updateQT", "udated");
+        this.$nuxt.$openDialog(); // Assuming you still want to use nuxtApp
+        await this.store.CRUDQUESTION(body);
+        this.$emit("updateQT", "updated");
         setTimeout(() => {
-          nuxtApp.$closeDialog();
+          this.$nuxt.$closeDialog();
         }, 800);
       }
-    };
-
-    return {
-      dialog,
-      optionbinding,
-      questionbinding,
-      rules,
-      answer,
-      Onopen,
-      onSubmit,
-    };
+    },
   },
-  data: () => ({
-    items: Array.from({ length: 4 }, (k, v) => v + 1),
-  }),
+  created() {
+    // Initialize store for this component
+    this.store = useQuestionStore();
+    // Optional: You can initialize additional data if needed
+  },
 };
 </script>
+
 
 <style lang="scss" scoped></style>

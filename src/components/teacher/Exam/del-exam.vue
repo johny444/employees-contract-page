@@ -16,44 +16,58 @@
 
 <script>
 import { useExamStore } from "@/stores/exam";
+
 export default {
   props: ["item"],
   emit: ["Delclass"],
-  setup(props, { emit }) {
-    const store = useExamStore();
-    // const nuxtApp = useNuxtApp();
-    const onDel = async () => {
-      nuxtApp
-        .$openAlert("Q", nuxtApp.$t("areYouSureToDelete"))
-        .then(async (res) => {
-          nuxtApp.$openLoading();
-          var result = await store.CRUDEXAM({
-            id: props.item,
-            ACTION: "DELETE",
-          });
-          console.log("result.status", result.status);
-          if (result.status == "200") {
-            console.log("Emit");
-            nuxtApp
-              .$openAlert("S", nuxtApp.$t("deleteDataSuccess"))
-              .then(async (r) => {
-                emit("DelExam", "Deled");
-                console.log("Delclass success");
-                nuxtApp.$closeLoading();
-              });
-          } else {
-            nuxtApp.$closeLoading();
-            nuxtApp.$openAlert("E", result.message);
-          }
-        })
-        .catch((err) => {
-          console.log("Error:", err);
-        });
+  data() {
+    return {
+      store: useExamStore(),
     };
-    const receiveDel = () => {};
-    return { onDel, receiveDel, props };
+  },
+  methods: {
+    async onDel() {
+      try {
+        this.$nuxt
+          .$openAlert("Q", this.$nuxt.$t("areYouSureToDelete"))
+          .then(async (res) => {
+            this.$nuxt.$openLoading();
+
+            // Perform the delete operation
+            const result = await this.store.CRUDEXAM({
+              id: this.item,
+              ACTION: "DELETE",
+            });
+
+            console.log("result.status", result.status);
+
+            if (result.status === "200") {
+              this.$nuxt
+                .$openAlert("S", this.$nuxt.$t("deleteDataSuccess"))
+                .then(() => {
+                  this.$emit("DelExam", "Deled");
+                  console.log("Delclass success");
+                  this.$nuxt.$closeLoading();
+                });
+            } else {
+              this.$nuxt.$closeLoading();
+              this.$nuxt.$openAlert("E", result.message);
+            }
+          })
+          .catch((err) => {
+            console.log("Error:", err);
+            this.$nuxt.$closeLoading();
+          });
+      } catch (error) {
+        console.log("Caught Error:", error);
+      }
+    },
+    receiveDel() {
+      // Logic for receiving delete data if necessary
+    },
   },
 };
 </script>
+
 
 <style lang="scss" scoped></style>

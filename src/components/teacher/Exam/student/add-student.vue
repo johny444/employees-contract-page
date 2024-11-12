@@ -144,96 +144,83 @@
 import moment from "moment";
 import { v4 as uuid } from "uuid";
 import { useStudentStore } from "@/stores/student";
+
 export default {
   props: [""],
   emit: ["addstudent"],
-  setup(props, { emit }) {
-    const d = ref("1995-10-01");
-    const store = useStudentStore();
-    const router = useRouter();
-    const currentRoute = router.currentRoute;
-    const { getTime } = useGetDate();
-    const { generatePassword } = useGeneratepassword();
-    // const nuxtApp = useNuxtApp();
-    const dialog = ref(false);
-    const fullname = ref("");
-    const email = ref("");
-    const Gender = ref("male");
-    const birthday = ref();
-    const password = ref("");
-    const studentCode = ref("");
-    const rules = ref({
-      required: (value) => !!value || nuxtApp.$t("requiredInsert"),
-      counter: (value) => value.length <= 20 || "Max 20 characters",
-      email: (value) => {
-        const pattern =
-          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return pattern.test(value) || nuxtApp.$t("InvalidEmail");
+  data() {
+    return {
+      d: "1995-10-01",
+      fullname: "",
+      email: "",
+      Gender: "male",
+      birthday: null,
+      password: "",
+      studentCode: "",
+      dialog: false,
+      rules: {
+        required: (value) => !!value || this.$t("requiredInsert"),
+        counter: (value) => value.length <= 20 || "Max 20 characters",
+        email: (value) => {
+          const pattern =
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          return pattern.test(value) || this.$t("InvalidEmail");
+        },
       },
-    });
-    const Onopen = () => {
-      fullname.value = "";
-      email.value = "";
-      Gender.value = "male";
-      birthday.value = "";
-      password.value = "";
-      studentCode.value = "";
     };
-    const onSubmit = async () => {
-      if (fullname.value && password.value && studentCode.value) {
-        let body = {
-          ExamId: currentRoute.value.params.student,
+  },
+  methods: {
+    Onopen() {
+      this.fullname = "";
+      this.email = "";
+      this.Gender = "male";
+      this.birthday = "";
+      this.password = "";
+      this.studentCode = "";
+    },
+    async onSubmit() {
+      const { currentRoute } = this.$router;
+      if (this.fullname && this.password && this.studentCode) {
+        const body = {
+          ExamId: currentRoute.params.student,
           id: uuid(),
           role: "student",
-          name: fullname.value,
-          email: email.value,
-          gender: Gender.value,
-          password: password.value,
-          studentCode: studentCode.value,
-          birthday: moment(birthday.value).format("DD-MM-YYYY"),
-          time: getTime(),
+          name: this.fullname,
+          email: this.email,
+          gender: this.Gender,
+          password: this.password,
+          studentCode: this.studentCode,
+          birthday: moment(this.birthday).format("DD-MM-YYYY"),
+          time: this.getTime(),
           ACTION: "INSERT",
         };
         console.log("body", body);
         if (body) {
-          nuxtApp.$openDialog("S", nuxtApp.$t("insertDataSuccess"));
+          this.$openDialog("S", this.$t("insertDataSuccess"));
+          const store = useStudentStore();
           await store.CRUDStudent(body);
-          emit("addstudent", "added");
+          this.$emit("addstudent", "added");
           setTimeout(() => {
-            nuxtApp.$closeDialog();
+            this.$closeDialog();
           }, 800);
         }
       }
-    };
-    const onChange = () => {
-      console.log("Gender", Gender.value);
-    };
-
-    const generateEmail = computed(() => {
-      if (fullname.value) {
-        email.value = fullname.value + "@gmail.com";
-        return fullname.value + "@gmail.com";
+    },
+    onChange() {
+      console.log("Gender", this.Gender);
+    },
+    Generate() {
+      this.password = this.generatePassword();
+    },
+  },
+  computed: {
+    generateEmail() {
+      if (this.fullname) {
+        this.email = this.fullname + "@gmail.com";
+        return this.fullname + "@gmail.com";
       }
-    });
-    const Generate = () => {
-      password.value = generatePassword();
-    };
-    return {
-      email,
-      d,
-      fullname,
-      password,
-      dialog,
-      rules,
-      Gender,
-      birthday,
-      generateEmail,
-      studentCode,
-      onSubmit,
-      Onopen,
-      onChange,
-      Generate,
-    };
+    },
   },
 };
 </script>
+

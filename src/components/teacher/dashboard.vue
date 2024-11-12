@@ -34,24 +34,29 @@
   </div>
 </template>
 
-<script setup>
-import { getCurrentInstance, onMounted } from "vue";
-
-onMounted(() => {
-  const instance = getCurrentInstance();
-  console.log("instance", instance.proxy);
-  if (instance) {
-    // Accessing the mixin method from the instance
-    const time = instance.proxy.getTime();
-    console.log("dashboard hello", time); // This should print the current time
-  }
-});
-
-const list = [
-  ["cyan-accent-4", "Student", "50", "fa-regular fa-user"],
-  ["pink-accent-3", "Teacher", "2", "fa-solid fa-user-tie"],
-  ["orange-darken-4", "exam", "3", "fa-solid fa-file-circle-question"],
-];
+<script>
+export default {
+  name: "dashboard",
+  data() {
+    return {
+      list: [
+        ["cyan-accent-4", "Student", "50", "fa-regular fa-user"],
+        ["pink-accent-3", "Teacher", "2", "fa-solid fa-user-tie"],
+        ["orange-darken-4", "exam", "3", "fa-solid fa-file-circle-question"],
+      ],
+    };
+  },
+  mounted() {
+    console.log("dashboard hello", this.getTime()); // Calls getTime function on mount
+    // console.log("this.$route.pat", this.$route.path);
+  },
+  methods: {
+    getTime() {
+      return new Date().toLocaleTimeString(); // Example function to return current time
+    },
+  },
+};
 </script>
+
 
 <style scoped></style>

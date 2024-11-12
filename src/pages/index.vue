@@ -49,57 +49,73 @@
   </div>
 </template>
 
-<script setup>
+<script>
 import { useUserStore } from "@/stores/user";
 import axios from "axios";
 import { useI18n } from "vue-i18n";
 import { useLoadingStore } from "@/stores/loadingStore";
-const loadingStore = useLoadingStore();
-const { locale } = useI18n();
-const storeUser = useUserStore();
-const myForm = ref(null);
-const router = useRouter();
-const txtUseremail = ref("teacher2@gmail.com");
-const txtPassword = ref("12345");
 
-const showPw = ref(false);
-const userlist = ref([]);
-onMounted(() => {
-  // locale.value = localStorage.getItem("i18n");
-});
-const onSubmit = async () => {
-  // console.log("Count");
-  const respone = await axios
-    .post("http://localhost:8080/auth/login", {
-      email: txtUseremail.value,
-      password: txtPassword.value,
-    })
-    .catch((err) => {
-      console.log("ERRO form login", err);
-      // nuxtApp.$openDialog("E", "INVALID CREDENTIALS");
-    });
-  console.log("respone.data.message", respone.data);
-  if (respone.data.token) {
-    // console.log("we have token");
-    await storeUser.acGetuserList(respone.data.token);
-    storeUser.aclogIn();
-    // console.log("user", storeUser.getuserList.user[0]);
-    switch (storeUser.getuserList.user[0].role) {
-      case "teacher":
-        localStorage.setItem("token", respone.data.token);
-        router.push("/dashboard");
-        break;
-      case "student":
-        localStorage.setItem("token", respone.data.token);
-        navigateTo(`/quiz`);
-        break;
+export default {
+  data() {
+    return {
+      myForm: null,
+      txtUseremail: "teacher2@gmail.com",
+      txtPassword: "12345",
+      showPw: false,
+      userlist: [],
+    };
+  },
+  // computed: {
+  //   locale() {
+  //     const { locale } = useI18n();
+  //     return locale;
+  //   },
+  // },
+  methods: {
+    async onSubmit() {
+      try {
+        const response = await axios.post("http://localhost:8080/auth/login", {
+          email: this.txtUseremail,
+          password: this.txtPassword,
+        });
 
-      default:
-        break;
-    }
-  }
+        console.log("response.data.message", response.data);
+        this.loadingStore.openLoading();
+        if (response.data.token) {
+          await this.storeUser.acGetuserList(response.data.token);
+          this.storeUser.aclogIn();
+
+          const userRole = this.storeUser.getuserList.user[0].role;
+          localStorage.setItem("token", response.data.token);
+
+          switch (userRole) {
+            case "teacher":
+              this.$router.push("/dashboard");
+              break;
+            case "student":
+              this.$router.push("/quiz");
+              break;
+            default:
+              break;
+          }
+        }
+        this.loadingStore.closeLoading();
+      } catch (error) {
+        console.error("Error in form login", error);
+        // Optionally open dialog for error
+      }
+    },
+  },
+  mounted() {
+    this.$i18n.locale = localStorage.getItem("i18n"); // Set locale on mounted
+  },
+  created() {
+    this.storeUser = useUserStore();
+    this.loadingStore = useLoadingStore();
+  },
 };
 </script>
+
 
 <style lang="scss" scoped>
 #particles-js {

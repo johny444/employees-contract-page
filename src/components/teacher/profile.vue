@@ -32,40 +32,44 @@
 <script>
 import { useUserStore } from "@/stores/user";
 import { useClassStore } from "@/stores/class";
-export default {
-  setup() {
-    // const storeUser = useUserStore();
-    const router = useRouter();
-    // const nuxtApp = useNuxtApp();
-    const user = ref("");
 
-    onMounted(async () => {
-      console.log("profile mount");
-      // try {
-      //   await storeUser.acGetuserList(localStorage.getItem("token"));
-      // } catch (error) {
-      //   // nuxtApp.$openDialog("E", error);
-      // }
-      // user.value = storeUser.getuserList.user[0];
-    });
-    const logout = () => {
-      // localStorage.removeItem("user");
-      localStorage.removeItem("token");
-      // storeUser.aclogOut();
-      // storeUser.getLoginState = false;
-      // try {
-      //   console.log("route:", router);
-      //   router.push("/exam");
-      //   console.log("route");
-      // } catch (error) {
-      //   console.log("Error:", error);
-      // }
-      // nuxtApp.$router.push("/exam");
-      router.push("/");
+export default {
+  name: "profile",
+  data() {
+    return {
+      user: "", // Initialize user as an empty string or adjust as needed
     };
-    return { logout, user };
+  },
+  computed: {
+    // Define any computed properties here if needed
+  },
+  methods: {
+    async fetchUser() {
+      console.log("profile mount");
+      try {
+        // Assuming you would use `storeUser` to fetch user data
+        const storeUser = useUserStore();
+        await storeUser.acGetuserList(localStorage.getItem("token"));
+        this.user = storeUser.getuserList.user[0];
+      } catch (error) {
+        console.error("Error fetching user:", error);
+        // Optionally open a dialog or handle error as needed
+      }
+    },
+    logout() {
+      localStorage.removeItem("token");
+      try {
+        this.$router.push("/");
+      } catch (error) {
+        console.error("Error during logout redirect:", error);
+      }
+    },
+  },
+  mounted() {
+    this.fetchUser(); // Call fetchUser on component mount
   },
 };
 </script>
+
 
 <style lang="scss" scoped></style>

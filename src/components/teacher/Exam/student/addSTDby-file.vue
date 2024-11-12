@@ -160,114 +160,101 @@ import moment from "moment";
 import { v4 as uuid } from "uuid";
 import { useStudentStore } from "@/stores/student";
 import * as XLSX from "xlsx";
+
 export default {
-  props: [""],
+  props: [],
   emit: ["addstudent"],
-  setup(props, { emit }) {
-    const excelData = ref([]);
-    const d = ref("1995-10-01");
-    const store = useStudentStore();
-    const router = useRouter();
-    const currentRoute = router.currentRoute;
-    const { getTime } = useGetDate();
-    const { generatePassword } = useGeneratepassword();
-    // const nuxtApp = useNuxtApp();
-    const dialog = ref(false);
-    const name = ref("");
-    const email = ref("");
-    const Gender = ref("male");
-    const birthday = ref();
-    const password = ref("");
-    const studentCode = ref("");
-    const Onopen = () => {};
-    const onSubmit = async () => {
-      excelData.value.map((v) => {
-        v.password = generatePassword();
-        v.time = getTime();
-        v.ExamId = currentRoute.value.params.student;
+  data() {
+    return {
+      excelData: [],
+      d: "1995-10-01",
+      name: "",
+      email: "",
+      Gender: "male",
+      birthday: null,
+      password: "",
+      studentCode: "",
+      dialog: false,
+    };
+  },
+  computed: {
+    generateEmail() {
+      if (this.name) {
+        this.email = this.name + "@gmail.com";
+        return this.name + "@gmail.com";
+      }
+    },
+  },
+  methods: {
+    async onSubmit() {
+      this.excelData.forEach((v) => {
+        v.password = this.generatePassword();
+        v.time = this.getTime();
+        v.ExamId = this.$route.params.student;
         v.id = uuid();
         v.role = "student";
         v.ACTION = "INSERT";
       });
-      if (excelData.value) {
-        var rs = "";
-        for (let index = 0; index < excelData.value.length; index++) {
-          console.log("excelData.value[index]", excelData.value[index]);
-          rs = await store.CRUDStudent(excelData.value[index]);
+
+      if (this.excelData) {
+        let rs = "";
+        for (let index = 0; index < this.excelData.length; index++) {
+          console.log("excelData.value[index]", this.excelData[index]);
+          rs = await this.$store.CRUDStudent(this.excelData[index]);
         }
         console.log("rs", rs);
+
         if (rs) {
-          nuxtApp.$openLoading();
+          this.$nuxt.$openLoading();
           setTimeout(() => {
             console.log("submit");
-            // nuxtApp.$closeDialog();
-            emit("addstudent", "added");
-            dialog.value = false;
-            nuxtApp.$closeLoading();
+            this.emit("addstudent", "added");
+            this.dialog = false;
+            this.$nuxt.$closeLoading();
           }, 800);
         }
       }
-    };
-    const onChange = () => {
-      console.log("Gender", Gender.value);
-    };
-
-    const generateEmail = computed(() => {
-      if (name.value) {
-        email.value = name.value + "@gmail.com";
-        return name.value + "@gmail.com";
-      }
-    });
-    const Generate = () => {
-      password.value = generatePassword();
-    };
-    const filecheck = () => {
+    },
+    onChange() {
+      console.log("Gender", this.Gender);
+    },
+    Generate() {
+      this.password = this.generatePassword();
+    },
+    filecheck() {
       document.getElementById("excelFile").click();
-    };
-    const excelExport = (event) => {
-      var input = event.target;
-      var reader = new FileReader();
+    },
+    excelExport(event) {
+      const input = event.target;
+      const reader = new FileReader();
       reader.onload = () => {
-        var fileData = reader.result;
-        var wb = XLSX.read(fileData, { type: "binary" });
+        const fileData = reader.result;
+        const wb = XLSX.read(fileData, { type: "binary" });
         wb.SheetNames.forEach((sheetName) => {
-          var rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
-          excelData.value = rowObj;
+          const rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
+          this.excelData = rowObj;
         });
       };
-
       reader.readAsBinaryString(input.files[0]);
-    };
-    watch(dialog, (currentValue, oldValue) => {
+    },
+    clearfile() {
+      this.excelData = [];
+    },
+    Onopen() {
+      // Open dialog logic
+    },
+  },
+  watch: {
+    dialog(currentValue) {
       if (currentValue === false) {
-        excelData.value = [];
+        this.excelData = [];
       } else {
-        excelData.value = [];
+        this.excelData = [];
       }
-    });
-    const clearfile = () => {
-      excelData.value = [];
-    };
-    return {
-      clearfile,
-      excelData,
-      filecheck,
-      excelExport,
-      moment,
-      email,
-      d,
-      name,
-      password,
-      dialog,
-      Gender,
-      birthday,
-      generateEmail,
-      studentCode,
-      onSubmit,
-      Onopen,
-      onChange,
-      Generate,
-    };
+    },
+  },
+  created() {
+    // You can place any initialization logic here
   },
 };
 </script>

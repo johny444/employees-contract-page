@@ -15,48 +15,59 @@
 </template>
 <script>
 import { useQuestionStore } from "@/stores/question";
+
 export default {
   props: ["item"],
-  emit: ["DelQT"],
-  setup(props, { emit }) {
-    const store = useQuestionStore();
-    // const nuxtApp = useNuxtApp();
-    const onDel = () => {
-      console.log("Del", props.item);
-      nuxtApp
-        .$openAlert("Q", nuxtApp.$t("areYouSureToDelete"))
+  emits: ["DelQT"],
+  data() {
+    return {
+      // You can define any reactive properties here if needed
+    };
+  },
+  created() {
+    // Store can be initialized here
+    this.store = useQuestionStore();
+    // Nuxt app or other initializations
+  },
+  methods: {
+    onDel() {
+      console.log("Del", this.item);
+      this.$nuxt
+        .$openAlert("Q", this.$t("areYouSureToDelete"))
         .then(async (res) => {
-          nuxtApp.$openLoading();
-          var rs = "";
-          for (let index = 0; index < props.item.length; index++) {
-            rs = await store.CRUDQUESTION({
-              id: props.item[index],
+          this.$nuxt.$openLoading();
+          let rs = "";
+          for (let index = 0; index < this.item.length; index++) {
+            rs = await this.store.CRUDQUESTION({
+              id: this.item[index],
               ACTION: "DELETE",
             });
           }
           console.log("rs", rs);
-          if (rs.status == "200") {
-            nuxtApp
-              .$openAlert("S", nuxtApp.$t("deleteDataSuccess"))
+          if (rs.status === "200") {
+            this.$nuxt
+              .$openAlert("S", this.$t("deleteDataSuccess"))
               .then(async (r) => {
                 console.log("Emit");
-                emit("DelQT", "Deled");
-                console.log("Delclass success");
-                nuxtApp.$closeLoading();
+                this.$emit("DelQT", "Deleted");
+                console.log("Del class success");
+                this.$nuxt.$closeLoading();
               });
           } else {
-            nuxtApp.$closeLoading();
-            nuxtApp.$openAlert("E", result.message);
+            this.$nuxt.$closeLoading();
+            this.$nuxt.$openAlert("E", rs.message); // Make sure to use the correct response message
           }
         })
         .catch((err) => {
           console.log("Error:", err);
         });
-    };
-    const receiveDel = () => {};
-    return { onDel, receiveDel, props };
+    },
+    receiveDel() {
+      // This method is defined but not used in your provided code
+    },
   },
 };
 </script>
+
 
 <style lang="scss" scoped></style>

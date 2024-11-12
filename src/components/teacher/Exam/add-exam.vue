@@ -84,78 +84,72 @@
 <script>
 import { v4 as uuid } from "uuid";
 import { useExamStore } from "@/stores/exam";
+
 export default {
   props: ["data"],
   emit: ["addclass"],
-  setup(props, { emit }) {
-    const { getTime } = useGetDate();
-    // const nuxtApp = useNuxtApp();
-    const storeExam = useExamStore();
-    const dialog = ref(false);
-    const exambinding = ref("");
-    const classExambinding = ref("");
-    const classbinding = ref("");
-    const termbinding = ref("mid");
-    const temp = ref();
-    const rules = ref({
-      required: (value) => !!value || nuxtApp.$t("requiredInsert"),
-      counter: (value) => value.length <= 20 || "Max 20 characters",
-      email: (value) => {
-        const pattern =
-          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return pattern.test(value) || nuxtApp.$t("InvalidEmail");
+  data() {
+    return {
+      storeExam: useExamStore(),
+      dialog: false,
+      exambinding: "", // Refactored from ref() to data
+      classExambinding: "", // Refactored from ref() to data
+      classbinding: "", // Refactored from ref() to data
+      termbinding: "mid", // Default value
+      temp: null, // Refactored from ref() to data
+      rules: {
+        required: (value) => !!value || this.$t("requiredInsert"),
+        counter: (value) => value.length <= 20 || "Max 20 characters",
+        email: (value) => {
+          const pattern =
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          return pattern.test(value) || this.$t("InvalidEmail");
+        },
       },
-    });
-    const Onopen = async () => {
-      console.log("props user", props.data.user);
-      exambinding.value = "";
-      classExambinding.value = "";
-      classbinding.value = "";
-      termbinding.value = "mid";
-      temp.value = props.data.classExam;
     };
-    const onSubmit = async () => {
-      console.log("classExambinding", JSON.stringify(classExambinding.value));
+  },
+  methods: {
+    async Onopen() {
+      console.log("props user", this.data.user);
+      this.exambinding = "";
+      this.classExambinding = "";
+      this.classbinding = "";
+      this.termbinding = "mid";
+      this.temp = this.data.classExam;
+    },
+    async onSubmit() {
+      console.log("classExambinding", JSON.stringify(this.classExambinding));
+
       let body = {
         id: uuid(),
-        classExamid: classExambinding.value.id,
-        term: termbinding.value,
-        time: getTime(),
+        classExamid: this.classExambinding.id,
+        term: this.termbinding,
+        time: this.getTime(),
         ACTION: "INSERT",
       };
+
       console.log("body:", body);
+
       if (body.classExamid && body.term !== "") {
-        var respone = await storeExam.CRUDEXAM(body);
-        console.log("respone", respone.message);
-        if (respone.code === "ERR_BAD_REQUEST") {
-          nuxtApp.$openDialog("E", respone.message);
+        let response = await this.storeExam.CRUDEXAM(body);
+        console.log("response", response.message);
+
+        if (response.code === "ERR_BAD_REQUEST") {
+          this.$nuxt.$openDialog("E", response.message);
         } else {
-          nuxtApp.$openDialog("S", nuxtApp.$t("insertDataSuccess"));
-          emit("addExam", "added");
+          this.$nuxt.$openDialog("S", this.$t("insertDataSuccess"));
+          this.$emit("addExam", "added");
           console.log("body");
           setTimeout(() => {
-            nuxtApp.$closeDialog();
+            this.$nuxt.$closeDialog();
           }, 800);
         }
       }
-    };
-    const OnSelect = async () => {
-      console.log("classExambinding", classExambinding.value);
-      classbinding.value = classExambinding.value.ClassExam;
-    };
-    return {
-      temp,
-      props,
-      termbinding,
-      dialog,
-      classExambinding,
-      classbinding,
-      exambinding,
-      rules,
-      Onopen,
-      onSubmit,
-      OnSelect,
-    };
+    },
+    async OnSelect() {
+      console.log("classExambinding", this.classExambinding);
+      this.classbinding = this.classExambinding.ClassExam;
+    },
   },
 };
 </script>

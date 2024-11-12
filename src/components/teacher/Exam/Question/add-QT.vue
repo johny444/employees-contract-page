@@ -75,62 +75,59 @@
 <script>
 import { v4 as uuid } from "uuid";
 import { useQuestionStore } from "@/stores/question";
+import useGetDate from "@/composables/getDate"; // Make sure this import is correct
+
 export default {
   props: ["examID"],
-  emit: ["addQT"],
-  setup(props, { emit }) {
-    const { getTime } = useGetDate();
-    // const nuxtApp = useNuxtApp();
-    const store = useQuestionStore();
-    const dialog = ref(false);
-    const questionbinding = ref("");
-    const optionbinding = ref([]);
-    const answer = ref("");
-    const rules = ref({
-      required: (value) => !!value || nuxtApp.$t("requiredInsert"),
-      counter: (value) => value.length <= 20 || "Max 20 characters",
-    });
-    const Onopen = () => {
-      questionbinding.value = "";
-      answer.value = "";
-      optionbinding.value = [];
-    };
-    const onSubmit = async () => {
-      let body = {
-        id: uuid(),
-        question: questionbinding.value,
-        options: optionbinding.value.toString(),
-        answer: answer.value,
-        examID: props.examID,
-        time: getTime(),
-        ACTION: "INSERT",
-      };
-      // console.log("body", body);
-      if (body) {
-        // nuxtApp.$openDialog();
-        await store.CRUDQUESTION(body);
-        emit("addQT", "added");
-        console.log("body");
-        // setTimeout(() => {
-        //   nuxtApp.$closeDialog();
-        // }, 800);
-      }
-    };
-
+  emits: ["addQT"],
+  data() {
     return {
-      dialog,
-      optionbinding,
-      questionbinding,
-      rules,
-      answer,
-      Onopen,
-      onSubmit,
+      dialog: false,
+      questionbinding: "",
+      optionbinding: [],
+      answer: "",
+      rules: {
+        required: (value) => !!value || this.$t("requiredInsert"),
+        counter: (value) => value.length <= 20 || "Max 20 characters",
+      },
+      items: Array.from({ length: 4 }, (k, v) => v + 1),
     };
   },
-  data: () => ({
-    items: Array.from({ length: 4 }, (k, v) => v + 1),
-  }),
+  created() {
+    this.store = useQuestionStore();
+    this.getTime = useGetDate(); // Assuming useGetDate returns a function
+  },
+  methods: {
+    Onopen() {
+      this.questionbinding = "";
+      this.answer = "";
+      this.optionbinding = [];
+    },
+    async onSubmit() {
+      let body = {
+        id: uuid(),
+        question: this.questionbinding,
+        options: this.optionbinding.toString(),
+        answer: this.answer,
+        examID: this.examID,
+        time: this.getTime(),
+        ACTION: "INSERT",
+      };
+
+      // console.log("body", body);
+      if (body) {
+        // this.$openDialog();  // If you want to use it, make sure the method is available
+        await this.store.CRUDQUESTION(body);
+        this.$emit("addQT", "added");
+        console.log("body");
+        // setTimeout(() => {
+        //   this.$closeDialog();
+        // }, 800);
+      }
+    },
+  },
 };
 </script>
+
 
 <style lang="scss" scoped></style>

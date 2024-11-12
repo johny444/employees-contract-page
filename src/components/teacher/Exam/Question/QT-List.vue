@@ -78,39 +78,48 @@
 </template>
 <script>
 import { useQuestionStore } from "@/stores/question";
+
 export default {
   props: ["examID"],
-  setup(props) {
-    const selected = ref([]);
-    const allChecked = ref(false);
-    const store = useQuestionStore();
-    const tableData = ref([]);
-    const getQT = async () => {
-      // await store.acGetquestionList();
-      await store.QUESTIONFILER(props.examID);
-      tableData.value = store.questionfilter;
-      console.log("tableData.value:", tableData.value);
+  data() {
+    return {
+      selected: [],
+      allChecked: false,
+      tableData: [],
     };
-    onMounted(() => {
-      getQT();
-    });
-    const receiveCUD = async (v) => {
-      getQT();
-    };
-    watch(allChecked, (currentValue, oldValue) => {
+  },
+  computed: {
+    store() {
+      return useQuestionStore();
+    },
+  },
+  methods: {
+    async getQT() {
+      await this.store.QUESTIONFILER(this.examID);
+      this.tableData = this.store.questionfilter;
+      console.log("tableData.value:", this.tableData);
+    },
+    async receiveCUD(v) {
+      await this.getQT();
+    },
+  },
+  watch: {
+    allChecked(currentValue, oldValue) {
       if (currentValue) {
-        tableData.value.map((v) => {
-          if (selected.value.indexOf(v.id) === -1) {
-            selected.value.push(v.id);
+        this.tableData.forEach((v) => {
+          if (!this.selected.includes(v.id)) {
+            this.selected.push(v.id);
           }
         });
       } else {
-        selected.value = [];
+        this.selected = [];
       }
-    });
-    return { tableData, props, selected, allChecked, receiveCUD };
+    },
+  },
+  created() {
+    this.getQT();
   },
 };
 </script>
 
-<style lang="scss" scoped></style>
+
