@@ -62,7 +62,7 @@
               <template v-else>
                 <td :colspan="9">
                   <div style="margin-top: 1rem; text-align: center">
-                    <NoData></NoData>
+                    <no-data></no-data>
                   </div>
                 </td>
               </template>
@@ -72,7 +72,7 @@
       </v-card>
     </template>
     <template v-else>
-      <NoData></NoData>
+      <no-data></no-data>
     </template>
   </div>
 </template>

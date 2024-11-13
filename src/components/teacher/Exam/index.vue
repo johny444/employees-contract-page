@@ -28,7 +28,7 @@
           </tr>
         </thead>
         <tbody>
-          <template v-if="tableData.length > 0">
+          <template v-if="!loading && tableData.length > 0">
             <tr v-for="(item, i) in tableData" :key="item.name">
               <td width="5%" align="center">{{ i + 1 }}</td>
               <td width="10%">{{ item.classExamid.subjectExam }}</td>
@@ -67,10 +67,10 @@
               </td>
             </tr>
           </template>
-          <template v-else>
+          <template v-else-if="!loading && tableData.length === 0">
             <td :colspan="9">
               <div style="margin-top: 1rem; text-align: center">
-                <NoData></NoData>
+                <no-data></no-data>
               </div>
             </td>
           </template>
@@ -103,6 +103,8 @@ export default {
       tableData: [],
       perPage: 10,
       searchText: "",
+      loading: true, // Add loading state
+      loadingStore: useLoadingStore(),
     };
   },
   computed: {
@@ -121,36 +123,43 @@ export default {
   },
   methods: {
     async ClassExam() {
-      console.log("Loading has mounted");
-      await this.store.CRUDEXAM({ ACTION: "GETAll" });
-      await this.storeUser.acGetuserList(localStorage.getItem("token"));
-      await this.storeclass.CRUDCLASSEXAM({
-        ACTION: "GETBYTEACHERID",
-        teacherID: this.storeUser.getuserList.user[0].id,
-      });
-      this.storeclass.CLASSEXAMFILER(
-        this.storeclass.getclassExamList.DATA,
-        this.storeUser.getuserList.user[0].id
-      );
-
-      const matching = this.InsertClassExamInfoToExam(
-        this.store.examList.DATA,
-        this.storeclass.examclassfilter
-      );
-      matching.forEach((item) => {
-        item.classExamid = this.storeclass.examclassfilter.find(
-          (exam) => exam.id === item.classExamid
+      try {
+        this.loading = true; // Start loading
+        console.log("Loading has mounted");
+        await this.store.CRUDEXAM({ ACTION: "GETAll" });
+        await this.storeUser.acGetuserList(localStorage.getItem("token"));
+        await this.storeclass.CRUDCLASSEXAM({
+          ACTION: "GETBYTEACHERID",
+          teacherID: this.storeUser.getuserList.user[0].id,
+        });
+        this.storeclass.CLASSEXAMFILER(
+          this.storeclass.getclassExamList.DATA,
+          this.storeUser.getuserList.user[0].id
         );
-      });
 
-      let newArray = matching;
-      this.storeResult.GetExamlistRS(newArray);
+        const matching = this.InsertClassExamInfoToExam(
+          this.store.examList.DATA,
+          this.storeclass.examclassfilter
+        );
+        matching.forEach((item) => {
+          item.classExamid = this.storeclass.examclassfilter.find(
+            (exam) => exam.id === item.classExamid
+          );
+        });
 
-      this.tableData = [];
-      for (let i = 0; i < this.perPage; i++) {
-        if (i < newArray.length) {
-          this.tableData.push(newArray[i]);
+        let newArray = matching;
+        this.storeResult.GetExamlistRS(newArray);
+
+        this.tableData = [];
+        for (let i = 0; i < this.perPage; i++) {
+          if (i < newArray.length) {
+            this.tableData.push(newArray[i]);
+          }
         }
+      } catch (error) {
+        console.log("catch error:", error);
+      } finally {
+        this.loading = false; // End loading
       }
     },
     receiveCUD(v) {
@@ -192,8 +201,9 @@ export default {
     },
   },
   mounted() {
+    this.loadingStore.openLoading();
     this.ClassExam();
-    console.log("Exam component mounted");
+    this.loadingStore.closeLoading();
   },
 };
 </script>

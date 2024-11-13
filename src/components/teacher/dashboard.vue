@@ -25,7 +25,7 @@
               <h1>{{ count }}</h1>
             </v-col>
             <v-col cols="4">
-              <v-icon style="font-size: 6rem"> {{ icon }} </v-icon>
+              <v-icon style="font-size: 5rem"> {{ icon }} </v-icon>
             </v-col>
           </v-row>
         </v-container>

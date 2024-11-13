@@ -24,7 +24,7 @@
           </tr>
         </thead>
         <tbody>
-          <template v-if="tableData.length > 0">
+          <template v-if="!loading && tableData.length > 0">
             <tr v-for="(item, i) in tableData" :key="item.name" align="center">
               <td width="5%">{{ i + 1 }}</td>
               <td width="10%">{{ item.subjectExam }}</td>
@@ -54,10 +54,10 @@
               </td>
             </tr>
           </template>
-          <template v-else>
+          <template v-else-if="!loading && tableData.length === 0">
             <td :colspan="9">
               <div style="margin-top: 1rem; text-align: center">
-                <NoData></NoData>
+                <no-data></no-data>
               </div>
             </td>
           </template>
@@ -86,16 +86,21 @@ export default {
       perPage: 10, // Replaces ref(10)
       Status: "", // Replaces ref("")
       token: "", // Replaces ref("")
+      loading: true, // Add loading state
       store: useClassStore(),
       storeUser: useUserStore(),
+      loadingStore: useLoadingStore(),
     };
   },
+
   mounted() {
     this.ClassExam(); // Equivalent to onMounted
   },
   methods: {
     async ClassExam() {
       try {
+        this.loading = true; // Start loading
+        this.loadingStore.openLoading();
         this.token = localStorage.getItem("token");
 
         // loadingStore.openLoading();
@@ -122,6 +127,9 @@ export default {
       } catch (error) {
         console.log("catch error:", error);
         // nuxtApp.$openDialog("E", error);
+      } finally {
+        this.loading = false; // End loading
+        this.loadingStore.closeLoading();
       }
     },
     async receiveCUD(v) {

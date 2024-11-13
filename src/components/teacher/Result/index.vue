@@ -18,7 +18,7 @@
           </tr>
         </thead>
         <tbody>
-          <template v-if="tableData.length > 0">
+          <template v-if="!loading && tableData.length > 0">
             <tr v-for="(item, i) in tableData" :key="item.name">
               <td width="5%" align="center">{{ i + 1 }}</td>
               <td width="10%">{{ item.classExamid.subjectExam }}</td>
@@ -48,10 +48,10 @@
               </td>
             </tr>
           </template>
-          <template v-else>
+          <template v-else-f="!loading && tableData.length === 0">
             <td :colspan="9">
               <div style="margin-top: 1rem; text-align: center">
-                <NoData></NoData>
+                <no-data></no-data>
               </div>
             </td>
           </template>
@@ -79,11 +79,20 @@ export default {
     return {
       tableData: [],
       perPage: 10,
+      loading: true, // Add loading state
+      loadingStore: useLoadingStore(),
     };
   },
   mounted() {
+    this.loadingStore.openLoading();
     this.ClassExam();
     this.getExam();
+    this.loadingStore.closeLoading();
+  },
+  computed: {
+    isLoading() {
+      return this.loadingStore.isLoading;
+    },
   },
   methods: {
     async ClassExam() {

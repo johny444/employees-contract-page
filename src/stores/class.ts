@@ -22,7 +22,7 @@ export const useClassStore = defineStore("classStore", {
       return respone;
     },
     async CLASSEXAMFILER(body: Array<object>, userID: string) {
-      // console.log("body", body);
+      console.log("body", body);
       // console.log("userID", userID);
       this.examclassfilter = body.filter((v) => {
         return v.teacherID === userID;
