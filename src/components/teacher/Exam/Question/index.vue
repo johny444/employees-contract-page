@@ -42,10 +42,10 @@
         <v-card-text>
           <v-window v-model="tab">
             <v-window-item value="one" align="center">
-              <QTList :examID="props.examID" />
+              <QTList :examID="examID" />
             </v-window-item>
             <v-window-item value="two">
-              <QTImport :examID="props.examID" @DL="receiveDialog" />
+              <QTImport :examID="examID" @DL="receiveDialog" />
             </v-window-item>
           </v-window>
         </v-card-text>
@@ -60,6 +60,7 @@ import QTList from "./QT-List.vue";
 import QTImport from "./QT-import.vue";
 
 export default {
+  props: ["examID"],
   components: {
     QTList,
     QTImport,

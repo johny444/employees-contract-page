@@ -12,7 +12,7 @@
       >
         <v-icon
           style="color: rgb(16, 98, 212)"
-          icon="fa-regular fa-pen-to-square"
+          icon="fa-solid fa-file-pen"
         ></v-icon>
         <v-tooltip activator="parent" location="top">{{
           $t("edit")
@@ -94,6 +94,8 @@ export default {
   emit: ["updateExam"],
   data() {
     return {
+      AlertStore: useAlertStore2(),
+      loadingStore: useLoadingStore(),
       dialog: false,
       subjectbinding: "",
       classbinding: "",
@@ -124,13 +126,18 @@ export default {
       };
       console.log("body:", body);
       if (body.classExamid && body.term !== "") {
-        this.$openDialog("U", this.$t("updateDataSuccess"));
-        await this.storeExam.CRUDEXAM(body);
-        this.$emit("updateExam", "updated");
-        console.log("body");
-        setTimeout(() => {
-          this.$closeDialog();
-        }, 800);
+        // this.$openDialog("U", this.$t("updateDataSuccess"));
+        var result = await this.storeExam.CRUDEXAM(body);
+        if (result.status == "200") {
+          this.AlertStore.openAlert("S", this.$t("updateDataSuccess")).then(
+            () => {
+              this.loadingStore.closeLoading();
+              this.$emit("updateExam", "updated");
+            }
+          );
+        } else {
+          this.AlertStore.openAlert("E", result.status);
+        }
       }
     },
     async OnSelect() {
@@ -141,9 +148,6 @@ export default {
   computed: {
     storeExam() {
       return useExamStore();
-    },
-    getTime() {
-      return useGetDate().getTime;
     },
   },
 };

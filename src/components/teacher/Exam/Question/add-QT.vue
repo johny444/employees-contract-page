@@ -75,7 +75,6 @@
 <script>
 import { v4 as uuid } from "uuid";
 import { useQuestionStore } from "@/stores/question";
-import useGetDate from "@/composables/getDate"; // Make sure this import is correct
 
 export default {
   props: ["examID"],
@@ -95,7 +94,6 @@ export default {
   },
   created() {
     this.store = useQuestionStore();
-    this.getTime = useGetDate(); // Assuming useGetDate returns a function
   },
   methods: {
     Onopen() {

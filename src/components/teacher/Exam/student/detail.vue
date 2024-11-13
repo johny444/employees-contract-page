@@ -201,7 +201,7 @@ export default {
       };
 
       console.log("Body", body);
-      this.$nuxt.$openLoading();
+      this.loadingStore.openLoading();
       var result = await this.store.CRUDStudent(body);
       console.log("result", result);
 
@@ -210,12 +210,12 @@ export default {
         this.$nuxt
           .$openAlert("S", this.$nuxt.$t("updateDataSuccess"))
           .then(async () => {
-            this.$nuxt.$closeLoading();
+            this.loadingStore.closeLoading();
             this.$emit("updatestd", "updated");
           });
       } else {
-        this.$nuxt.$closeLoading();
-        this.$nuxt.$openAlert("E", result.status);
+        this.loadingStore.closeLoading();
+        this.AlertStore.openAlert("E", result.status);
       }
     },
   },

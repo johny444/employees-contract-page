@@ -31,7 +31,7 @@ export default {
         this.$nuxt
           .$openAlert("Q", this.$nuxt.$t("areYouSureToDelete"))
           .then(async (res) => {
-            this.$nuxt.$openLoading();
+            this.loadingStore.openLoading();
 
             // Perform the delete operation
             const result = await this.store.CRUDEXAM({
@@ -41,22 +41,22 @@ export default {
 
             console.log("result.status", result.status);
 
-            if (result.status === "200") {
+            if (result.status == "200") {
               this.$nuxt
                 .$openAlert("S", this.$nuxt.$t("deleteDataSuccess"))
                 .then(() => {
                   this.$emit("DelExam", "Deled");
                   console.log("Delclass success");
-                  this.$nuxt.$closeLoading();
+                  this.loadingStore.closeLoading();
                 });
             } else {
-              this.$nuxt.$closeLoading();
-              this.$nuxt.$openAlert("E", result.message);
+              this.loadingStore.closeLoading();
+              this.AlertStore.openAlert("E", result.message);
             }
           })
           .catch((err) => {
             console.log("Error:", err);
-            this.$nuxt.$closeLoading();
+            this.loadingStore.closeLoading();
           });
       } catch (error) {
         console.log("Caught Error:", error);

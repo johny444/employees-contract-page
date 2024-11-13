@@ -30,7 +30,7 @@ export default {
       this.$nuxt
         .$openAlert("Q", this.$nuxt.$t("areYouSureToDelete"))
         .then(async (res) => {
-          this.$nuxt.$openLoading();
+          this.loadingStore.openLoading();
 
           let rs = "";
           for (let index = 0; index < this.item.length; index++) {
@@ -48,11 +48,11 @@ export default {
                 console.log("Emit");
                 this.$emit("Delstudent", "Deled");
                 console.log("Delclass success");
-                this.$nuxt.$closeLoading();
+                this.loadingStore.closeLoading();
               });
           } else {
-            this.$nuxt.$closeLoading();
-            this.$nuxt.$openAlert("E", rs.message);
+            this.loadingStore.closeLoading();
+            this.AlertStore.openAlert("E", rs.message);
           }
         })
         .catch((err) => {

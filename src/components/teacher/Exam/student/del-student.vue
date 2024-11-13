@@ -30,7 +30,7 @@ export default {
       this.$nuxt
         .$openAlert("Q", this.$nuxt.$t("areYouSureToDelete"))
         .then(async (res) => {
-          this.$nuxt.$openLoading();
+          this.loadingStore.openLoading();
           // Perform the delete operation
           var result = await this.store.CRUDStudent({
             id: this.item,
@@ -44,12 +44,12 @@ export default {
               .then(async (r) => {
                 this.$emit("Delstudent", "Deled");
                 console.log("Delclass success");
-                this.$nuxt.$closeLoading();
+                this.loadingStore.closeLoading();
               });
           } else {
             // If delete fails, show error alert
-            this.$nuxt.$closeLoading();
-            this.$nuxt.$openAlert("E", result.message);
+            this.loadingStore.closeLoading();
+            this.AlertStore.openAlert("E", result.message);
           }
         })
         .catch((err) => {

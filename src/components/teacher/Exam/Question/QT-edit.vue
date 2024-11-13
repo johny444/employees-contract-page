@@ -110,11 +110,11 @@ export default {
       };
 
       if (body) {
-        this.$nuxt.$openDialog(); // Assuming you still want to use nuxtApp
+        this.AlertStore.openDialog(); // Assuming you still want to use nuxtApp
         await this.store.CRUDQUESTION(body);
         this.$emit("updateQT", "updated");
         setTimeout(() => {
-          this.$nuxt.$closeDialog();
+          this.AlertStore.closeDialog();
         }, 800);
       }
     },

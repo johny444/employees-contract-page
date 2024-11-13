@@ -83,13 +83,13 @@
 
 <script>
 import { v4 as uuid } from "uuid";
-import { useExamStore } from "@/stores/exam";
 
 export default {
   props: ["data"],
   emit: ["addclass"],
   data() {
     return {
+      AlertStore: useAlertStore(),
       storeExam: useExamStore(),
       dialog: false,
       exambinding: "", // Refactored from ref() to data
@@ -135,13 +135,13 @@ export default {
         console.log("response", response.message);
 
         if (response.code === "ERR_BAD_REQUEST") {
-          this.$nuxt.$openDialog("E", response.message);
+          this.AlertStore.openDialog("E", response.message);
         } else {
-          this.$nuxt.$openDialog("S", this.$t("insertDataSuccess"));
+          this.AlertStore.openDialog("S", this.$t("insertDataSuccess"));
           this.$emit("addExam", "added");
           console.log("body");
           setTimeout(() => {
-            this.$nuxt.$closeDialog();
+            this.AlertStore.closeDialog();
           }, 800);
         }
       }

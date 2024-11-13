@@ -13,7 +13,7 @@
         >
           <v-icon
             style="color: rgb(16, 98, 212)"
-            icon="fa-regular fa-pen-to-square"
+            icon="fa-solid fa-file-pen"
           ></v-icon>
           <v-tooltip activator="parent" location="start">{{
             $t("edit")
@@ -74,6 +74,8 @@ export default {
   data() {
     return {
       store: useClassStore(),
+      loadingStore: useLoadingStore(),
+      AlertStore: useAlertStore2(),
       dialog: false, // Replaces ref(false)
       subjectbinding: "", // Replaces ref("")
       classbinding: "", // Replaces ref("")
@@ -104,31 +106,33 @@ export default {
       this.classbinding = this.data.classExam;
     },
     async onSubmit() {
-      // let body = {
-      //   id: this.data.id, // Accessing props.data
-      //   subjectExam: this.subjectbinding, // Accessing local variable
-      //   classExam: this.classbinding, // Accessing local variable
-      //   status: this.data.status, // Accessing props.data
-      //   time: this.getTime(), // Calling the method
-      //   teacherID: this.data.teacherID, // Accessing props.data
-      //   ACTION: "UPDATE",
-      // };
-      // console.log("body", body);
-      // // Loading indicator start
-      // this.$nuxt.$openLoading();
-      // // Making the request
-      // var result = await this.store.CRUDCLASSEXAM(body);
-      // // Handling the response
-      // if (result.status == "200") {
-      //   console.log("result", result);
-      //   this.$nuxt.$openAlert("S", this.$t("updateDataSuccess")).then(() => {
-      //     this.$nuxt.$closeLoading();
-      //     this.$emit("updateclass", "updated");
-      //   });
-      // } else {
-      //   this.$nuxt.$closeLoading();
-      //   this.$nuxt.$openAlert("E", result.status);
-      // }
+      let body = {
+        id: this.data.id, // Accessing props.data
+        subjectExam: this.subjectbinding, // Accessing local variable
+        classExam: this.classbinding, // Accessing local variable
+        status: this.data.status, // Accessing props.data
+        time: this.getTime(), // Calling the method
+        teacherID: this.data.teacherID, // Accessing props.data
+        ACTION: "UPDATE",
+      };
+      console.log("body", body);
+      // Loading indicator start
+      this.loadingStore.openLoading();
+      // Making the request
+      var result = await this.store.CRUDCLASSEXAM(body);
+      // Handling the response
+      if (result.status == "200") {
+        console.log("result", result);
+        this.AlertStore.openAlert("S", this.$t("updateDataSuccess")).then(
+          () => {
+            this.loadingStore.closeLoading();
+            this.$emit("updateclass", "updated");
+          }
+        );
+      } else {
+        this.loadingStore.closeLoading();
+        this.AlertStore.openAlert("E", result.status);
+      }
     },
   },
 };

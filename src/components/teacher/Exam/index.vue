@@ -45,7 +45,7 @@
                     @updateExam="receiveCUD"
                   />
                   <v-spacer></v-spacer>
-                  <NuxtLink :to="`/exam/${item.id}`">
+                  <router-link :to="`/exam/${item.id}`">
                     <v-btn
                       variant="text"
                       density="compact"
@@ -57,7 +57,7 @@
                         $t("detail")
                       }}</v-tooltip>
                     </v-btn>
-                  </NuxtLink>
+                  </router-link>
                   <v-spacer></v-spacer>
                   <ExamQuestion :examID="item.id" />
 
@@ -119,8 +119,8 @@ export default {
   methods: {
     async ClassExam() {
       try {
-        this.loading = true; // Start loading
-        console.log("Loading has mounted");
+        // this.loading = true; // Start loading
+        this.loadingStore.openLoading();
         await this.store.CRUDEXAM({ ACTION: "GETAll" });
         await this.storeUser.acGetuserList(localStorage.getItem("token"));
         await this.storeclass.CRUDCLASSEXAM({
@@ -155,6 +155,7 @@ export default {
         console.log("catch error:", error);
       } finally {
         this.loading = false; // End loading
+        this.loadingStore.closeLoading();
       }
     },
     receiveCUD(v) {
@@ -196,9 +197,7 @@ export default {
     },
   },
   mounted() {
-    this.loadingStore.openLoading();
     this.ClassExam();
-    this.loadingStore.closeLoading();
   },
 };
 </script>

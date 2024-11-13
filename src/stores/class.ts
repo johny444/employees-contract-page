@@ -16,6 +16,7 @@ export const useClassStore = defineStore("classStore", {
         .post("http://localhost:8080/classExam", body)
         .catch((err) => {
           console.log("ERRO form fetchQuestion", err);
+          return err;
         });
       // console.log("respone", respone);
       this.classExamList = respone.data;

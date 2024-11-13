@@ -6,9 +6,9 @@
       </v-col>
       <v-col style="text-align: end">
         <div class="d-inline-flex">
-          <ExamStudentAddSTDbyFile @addstudent="receiveCUD" />
+          <addSTDby-file @addstudent="receiveCUD" />
           <div class="mx-2"></div>
-          <ExamStudentAddStudent @addstudent="receiveCUD" />
+          <add-student @addstudent="receiveCUD" />
         </div>
       </v-col>
     </v-row>
@@ -114,6 +114,7 @@ import { useStudentStore } from "@/stores/student";
 export default {
   data() {
     return {
+      loadingStore: useLoadingStore(),
       tableData: [],
       selected: [],
       allChecked: false,
@@ -130,9 +131,9 @@ export default {
   },
   methods: {
     async ClassExam() {
-      this.$nuxt.$openLoading();
+      this.loadingStore.openLoading();
       await this.store.StudentFILER(this.currentRoute.value.params.student);
-      this.$nuxt.$closeLoading();
+      this.loadingStore.closeLoading();
       this.newArray = this.store.studentfilter;
       this.tableData = [];
       for (let i = 0; i < this.perPage; i++) {

@@ -11,6 +11,7 @@
     "@fortawesome/fontawesome-free": "^6.6.0",
     "axios": "^1.7.7",
     "core-js": "^3.37.1",
+    "moment": "^2.30.1",
     "roboto-fontface": "*",
     "uuid": "^11.0.3",
     "vue": "^3.4.31",

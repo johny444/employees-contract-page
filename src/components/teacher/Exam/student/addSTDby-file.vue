@@ -156,7 +156,6 @@
 </template>
 
 <script>
-import moment from "moment";
 import { v4 as uuid } from "uuid";
 import { useStudentStore } from "@/stores/student";
 import * as XLSX from "xlsx";
@@ -205,12 +204,12 @@ export default {
         console.log("rs", rs);
 
         if (rs) {
-          this.$nuxt.$openLoading();
+          this.loadingStore.openLoading();
           setTimeout(() => {
             console.log("submit");
             this.emit("addstudent", "added");
             this.dialog = false;
-            this.$nuxt.$closeLoading();
+            this.loadingStore.closeLoading();
           }, 800);
         }
       }

@@ -35,7 +35,7 @@ export default {
             id: this.item, // Pass the item ID
             ACTION: "DELETE", // Delete action
           });
-
+          console.log("result", result);
           if (result.status == "200") {
             console.log("Emit");
             this.AlertStore.openAlert("S", this.$t("deleteDataSuccess")) // Success alert

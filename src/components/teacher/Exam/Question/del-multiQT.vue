@@ -21,21 +21,18 @@ export default {
   emits: ["DelQT"],
   data() {
     return {
+      loadingStore: useLoadingStore(),
       // You can define any reactive properties here if needed
+      AlertStore: useAlertStore2(),
+      store: useQuestionStore(),
     };
-  },
-  created() {
-    // Store can be initialized here
-    this.store = useQuestionStore();
-    // Nuxt app or other initializations
   },
   methods: {
     onDel() {
       console.log("Del", this.item);
-      this.$nuxt
-        .$openAlert("Q", this.$t("areYouSureToDelete"))
+      this.AlertStore.openAlert("Q", this.$t("areYouSureToDelete"))
         .then(async (res) => {
-          this.$nuxt.$openLoading();
+          this.loadingStore.openLoading();
           let rs = "";
           for (let index = 0; index < this.item.length; index++) {
             rs = await this.store.CRUDQUESTION({
@@ -43,19 +40,21 @@ export default {
               ACTION: "DELETE",
             });
           }
-          console.log("rs", rs);
-          if (rs.status === "200") {
-            this.$nuxt
-              .$openAlert("S", this.$t("deleteDataSuccess"))
-              .then(async (r) => {
+          // console.log("rs", rs);
+          // console.log("rs", rs.status);
+          if (rs.status == "200") {
+            console.log("success");
+            this.AlertStore.openAlert("S", this.$t("deleteDataSuccess")).then(
+              async (r) => {
                 console.log("Emit");
                 this.$emit("DelQT", "Deleted");
                 console.log("Del class success");
-                this.$nuxt.$closeLoading();
-              });
+                this.loadingStore.closeLoading();
+              }
+            );
           } else {
-            this.$nuxt.$closeLoading();
-            this.$nuxt.$openAlert("E", rs.message); // Make sure to use the correct response message
+            this.loadingStore.closeLoading();
+            this.AlertStore.openAlert("E", rs.message); // Make sure to use the correct response message
           }
         })
         .catch((err) => {

@@ -2,7 +2,7 @@
   <div>
     <v-row>
       <v-col style="text-align: start">
-        <ExamQuestionAddQT :examID="props.examID" @addQT="receiveCUD" />
+        <add-QT :examID="examID" @addQT="receiveCUD" />
       </v-col>
     </v-row>
     <template v-if="tableData.length > 0">
@@ -15,7 +15,7 @@
         <v-col style="text-align: end" class="py-0">
           <div class="d-inline-flex mr-4">
             <v-checkbox-btn color="red" v-model="allChecked"></v-checkbox-btn>
-            <ExamQuestionDelMultiQT :item="selected" @DelQT="receiveCUD" />
+            <del-multiQT :item="selected" @DelQT="receiveCUD" />
           </div>
         </v-col>
       </v-row>
@@ -46,10 +46,7 @@
                   <td width="1%">
                     <v-row justify="center">
                       <v-spacer></v-spacer>
-                      <ExamQuestionQTEdit
-                        :data="question"
-                        @updateQT="receiveCUD"
-                      />
+                      <QT-edit :data="question" @updateQT="receiveCUD" />
                       <v-checkbox-btn
                         color="red"
                         :value="question.id"

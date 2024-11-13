@@ -155,11 +155,11 @@ export default {
         }
 
         if (rs) {
-          this.$nuxt.$openLoading();
+          this.loadingStore.openLoading();
           setTimeout(() => {
-            this.$nuxt.$closeDialog();
+            this.AlertStore.closeDialog();
             this.$emit("DL", false);
-            this.$nuxt.$closeLoading();
+            this.loadingStore.closeLoading();
           }, 800);
         }
       }

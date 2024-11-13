@@ -95,7 +95,7 @@ export default {
   methods: {
     async ClassExam() {
       try {
-        this.loading = true; // Start loading
+        // this.loading = true; // Start loading
         this.loadingStore.openLoading();
         this.token = localStorage.getItem("token");
 
@@ -109,9 +109,9 @@ export default {
         });
 
         // loadingStore.closeLoading();
-        console.log("Class: ", this.store.getclassExamList.DATA);
+        console.log("Class: ", this.store.classExamList.DATA);
 
-        let newArray = this.store.getclassExamList.DATA.filter((v) => {
+        let newArray = this.store.classExamList.DATA.filter((v) => {
           return v.teacherID === this.storeUser.getuserList.user[0].id;
         });
         this.tableData = [];
