@@ -1,5 +1,7 @@
 <template>
   <loading />
+  <alertDialog />
+  <alert />
   <v-app>
     <v-main>
       <!-- Dynamically render the layout specified in the route's meta -->

@@ -68,8 +68,6 @@
   </div>
 </template>
 <script>
-import { useClassStore } from "@/stores/class";
-
 export default {
   props: ["data"],
   emit: ["updateclass"],
@@ -106,8 +104,6 @@ export default {
       this.classbinding = this.data.classExam;
     },
     async onSubmit() {
-      console.log("getTime()", this.getTime());
-
       // let body = {
       //   id: this.data.id, // Accessing props.data
       //   subjectExam: this.subjectbinding, // Accessing local variable
@@ -117,19 +113,14 @@ export default {
       //   teacherID: this.data.teacherID, // Accessing props.data
       //   ACTION: "UPDATE",
       // };
-
       // console.log("body", body);
-
       // // Loading indicator start
       // this.$nuxt.$openLoading();
-
       // // Making the request
       // var result = await this.store.CRUDCLASSEXAM(body);
-
       // // Handling the response
       // if (result.status == "200") {
       //   console.log("result", result);
-
       //   this.$nuxt.$openAlert("S", this.$t("updateDataSuccess")).then(() => {
       //     this.$nuxt.$closeLoading();
       //     this.$emit("updateclass", "updated");

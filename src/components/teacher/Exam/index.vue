@@ -88,11 +88,6 @@
 </template>
 
 <script>
-import { useExamStore } from "@/stores/exam";
-import { useClassStore } from "@/stores/class";
-import { useUserStore } from "@/stores/user";
-import { useResultStore } from "@/stores/result";
-import { useLoadingStore } from "@/stores/loadingStore";
 import ExamQuestion from "@/components/teacher/Exam/Question/index.vue";
 export default {
   components: {

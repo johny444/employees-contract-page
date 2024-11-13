@@ -38,7 +38,8 @@ export default defineConfig({
       },
     }),
     AutoImport({
-      imports: ["vue", "vue-router"],
+      imports: ["vue", "vue-router", "pinia"],
+      dirs: ["src/stores"],
       eslintrc: {
         enabled: true,
       },

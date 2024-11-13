@@ -8,15 +8,22 @@
     </div>
   </v-dialog>
 </template>
-<script setup>
-import { useLoadingStore } from "@/stores/loadingStore";
-const loadingStore = useLoadingStore();
-onMounted(() => {
-  // console.log("Loading has mmount", loadingStore.open);
-  // loadingStore.open = "asd";
-  // console.log("Loading has mmount", loadingStore.open);
-});
+<script>
+export default {
+  data() {
+    return {
+      loadingStore: useLoadingStore(),
+    };
+  },
+  mounted() {
+    // Use the loading store as needed when the component mounts
+    // console.log("Loading has mounted", this.loadingStore.open);
+    // this.loadingStore.open = "asd";
+    // console.log("Loading has mounted", this.loadingStore.open);
+  },
+};
 </script>
+
 <style>
 .spinner {
   width: 8px;

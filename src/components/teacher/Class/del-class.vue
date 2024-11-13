@@ -15,21 +15,21 @@
 </template>
 
 <script>
-import { useClassStore } from "@/stores/class"; // Import Pinia store
-
 export default {
   props: ["item"],
   emits: ["Delclass"],
   data() {
     return {
       store: useClassStore(), // Access the store
+      AlertStore: useAlertStore2(),
+      loadingStore: useLoadingStore(),
     };
   },
   methods: {
     async onDel() {
-      this.$openAlert("Q", this.$t("areYouSureToDelete")) // Open confirmation alert
+      this.AlertStore.openAlert("Q", this.$t("areYouSureToDelete")) // Open confirmation alert
         .then(async (res) => {
-          this.$openLoading(); // Open loading indicator
+          this.loadingStore.openLoading(); // Open loading indicator
 
           let result = await this.store.CRUDCLASSEXAM({
             id: this.item, // Pass the item ID
@@ -38,15 +38,15 @@ export default {
 
           if (result.status == "200") {
             console.log("Emit");
-            this.$openAlert("S", this.$t("deleteDataSuccess")) // Success alert
+            this.AlertStore.openAlert("S", this.$t("deleteDataSuccess")) // Success alert
               .then(async (r) => {
                 this.$emit("Delclass", "Deled"); // Emit event
                 console.log("Delclass success");
-                this.$closeLoading(); // Close loading
+                this.loadingStore.closeLoading(); // Close loading
               });
           } else {
-            this.$closeLoading(); // Close loading if error
-            this.$openAlert("E", result.message); // Error alert
+            this.loadingStore.closeLoading(); // Close loading if error
+            this.AlertStore.openAlert("E", result.message); // Error alert
           }
         })
         .catch((err) => {

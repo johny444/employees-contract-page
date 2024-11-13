@@ -62,14 +62,15 @@
 </template>
 
 <script>
-import { useClassStore } from "@/stores/class"; // Import your Pinia store
+// import { useClassStore } from "@/stores/class"; // Import your Pinia store
 import { v4 as uuid } from "uuid";
-
+// import { useAlertStore } from "@/stores/alertStore";
 export default {
   props: ["userInfo"],
   emits: ["addclass"],
   data() {
     return {
+      AlertStore: useAlertStore(),
       dialog: false,
       subjectbinding: "",
       classbinding: "",
@@ -91,25 +92,22 @@ export default {
     },
     async onSubmit() {
       const store = useClassStore(); // Access your Pinia store here
-      const { getTime } = store; // Access methods or state from your store
-
       let body = {
         id: uuid(),
         subjectExam: this.subjectbinding,
         status: "A",
         classExam: this.classbinding,
-        time: getTime(),
+        time: this.getTime(),
         teacherID: this.userInfo[0].id,
         ACTION: "INSERT",
       };
-
       if (body.subjectExam && body.classExam !== "") {
-        this.$openDialog("S", this.$t("insertDataSuccess"));
+        this.AlertStore.openDialog("S", this.$t("insertDataSuccess"));
         await store.CRUDCLASSEXAM(body); // Use the store's method
         this.$emit("addclass", "added");
         console.log("body");
         setTimeout(() => {
-          this.$closeDialog();
+          this.AlertStore.closeDialog();
         }, 800);
       }
     },

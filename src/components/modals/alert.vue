@@ -1,14 +1,14 @@
 <template>
   <div>
     <v-dialog
-      v-model="$alertState.dialog"
+      v-model="AlertStore.dialog"
       transition="dialog-top-transition"
       width="auto"
       persistent
     >
       <v-card class="rounded-lg">
         <v-toolbar
-          v-if="$alertState.type == 'Q'"
+          v-if="AlertStore.type == 'Q'"
           density="compact"
           color="secondary"
           ><v-icon
@@ -21,7 +21,7 @@
           <v-spacer></v-spacer>
         </v-toolbar>
         <v-toolbar
-          v-else-if="$alertState.type == 'S'"
+          v-else-if="AlertStore.type == 'S'"
           density="compact"
           color="success"
           ><v-icon
@@ -34,7 +34,7 @@
           <v-spacer></v-spacer>
         </v-toolbar>
         <v-toolbar
-          v-else-if="$alertState.type == 'E'"
+          v-else-if="AlertStore.type == 'E'"
           density="compact"
           color="error"
           ><v-icon
@@ -47,7 +47,7 @@
           <v-spacer></v-spacer>
         </v-toolbar>
         <v-toolbar
-          v-else-if="$alertState.type == 'W'"
+          v-else-if="AlertStore.type == 'W'"
           density="compact"
           color="warning"
           ><v-icon
@@ -59,7 +59,7 @@
           <v-spacer></v-spacer>
         </v-toolbar>
         <v-toolbar
-          v-else-if="$alertState.type == 'I'"
+          v-else-if="AlertStore.type == 'I'"
           density="compact"
           color="info"
           ><v-icon
@@ -85,7 +85,7 @@
           "
         >
           <div class="py-4 text-center">
-            <h2>{{ $alertState.message }}</h2>
+            <h2>{{ AlertStore.message }}</h2>
           </div>
         </v-card-text>
         <v-divider></v-divider>
@@ -99,7 +99,7 @@
             >{{ $t("oK") }}</v-btn
           >
           <v-btn
-            v-if="$alertState.type == 'Q'"
+            v-if="AlertStore.type == 'Q'"
             class="rounded-lg"
             width="100px"
             variant="tonal"
@@ -113,20 +113,21 @@
   </div>
 </template>
 
-<script lang="ts">
+<script >
 export default {
-  setup() {
-    const nuxtApp = useNuxtApp();
-    const cancel = () => {
-      nuxtApp.$alertCancel();
-    };
-    const open = () => {
-      nuxtApp.$alertAgree();
-    };
+  data() {
     return {
-      open,
-      cancel,
+      AlertStore: useAlertStore2(),
     };
+  },
+  methods: {
+    cancel() {
+      this.AlertStore.alertCancel();
+    },
+    open() {
+      this.AlertStore.alertAgree();
+    },
   },
 };
 </script>
+

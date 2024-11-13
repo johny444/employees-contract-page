@@ -75,10 +75,6 @@
 </template>
 
 <script>
-import { useClassStore } from "@/stores/class";
-import { useUserStore } from "@/stores/user";
-import { useLoadingStore } from "@/stores/loadingStore";
-
 export default {
   data() {
     return {
