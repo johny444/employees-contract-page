@@ -77,7 +77,7 @@
 import { useQuestionStore } from "@/stores/question";
 
 export default {
-  props: ["examID"],
+  props: ["examID", "triggerFetch"],
   data() {
     return {
       selected: [],
@@ -91,16 +91,23 @@ export default {
     },
   },
   methods: {
-    async getQT() {
-      await this.store.QUESTIONFILER(this.examID);
-      this.tableData = this.store.questionfilter;
-      console.log("tableData.value:", this.tableData);
+    async getQuestionlist() {
+      this.tableData = await this.getQT(this.examID);
     },
-    async receiveCUD(v) {
-      await this.getQT();
+    receiveCUD(v) {
+      this.getQuestionlist();
+      // this.tableData = this.getQT(this.examID);
     },
   },
+  mounted() {
+    this.getQuestionlist();
+  },
   watch: {
+    triggerFetch(newVal) {
+      if (newVal) {
+        this.getQuestionlist();
+      }
+    },
     allChecked(currentValue, oldValue) {
       if (currentValue) {
         this.tableData.forEach((v) => {
@@ -112,9 +119,6 @@ export default {
         this.selected = [];
       }
     },
-  },
-  created() {
-    this.getQT();
   },
 };
 </script>

@@ -38,8 +38,13 @@
                   type="submit"
                   color="#1565C0"
                   prepend-icon="fas fa-right-to-bracket"
+                  :loading="loading"
+                  @click="loading = !loading"
                   >{{ $t("login") }}
                 </v-btn>
+                <template v-slot:loader>
+                  <v-progress-linear indeterminate></v-progress-linear>
+                </template>
               </v-row>
             </v-form>
           </div>
@@ -63,14 +68,16 @@ export default {
       txtPassword: "12345",
       showPw: false,
       userlist: [],
+      loading: false,
     };
   },
-  // computed: {
-  //   locale() {
-  //     const { locale } = useI18n();
-  //     return locale;
-  //   },
-  // },
+  watch: {
+    loading(val) {
+      if (!val) return;
+
+      setTimeout(() => (this.loading = false), 2000);
+    },
+  },
   methods: {
     async onSubmit() {
       try {
@@ -107,7 +114,7 @@ export default {
     },
   },
   mounted() {
-    this.$i18n.locale = localStorage.getItem("i18n"); // Set locale on mounted
+    this.$i18n.locale = localStorage.getItem("i18n") || "en"; // Set locale on mounted
   },
   created() {
     this.storeUser = useUserStore();

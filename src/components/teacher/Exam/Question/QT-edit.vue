@@ -81,6 +81,7 @@ export default {
   emits: ["updateQT"],
   data() {
     return {
+      AlertStore: useAlertStore(),
       dialog: false,
       questionbinding: this.data.question,
       optionbinding: this.data.options.split(","),
@@ -110,7 +111,7 @@ export default {
       };
 
       if (body) {
-        this.AlertStore.openDialog(); // Assuming you still want to use nuxtApp
+        this.AlertStore.openDialog("S", this.$t("updateDataSuccess")); // Assuming you still want to use nuxtApp
         await this.store.CRUDQUESTION(body);
         this.$emit("updateQT", "updated");
         setTimeout(() => {

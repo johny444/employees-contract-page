@@ -25,7 +25,7 @@
       </div>
       <div class="d-inline-flex">
         <h2 class="mb-6">{{ $t("selectfile") }}.</h2>
-        <ExamQuestionQTTemplate />
+        <QT-template />
       </div>
     </div>
     <div v-if="excelData.length > 0">
@@ -119,52 +119,62 @@ export default {
       showResults: false,
       checkbox1: false,
       items: Array.from({ length: 50 }, (k, v) => v + 1),
+      loadingStore: useLoadingStore(),
+      AlertStore: useAlertStore(),
     };
   },
   computed: {
     store() {
       return useQuestionStore();
     },
-    getTime() {
-      return this.$getTime(); // Assuming `$getTime()` is a global method
-    },
   },
   methods: {
     async onOpen() {
       this.choice = {};
       this.selected = [];
-      this.Qlist = this.store.getquestionList;
-      this.Qlist.forEach((question, index) => {
-        this.selectedAnswers[index] = [];
-        question.answers.forEach((answer, answerIndex) => {
-          this.selectedAnswers[index][answerIndex] = false;
+      if (this.Qlist.length !== 0) {
+        console.log("Qlist", this.Qlist);
+        this.Qlist = this.store.getquestionList;
+        this.Qlist.forEach((question, index) => {
+          this.selectedAnswers[index] = [];
+          question.answers.forEach((answer, answerIndex) => {
+            this.selectedAnswers[index][answerIndex] = false;
+          });
         });
-      });
+      }
     },
     async onSubmit() {
-      this.excelData.forEach((v) => {
-        v.examID = this.examID;
-        v.time = this.getTime();
-        v.id = uuid();
-        v.ACTION = "INSERT";
-      });
-      if (this.excelData.length > 0) {
-        let rs = "";
-        for (let index = 0; index < this.excelData.length; index++) {
-          rs = await this.store.CRUDQUESTION(this.excelData[index]);
+      console.log("111111111111111111111");
+      try {
+        this.excelData.forEach((v) => {
+          v.examID = this.examID;
+          v.time = this.getTime();
+          v.id = uuid();
+          v.ACTION = "INSERT";
+        });
+        console.log("this.excelData.length", this.excelData.length);
+        if (this.excelData.length > 0) {
+          let rs = "";
+          for (let index = 0; index < this.excelData.length; index++) {
+            rs = await this.store.CRUDQUESTION(this.excelData[index]);
+          }
+          if (rs) {
+            this.loadingStore.openLoading();
+            this.AlertStore.openDialog("S", this.$t("insertDataSuccess"));
+            setTimeout(() => {
+              // this.$emit("DL", false);//close dialog
+              this.AlertStore.closeDialog();
+              this.loadingStore.closeLoading();
+            }, 800);
+          }
+          this.clearfile();
         }
-
-        if (rs) {
-          this.loadingStore.openLoading();
-          setTimeout(() => {
-            this.AlertStore.closeDialog();
-            this.$emit("DL", false);
-            this.loadingStore.closeLoading();
-          }, 800);
-        }
+      } catch (error) {
+        this.AlertStore.openDialog("E", error);
       }
     },
     filecheck() {
+      console.log("filecheck");
       document.getElementById("excelFile").click();
     },
     excelExport(event) {
@@ -182,6 +192,7 @@ export default {
     },
     clearfile() {
       this.excelData = [];
+      document.getElementById("excelFile").value = "";
     },
     submitAnswers() {
       this.showResults = true;
