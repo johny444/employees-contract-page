@@ -22,13 +22,14 @@ export default {
   data() {
     return {
       store: useStudentStore(),
+      AlertStore: useAlertStore2(),
+      loadingStore: useLoadingStore(),
     };
   },
   methods: {
     onDel() {
       console.log("Del", this.item);
-      this.$nuxt
-        .$openAlert("Q", this.$nuxt.$t("areYouSureToDelete"))
+      this.AlertStore.openAlert("Q", this.$t("areYouSureToDelete"))
         .then(async (res) => {
           this.loadingStore.openLoading();
 
@@ -41,15 +42,15 @@ export default {
             });
           }
           console.log("rs", rs);
-          if (rs.status === "200") {
-            this.$nuxt
-              .$openAlert("S", this.$nuxt.$t("deleteDataSuccess"))
-              .then(async (r) => {
+          if (rs.status == "200") {
+            this.AlertStore.openAlert("S", this.$t("deleteDataSuccess")).then(
+              async (r) => {
                 console.log("Emit");
                 this.$emit("Delstudent", "Deled");
                 console.log("Delclass success");
                 this.loadingStore.closeLoading();
-              });
+              }
+            );
           } else {
             this.loadingStore.closeLoading();
             this.AlertStore.openAlert("E", rs.message);

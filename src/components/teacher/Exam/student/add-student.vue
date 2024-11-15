@@ -78,7 +78,6 @@
                     variant="outlined"
                   ></v-text-field>
                   <v-text-field
-                    :value="d"
                     :rules="[rules.required]"
                     :label="$t('birthday')"
                     density="compact"
@@ -144,12 +143,12 @@
 import moment from "moment";
 import { v4 as uuid } from "uuid";
 import { useStudentStore } from "@/stores/student";
-
 export default {
   props: [""],
   emit: ["addstudent"],
   data() {
     return {
+      AlertStore: useAlertStore(),
       d: "1995-10-01",
       fullname: "",
       email: "",
@@ -174,15 +173,15 @@ export default {
       this.fullname = "";
       this.email = "";
       this.Gender = "male";
-      this.birthday = "";
+      this.birthday = this.d;
       this.password = "";
       this.studentCode = "";
     },
     async onSubmit() {
-      const { currentRoute } = this.$router;
+      // console.log("this.$route.pat", this.$route.params.student);
       if (this.fullname && this.password && this.studentCode) {
         const body = {
-          ExamId: currentRoute.params.student,
+          ExamId: this.$route.params.student,
           id: uuid(),
           role: "student",
           name: this.fullname,
@@ -196,12 +195,12 @@ export default {
         };
         console.log("body", body);
         if (body) {
-          this.$openDialog("S", this.$t("insertDataSuccess"));
+          this.AlertStore.openDialog("S", this.$t("insertDataSuccess"));
           const store = useStudentStore();
           await store.CRUDStudent(body);
           this.$emit("addstudent", "added");
           setTimeout(() => {
-            this.$closeDialog();
+            this.AlertStore.closeDialog();
           }, 800);
         }
       }

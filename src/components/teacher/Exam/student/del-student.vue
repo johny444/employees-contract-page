@@ -22,13 +22,14 @@ export default {
   data() {
     return {
       store: useStudentStore(), // Store initialization
+      loadingStore: useLoadingStore(),
+      AlertStore: useAlertStore2(),
     };
   },
   methods: {
     async onDel() {
       // Opening confirmation dialog
-      this.$nuxt
-        .$openAlert("Q", this.$nuxt.$t("areYouSureToDelete"))
+      this.AlertStore.openAlert("Q", this.$t("areYouSureToDelete"))
         .then(async (res) => {
           this.loadingStore.openLoading();
           // Perform the delete operation
@@ -37,15 +38,15 @@ export default {
             ACTION: "DELETE",
           });
           console.log("result.status", result.status);
-          if (result.status === "200") {
+          if (result.status == "200") {
             // If delete is successful, show success alert and emit event
-            this.$nuxt
-              .$openAlert("S", this.$nuxt.$t("deleteDataSuccess"))
-              .then(async (r) => {
+            this.AlertStore.openAlert("S", this.$t("deleteDataSuccess")).then(
+              async (r) => {
                 this.$emit("Delstudent", "Deled");
                 console.log("Delclass success");
                 this.loadingStore.closeLoading();
-              });
+              }
+            );
           } else {
             // If delete fails, show error alert
             this.loadingStore.closeLoading();

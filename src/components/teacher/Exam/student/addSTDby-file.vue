@@ -47,7 +47,7 @@
                 </div>
                 <div class="d-inline-flex">
                   <h2 class="mb-6">{{ $t("selectfile") }}.</h2>
-                  <ExamStudentStdExport />
+                  <std-export />
                 </div>
               </div>
               <div v-if="excelData.length > 0">
@@ -103,11 +103,7 @@
                         </v-list-item
                       ></v-col>
                       <v-col class="px-0">
-                        <v-list-item
-                          :title="`${moment(item.birthday).format(
-                            `YYYY-MM-DD`
-                          )}`"
-                        >
+                        <v-list-item :title="`${formatDate(item.birthday)}`">
                         </v-list-item
                       ></v-col>
                     </v-row>
@@ -157,7 +153,7 @@
 
 <script>
 import { v4 as uuid } from "uuid";
-import { useStudentStore } from "@/stores/student";
+
 import * as XLSX from "xlsx";
 
 export default {
@@ -174,6 +170,8 @@ export default {
       password: "",
       studentCode: "",
       dialog: false,
+      loadingStore: useLoadingStore(),
+      store: useStudentStore(),
     };
   },
   computed: {
@@ -199,7 +197,7 @@ export default {
         let rs = "";
         for (let index = 0; index < this.excelData.length; index++) {
           console.log("excelData.value[index]", this.excelData[index]);
-          rs = await this.$store.CRUDStudent(this.excelData[index]);
+          rs = await this.store.CRUDStudent(this.excelData[index]);
         }
         console.log("rs", rs);
 
@@ -207,7 +205,7 @@ export default {
           this.loadingStore.openLoading();
           setTimeout(() => {
             console.log("submit");
-            this.emit("addstudent", "added");
+            this.$emit("addstudent", "added");
             this.dialog = false;
             this.loadingStore.closeLoading();
           }, 800);
@@ -238,6 +236,7 @@ export default {
     },
     clearfile() {
       this.excelData = [];
+      document.getElementById("excelFile").value = "";
     },
     Onopen() {
       // Open dialog logic

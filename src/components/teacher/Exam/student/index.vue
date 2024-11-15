@@ -57,16 +57,13 @@
               <td width="20%">{{ item.password }}</td>
               <td width="10%">
                 <v-row justify="center" style="margin: 1rem">
-                  <ExamStudentDetail
+                  <detail
                     :items="item"
-                    :examid="currentRoute.params.student"
+                    :examid="$route.params.student"
                     @updatestd="receiveCUD"
                   />
                   <v-spacer></v-spacer>
-                  <ExamStudentDelStudent
-                    :item="item.id"
-                    @Delstudent="receiveCUD"
-                  />
+                  <del-student :item="item.id" @Delstudent="receiveCUD" />
                 </v-row>
               </td>
             </tr>
@@ -89,7 +86,7 @@
                 :label="$t('selectAll') + `\t` + selected.length.toString()"
               ></v-checkbox-btn>
 
-              <ExamStudentDelMultiSTD
+              <del-multiSTD
                 class="mb-9 ml-1"
                 :item="selected"
                 @Delstudent="receiveCUD"
@@ -132,7 +129,7 @@ export default {
   methods: {
     async ClassExam() {
       this.loadingStore.openLoading();
-      await this.store.StudentFILER(this.currentRoute.value.params.student);
+      await this.store.StudentFILER(this.$route.params.student);
       this.loadingStore.closeLoading();
       this.newArray = this.store.studentfilter;
       this.tableData = [];

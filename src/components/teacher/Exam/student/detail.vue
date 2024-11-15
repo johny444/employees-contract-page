@@ -157,6 +157,8 @@ export default {
       birthday: "",
       model: true,
       store: useStudentStore(), // Initialize store
+      loadingStore: useLoadingStore(),
+      AlertStore: useAlertStore(),
     };
   },
   computed: {
@@ -183,7 +185,7 @@ export default {
       this.gender = this.items.gender;
     },
     Generate() {
-      this.password = this.$nuxt.$generatePassword();
+      this.password = $generatePassword();
     },
     async onSubmit() {
       let body = {
@@ -195,7 +197,7 @@ export default {
         password: this.password,
         studentCode: this.studentCode,
         birthday: moment(this.birthday).format("DD-MM-YYYY"),
-        time: this.$nuxt.$getTime(),
+        time: this.getTime(),
         ExamId: this.examid,
         ACTION: "UPDATE",
       };
@@ -207,15 +209,16 @@ export default {
 
       if (result.status == "200") {
         console.log("result", result);
-        this.$nuxt
-          .$openAlert("S", this.$nuxt.$t("updateDataSuccess"))
-          .then(async () => {
-            this.loadingStore.closeLoading();
-            this.$emit("updatestd", "updated");
-          });
+        this.AlertStore.openDialog("S", this.$t("updateDataSuccess"));
+        this.loadingStore.closeLoading();
+        setTimeout(() => {
+          this.AlertStore.closeDialog();
+        }, 800);
+
+        this.$emit("updatestd", "updated");
       } else {
         this.loadingStore.closeLoading();
-        this.AlertStore.openAlert("E", result.status);
+        this.AlertStore.closeDialog("E", result.status);
       }
     },
   },
