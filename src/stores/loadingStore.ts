@@ -9,7 +9,7 @@ export const useLoadingStore = defineStore("loading", {
   getters: {},
   actions: {
     openLoading() {
-      console.log("open");
+      // console.log("open");
       this.open = true;
     },
 

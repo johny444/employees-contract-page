@@ -28,7 +28,7 @@
                 {{ item.term === "mid" ? $t("midterm") : $t("finalterm") }}
               </td>
               <td width="10%" align="center">
-                <NuxtLink :to="`/result/${item.id}`">
+                <router-link :to="`/result/${item.id}`">
                   <v-btn
                     variant="text"
                     density="compact"
@@ -44,7 +44,7 @@
                       $t("detail")
                     }}</v-tooltip>
                   </v-btn>
-                </NuxtLink>
+                </router-link>
               </td>
             </tr>
           </template>
@@ -69,11 +69,6 @@
 </template>
 
 <script>
-import { useExamStore } from "@/stores/exam";
-import { useClassStore } from "@/stores/class";
-import { useUserStore } from "@/stores/user";
-import { useLoadingStore } from "@/stores/loadingStore";
-
 export default {
   data() {
     return {
@@ -81,6 +76,9 @@ export default {
       perPage: 10,
       loading: true, // Add loading state
       loadingStore: useLoadingStore(),
+      store: useExamStore(),
+      storeUser: useUserStore(),
+      storeclass: useClassStore(),
     };
   },
   mounted() {
@@ -96,42 +94,46 @@ export default {
   },
   methods: {
     async ClassExam() {
-      const loadingStore = useLoadingStore();
-      const store = useExamStore();
-      const storeclass = useClassStore();
-      const storeUser = useUserStore();
+      try {
+        this.loadingStore.openLoading();
 
-      loadingStore.openLoading();
+        await this.store.CRUDEXAM({ ACTION: "GETAll" });
+        await this.storeUser.acGetuserList(localStorage.getItem("token"));
+        this.loadingStore.closeLoading();
 
-      await store.CRUDEXAM({ ACTION: "GETAll" });
-      await storeUser.acGetuserList(localStorage.getItem("token"));
-      loadingStore.closeLoading();
-
-      // Filter classExam
-      storeclass.CLASSEXAMFILER(
-        storeclass.getclassExamList.DATA,
-        storeUser.getuserList.user[0].id
-      );
-
-      // Filter and add classExamid to exams
-      const matching = this.InsertObjectClassExam(
-        store.examList.DATA,
-        storeclass.examclassfilter
-      );
-
-      matching.forEach((item) => {
-        item.classExamid = storeclass.examclassfilter.find(
-          (exam) => exam.id === item.classExamid
+        // Filter classExam
+        this.storeclass.CLASSEXAMFILER(
+          this.storeclass.getclassExamList.DATA,
+          this.storeUser.getuserList.user[0].id
         );
-      });
 
-      // Update table data
-      const newArray = matching;
-      this.tableData = [];
-      for (let i = 0; i < this.perPage; i++) {
-        if (i < newArray.length) {
-          this.tableData.push(newArray[i]);
+        // Filter and add classExamid to exams
+        const matching = this.InsertObjectClassExam(
+          this.store.examList.DATA,
+          this.storeclass.examclassfilter
+        );
+
+        matching.forEach((item) => {
+          item.classExamid = this.storeclass.examclassfilter.find(
+            (exam) => exam.id === item.classExamid
+          );
+        });
+
+        // Update table data
+        const newArray = matching;
+        console.log("newArray", newArray);
+        this.tableData = [];
+        for (let i = 0; i < this.perPage; i++) {
+          if (i < newArray.length) {
+            this.tableData.push(newArray[i]);
+          }
         }
+        console.log("this.tableData", this.tableData);
+      } catch (error) {
+        console.log("catch error:", error);
+      } finally {
+        this.loading = false; // End loading
+        this.loadingStore.closeLoading();
       }
     },
 
