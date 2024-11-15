@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     async fetchUser() {
-      console.log("profile mount");
+      // console.log("profile mount");
       try {
         // Assuming you would use `storeUser` to fetch user data
         const storeUser = useUserStore();
