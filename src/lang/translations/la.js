@@ -30,6 +30,7 @@ export default {
   updateclassExam: "ແກ້ໄຂຂໍ້ມູນຫ້ອງເສັງ",
   updateExam: "ແກ້ໄຂຂໍ້ມູນບົດເສັງ",
   studentList: "ລາຍຊື່ນັກຮຽນ",
+  name: "ຊື່",
   studentName: "ຊື່ນັກຮຽນ",
   studentCode: "ລະຫັດນັກຮຽນ",
   password: "ລະຫັດ",

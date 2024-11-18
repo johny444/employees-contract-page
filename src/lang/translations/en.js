@@ -31,6 +31,7 @@ export default {
   updateExam: "Update Exam",
   studentList: "Student list",
   studentName: "Student Name",
+  name: "Name",
   studentCode: "Student Code",
   password: "Password",
   detail: "Detail",
