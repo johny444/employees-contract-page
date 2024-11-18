@@ -100,22 +100,13 @@ export default {
       searchText: "",
       loading: true, // Add loading state
       loadingStore: useLoadingStore(),
+      store: useExamStore(),
+      storeclass: useClassStore(),
+      storeUser: useUserStore(),
+      storeResult: useResultStore(),
     };
   },
-  computed: {
-    store() {
-      return useExamStore();
-    },
-    storeclass() {
-      return useClassStore();
-    },
-    storeUser() {
-      return useUserStore();
-    },
-    storeResult() {
-      return useResultStore();
-    },
-  },
+
   methods: {
     async ClassExam() {
       try {
@@ -143,7 +134,7 @@ export default {
         });
 
         let newArray = matching;
-        this.storeResult.GetExamlistRS(newArray);
+        // this.storeResult.GetExamlistRS(newArray);
 
         this.tableData = [];
         for (let i = 0; i < this.perPage; i++) {

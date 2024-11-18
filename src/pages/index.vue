@@ -7,23 +7,24 @@
       id="particles-js"
       class="normal_gradient d-flex justify-center align-center"
     >
-      <v-card class="loginCard rounded-lg" align="center">
+      <v-card class="loginCard rounded-xl" align="center">
         <v-card-text>
-          <div class="mt-4" style="text-align: center">
+          <div class="mt-2" style="text-align: center">
             <h1 class="text-secondary" style="font-size: 2.5rem">
               {{ $t("examinationSystem") }}
             </h1>
           </div>
-
           <div style="">
             <img src="@/assets/images/examLogo.png" :width="300" />
           </div>
-          <div class="ml-4" style="min-width: 40%">
+          <div class="ml-4">
             <v-form @submit.prevent="onSubmit">
               <v-text-field
                 v-model="txtUseremail"
                 :label="$t('email')"
                 prepend-inner-icon="fas fa-user"
+                rounded
+                variant="solo"
               ></v-text-field>
               <v-text-field
                 v-model="txtPassword"
@@ -32,9 +33,12 @@
                 :append-inner-icon="showPw ? 'fas fa-eye' : 'fas fa-eye-slash'"
                 :type="showPw ? 'text' : 'password'"
                 @click:append-inner="showPw = !showPw"
+                rounded
+                variant="solo"
               ></v-text-field>
               <v-row class="ma-0" justify="end">
                 <v-btn
+                  class="rounded-lg"
                   type="submit"
                   color="#1565C0"
                   prepend-icon="fas fa-right-to-bracket"
@@ -124,7 +128,7 @@ export default {
 </script>
 
 
-<style lang="scss" scoped>
+<style scoped>
 #particles-js {
   position: absolute;
   width: 100%;
@@ -141,7 +145,7 @@ export default {
 }
 .loginCard {
   position: absolute;
-  width: 25%;
+  width: 20%;
   left: 10%;
   box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
 }

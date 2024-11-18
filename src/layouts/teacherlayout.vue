@@ -32,28 +32,27 @@
   </div>
 </template>
   
-<script setup >
-import { useLoadingStore } from "@/stores/loadingStore";
-const loadingStore = useLoadingStore();
-
-const drawer = ref(null);
-const route = useRoute();
-const logined = ref();
-const links = [
-  ["fa-solid fa-gear", "Dashboard", "/dashboard"],
-  ["fa-solid fa-gear", "classExam", "/class"],
-  ["fa-solid fa-gear", "exam", "/exam"],
-  ["fa-solid fa-gear", "result", "/result"],
-];
-
-onMounted(() => {
-  // loadingStore.openLoading();
-  // loadingStore.open = true;
-  // console.log("layout");
-  // loadingStore.closeLoading();
-});
-const onClick = () => {
-  console.log("route.params", route.params);
+<script>
+export default {
+  name: "teacherLayout",
+  data() {
+    return {
+      drawer: null,
+      logined: null,
+      links: [
+        ["fa-solid fa-gear", "Dashboard", "/dashboard"],
+        ["fa-solid fa-gear", "classExam", "/class"],
+        ["fa-solid fa-gear", "exam", "/exam"],
+        ["fa-solid fa-gear", "result", "/result"],
+      ],
+    };
+  },
+  methods: {
+    onClick() {
+      console.log("route.params", this.route.params);
+    },
+  },
 };
 </script>
+
   

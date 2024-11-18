@@ -82,10 +82,8 @@ export default {
     };
   },
   mounted() {
-    this.loadingStore.openLoading();
     this.ClassExam();
-    this.getExam();
-    this.loadingStore.closeLoading();
+    // this.getExam();
   },
   computed: {
     isLoading() {
@@ -96,11 +94,12 @@ export default {
     async ClassExam() {
       try {
         this.loadingStore.openLoading();
-
         await this.store.CRUDEXAM({ ACTION: "GETAll" });
         await this.storeUser.acGetuserList(localStorage.getItem("token"));
-        this.loadingStore.closeLoading();
-
+        await this.storeclass.CRUDCLASSEXAM({
+          ACTION: "GETBYTEACHERID",
+          teacherID: this.storeUser.getuserList.user[0].id,
+        });
         // Filter classExam
         this.storeclass.CLASSEXAMFILER(
           this.storeclass.getclassExamList.DATA,
@@ -137,10 +136,12 @@ export default {
       }
     },
 
-    async getExam() {
-      const storeclass = useClassStore();
-      await storeclass.CRUDCLASSEXAM({ ACTION: "GETAll" });
-    },
+    // async getExam() {
+    //   await this.storeclass.CRUDCLASSEXAM({
+    //     ACTION: "GETBYTEACHERID",
+    //     teacherID: this.storeUser.getuserList.user[0].id,
+    //   });
+    // },
 
     InsertObjectClassExam(Exams, classExam) {
       return Exams.filter((exam) => {
