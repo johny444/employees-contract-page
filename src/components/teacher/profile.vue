@@ -12,8 +12,12 @@
         ></v-avatar>
       </v-col>
       <v-col align="end">
-        <v-icon color="primary" @click.stop="$emit('toggle-rail')"
-          >fa-solid fa-angles-left</v-icon
+        <v-icon
+          class="px-3"
+          style="font-size: 20px"
+          color="white"
+          @click.stop="$emit('toggle-rail')"
+          >fa-solid fa-circle-left</v-icon
         >
       </v-col>
     </v-row>
@@ -44,9 +48,6 @@ export default {
       user: "", // Initialize user as an empty string or adjust as needed
     };
   },
-  computed: {
-    // Define any computed properties here if needed
-  },
   methods: {
     async fetchUser() {
       // console.log("profile mount");
@@ -55,7 +56,7 @@ export default {
         const storeUser = useUserStore();
         await storeUser.acGetuserList(localStorage.getItem("token"));
         this.user = storeUser.getuserList.user[0];
-        console.log("user:", this.user);
+        // console.log("user:", this.user);
       } catch (error) {
         console.error("Error fetching user:", error);
         // Optionally open a dialog or handle error as needed

@@ -2,8 +2,12 @@
   <div>
     <v-row>
       <v-col>
-        <h1>{{ $t("classExam") }}</h1></v-col
-      >
+        <h1>
+          <v-breadcrumbs class="pa-0">
+            {{ $t("exam") }}
+          </v-breadcrumbs>
+        </h1>
+      </v-col>
       <v-spacer></v-spacer>
       <v-col style="text-align: end">
         <add-exam

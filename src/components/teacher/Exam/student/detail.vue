@@ -176,7 +176,7 @@ export default {
       return formattedDate;
     },
     onOpen() {
-      console.log("object", this.items);
+      // console.log("object", this.items);
       this.birthday = this.dateFormat(this.items.birthday);
       this.password = this.items.password;
       this.studentName = this.items.name;

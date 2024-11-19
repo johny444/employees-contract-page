@@ -6,7 +6,12 @@
         <v-container class="py-8 px-6" fluid>
           <v-row>
             <v-col>
-              <v-navigation-drawer :rail="rail" permanent @click="rail = false">
+              <v-navigation-drawer
+                :rail="rail"
+                permanent
+                @click="rail = false"
+                class="bg-cyan-darken-4"
+              >
                 <v-list>
                   <template v-if="!this.rail">
                     <profile @toggle-rail="toggleRail" />
@@ -52,10 +57,10 @@ export default {
       drawer: true,
       rail: false,
       links: [
-        ["fa-solid fa-gear", "Dashboard", "/dashboard"],
-        ["fa-solid fa-gear", "classExam", "/class"],
-        ["fa-solid fa-gear", "exam", "/exam"],
-        ["fa-solid fa-gear", "result", "/result"],
+        ["fa-solid fa-table-columns", "Dashboard", "/dashboard"],
+        ["fa-solid fa-chalkboard-user", "classExam", "/class"],
+        ["fa-solid fa-clipboard-question", "exam", "/exam"],
+        ["fa-solid fa-sheet-plastic", "result", "/result"],
       ],
     };
   },

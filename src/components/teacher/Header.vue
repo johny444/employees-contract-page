@@ -9,7 +9,9 @@
           gradient="to top right, rgba(19,84,122,.8), rgba(128,208,199,.8)"
         ></v-img>
       </template>
-      <v-app-bar-title>{{ $t("examinationSystem") }}</v-app-bar-title>
+      <v-app-bar-title :style="{ textTransform: 'uppercase' }">{{
+        $t("examinationSystem")
+      }}</v-app-bar-title>
       <LangSwitcher />
     </v-app-bar>
   </div>

@@ -2,7 +2,18 @@
   <div>
     <v-row>
       <v-col>
-        <h1>{{ $t("studentList") }}</h1>
+        <!-- <h1>{{ $t("studentList") }}</h1> -->
+        <h1>
+          <!-- <v-breadcrumbs class="pa-0" :items="items">
+            <template v-slot:divider>
+              <v-icon
+                style="font-size: 20px"
+                icon="fa-regular fa-hand-point-right"
+              ></v-icon>
+            </template>
+          </v-breadcrumbs> -->
+          <Breadcrumb :dataItem="items" />
+        </h1>
       </v-col>
       <v-col style="text-align: end">
         <div class="d-inline-flex">
@@ -55,7 +66,7 @@
               </td>
               <td width="10%">{{ item.studentCode }}</td>
               <td width="20%">{{ item.password }}</td>
-              <td width="10%">
+              <td width="7%">
                 <v-row justify="center" style="margin: 1rem">
                   <detail
                     :items="item"
@@ -119,6 +130,10 @@ export default {
       newArray: [],
       items: Array.from({ length: 50 }, (k, v) => v + 1),
       store: useStudentStore(),
+      items: [
+        { title: this.$t("exam"), disabled: false, to: "/exam" },
+        { title: this.$t("studentList"), disabled: false },
+      ],
     };
   },
   computed: {

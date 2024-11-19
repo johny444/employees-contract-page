@@ -2,7 +2,10 @@
   <div>
     <v-row>
       <v-col>
-        <h1>{{ $t("gradeExam") }}</h1>
+        <!-- <h1>{{ $t("gradeExam") }}</h1> -->
+        <h1>
+          <Breadcrumb :dataItem="items" />
+        </h1>
       </v-col>
     </v-row>
     <div class="mt-5">
@@ -73,6 +76,14 @@ import { useStudentStore } from "@/stores/student";
 import { useResultStore } from "@/stores/result";
 import { useLoadingStore } from "@/stores/loadingStore";
 export default {
+  data() {
+    return {
+      items: [
+        { title: this.$t("gradeExam"), disabled: false, to: "/result" },
+        { title: this.$t("studentList"), disabled: false },
+      ],
+    };
+  },
   setup() {
     const loadingStore = useLoadingStore();
     const store = useStudentStore();
@@ -178,9 +189,6 @@ export default {
       receiveCUD,
     };
   },
-  data: () => ({
-    items: Array.from({ length: 50 }, (k, v) => v + 1),
-  }),
 };
 </script>
 
