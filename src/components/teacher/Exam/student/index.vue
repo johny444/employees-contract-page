@@ -78,7 +78,7 @@
         </tbody>
         <template #bottom v-if="tableData.length > 0">
           <v-row class="pa-3">
-            <v-col class="pa-0">
+            <v-col class="pa-0" align="start">
               <v-checkbox-btn
                 color="red"
                 v-model="allChecked"

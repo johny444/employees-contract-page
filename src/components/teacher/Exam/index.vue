@@ -37,7 +37,7 @@
               <td width="10%">
                 {{ item.term === "mid" ? $t("midterm") : $t("finalterm") }}
               </td>
-              <td width="12%">
+              <td width="7%">
                 <v-row justify="center" style="margin: 1rem">
                   <update-exam
                     :data="item"

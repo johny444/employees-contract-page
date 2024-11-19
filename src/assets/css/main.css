@@ -27,6 +27,7 @@ th {
   border-radius: inherit;
   line-height: 1.5;
   max-width: 100%;
+  text-align: center;
 }
 
 .v-table--density-default > .v-table__wrapper > table > tbody > tr > td,

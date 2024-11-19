@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-row align="center" no-gutters>
-      <v-col cols="8">
+    <v-row no-gutters>
+      <v-col align="end" cols="9">
         <!-- <v-avatar
         image="https://th.bing.com/th/id/OIP.40GYfHQgA5nphad0oLAfjQHaHa?w=214&h=214&c=7&r=0&o=5&dpr=1.3&pid=1.7"
         size="120"
@@ -11,9 +11,9 @@
           size="120"
         ></v-avatar>
       </v-col>
-      <v-col cols="4">
+      <v-col align="end">
         <v-icon color="primary" @click.stop="$emit('toggle-rail')"
-          >fa-solid fa-angle-left</v-icon
+          >fa-solid fa-angles-left</v-icon
         >
       </v-col>
     </v-row>

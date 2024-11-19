@@ -8,7 +8,9 @@
             <v-col>
               <v-navigation-drawer :rail="rail" permanent @click="rail = false">
                 <v-list>
-                  <profile @toggle-rail="toggleRail" />
+                  <template v-if="!this.rail">
+                    <profile @toggle-rail="toggleRail" />
+                  </template>
                   <v-list-item
                     border
                     v-for="[icon, text, routing] in links"
@@ -22,11 +24,15 @@
                 </v-list>
                 <template v-slot:append>
                   <div class="pa-2">
-                    <v-btn block> Logout </v-btn>
+                    <v-btn block @click="logout">
+                      {{ $t("logOut") }}
+                    </v-btn>
                   </div>
                 </template>
               </v-navigation-drawer>
-              <slot />
+              <v-container max-width="90%">
+                <slot />
+              </v-container>
             </v-col>
             <!-- <v-col cols="6" md="3">
               <profile />
@@ -61,6 +67,14 @@ export default {
     },
     onClick() {
       console.log("route.params", this.route.params);
+    },
+    logout() {
+      localStorage.removeItem("token");
+      try {
+        this.$router.push("/");
+      } catch (error) {
+        console.error("Error during logout redirect:", error);
+      }
     },
   },
 };

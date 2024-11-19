@@ -27,7 +27,7 @@
               <td width="10%">
                 {{ item.term === "mid" ? $t("midterm") : $t("finalterm") }}
               </td>
-              <td width="10%" align="center">
+              <td width="7%">
                 <router-link :to="`/result/${item.id}`">
                   <v-btn
                     variant="text"
