@@ -12,6 +12,7 @@ export const useUserStore = defineStore("userStore", {
   },
   actions: {
     async acGetuserList(body: string) {
+      // console.log("user store");
       const respone = await axios
         .get("http://localhost:8080/Auth", {
           headers: { Authorization: `Bearer ${body}` },
@@ -24,7 +25,7 @@ export const useUserStore = defineStore("userStore", {
     },
     async aclogIn() {
       this.islogin = true;
-      console.log(" this.islogin", this.islogin);
+      // console.log(" this.islogin", this.islogin);
     },
     async aclogOut() {
       localStorage.removeItem("token");

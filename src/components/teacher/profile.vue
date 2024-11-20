@@ -17,7 +17,7 @@
           style="font-size: 20px"
           color="white"
           @click.stop="$emit('toggle-rail')"
-          >fa-solid fa-circle-left</v-icon
+          >fa-solid fa-square-caret-left</v-icon
         >
       </v-col>
     </v-row>

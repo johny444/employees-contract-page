@@ -9,11 +9,22 @@
               <v-navigation-drawer
                 :rail="rail"
                 permanent
-                @click="rail = false"
                 class="bg-cyan-darken-4"
               >
+                <v-row class="pt-2">
+                  <v-col align="end">
+                    <v-icon
+                      @click="rail = false"
+                      v-if="rail"
+                      class="px-3"
+                      style="font-size: 20px"
+                      color="white"
+                      >fa-solid fa-square-caret-right</v-icon
+                    >
+                  </v-col>
+                </v-row>
                 <v-list>
-                  <template v-if="!this.rail">
+                  <template v-if="!rail">
                     <profile @toggle-rail="toggleRail" />
                   </template>
                   <v-list-item
@@ -28,13 +39,25 @@
                   </v-list-item>
                 </v-list>
                 <template v-slot:append>
-                  <div class="pa-2">
-                    <v-btn block @click="logout">
+                  <div class="pa-2" align="center">
+                    <template v-if="rail">
+                      <v-icon
+                        @click="logout"
+                        style="font-size: 20px"
+                        icon="fa-solid fa-power-off"
+                      >
+                      </v-icon>
+                      <v-tooltip activator="parent" location="end">
+                        {{ $t("logOut") }}</v-tooltip
+                      >
+                    </template>
+                    <v-btn v-else block @click="logout">
                       {{ $t("logOut") }}
                     </v-btn>
                   </div>
                 </template>
               </v-navigation-drawer>
+
               <v-container max-width="90%">
                 <slot />
               </v-container>
@@ -67,8 +90,8 @@ export default {
 
   methods: {
     toggleRail() {
-      console.log("rail");
       this.rail = !this.rail;
+      console.log("rail", this.rail);
     },
     onClick() {
       console.log("route.params", this.route.params);
