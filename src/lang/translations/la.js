@@ -79,4 +79,5 @@ export default {
   Teacher: "ອາຈານ",
   Student: "ນັກຮຽນ",
   Dashboard: "ແຜກຄວມຄູມ",
+  user: "ຜູ້ໃຊ້",
 };
