@@ -11,7 +11,7 @@
                 permanent
                 class="bg-cyan-darken-4"
               >
-                <v-row class="pt-2">
+                <!-- <v-row class="pt-2">
                   <v-col align="end">
                     <v-icon
                       @click="rail = false"
@@ -22,7 +22,7 @@
                       >fa-solid fa-square-caret-right</v-icon
                     >
                   </v-col>
-                </v-row>
+                </v-row> -->
                 <v-list>
                   <template v-if="!rail">
                     <profile @toggle-rail="toggleRail" />
@@ -39,6 +39,17 @@
                   </v-list-item>
                 </v-list>
                 <template v-slot:append>
+                  <div align="center">
+                    <v-icon
+                      @click="rail = false"
+                      v-if="rail"
+                      class="px-3"
+                      style="font-size: 20px"
+                      color="white"
+                      >fa-solid fa-circle-chevron-right</v-icon
+                    >
+                  </div>
+                  <div class="pa-2"></div>
                   <div class="pa-2" align="center">
                     <template v-if="rail">
                       <v-icon
