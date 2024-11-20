@@ -39,32 +39,34 @@
                   </v-list-item>
                 </v-list>
                 <template v-slot:append>
-                  <div align="center">
-                    <v-icon
-                      @click="rail = false"
-                      v-if="rail"
-                      class="px-3"
-                      style="font-size: 20px"
-                      color="white"
-                      >fa-solid fa-circle-chevron-right</v-icon
-                    >
-                  </div>
-                  <div class="pa-2"></div>
-                  <div class="pa-2" align="center">
-                    <template v-if="rail">
+                  <div class="nav-footer">
+                    <div align="center">
                       <v-icon
-                        @click="logout"
+                        @click="rail = false"
+                        v-if="rail"
+                        class="px-3"
                         style="font-size: 20px"
-                        icon="fa-solid fa-power-off"
+                        color="white"
+                        >fa-solid fa-circle-chevron-right</v-icon
                       >
-                      </v-icon>
-                      <v-tooltip activator="parent" location="end">
-                        {{ $t("logOut") }}</v-tooltip
-                      >
-                    </template>
-                    <v-btn v-else block @click="logout">
-                      {{ $t("logOut") }}
-                    </v-btn>
+                    </div>
+                    <div class="pa-2"></div>
+                    <div class="pa-2" align="center">
+                      <template v-if="rail">
+                        <v-icon
+                          @click="logout"
+                          style="font-size: 20px"
+                          icon="fa-solid fa-power-off"
+                        >
+                        </v-icon>
+                        <v-tooltip activator="parent" location="end">
+                          {{ $t("logOut") }}</v-tooltip
+                        >
+                      </template>
+                      <v-btn v-else block @click="logout">
+                        {{ $t("logOut") }}
+                      </v-btn>
+                    </div>
                   </div>
                 </template>
               </v-navigation-drawer>
