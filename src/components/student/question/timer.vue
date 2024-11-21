@@ -4,113 +4,121 @@
       :model-value="progressValue"
       :rotate="360"
       :size="progressCircleSize"
-      :width="5"
-      color="teal"
-      :class="isBlinking ? 'blink-bg' : 'progress'"
+      :width="10"
+      :color="progressColor"
+      :class="{ blinking: isBlinking }"
     >
-      <template v-slot:default> {{ formattedTime }} </template>
+      <template v-slot:default>
+        <span :style="{ fontSize: `${progressCircleSize / 6}px` }">
+          {{ formattedTime }}
+        </span>
+      </template>
     </v-progress-circular>
   </div>
 </template>
-<script setup>
-import { useTimerStore as timer } from "/stores/timer";
 
-const countdownSeconds = 10; // Change this to set the countdown duration in seconds
-const totalTime = ref(countdownSeconds);
-const progressValue = ref(100);
-const formattedTime = ref(formatTime(totalTime.value));
-
-let countdownInterval;
-let isFlashing = false;
-let currentColor = "teal";
-const progressCircleSize = ref(250); // Initial size
-const isBlinking = ref(false);
-function formatTime(seconds) {
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  const remainingSeconds = seconds % 60;
-  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
-    2,
-    "0"
-  )}:${String(remainingSeconds).padStart(2, "0")}`;
-}
-
-function updateProgressCircleSize() {
-  const screenWidth = window.innerWidth;
-  // Adjust the size based on screen width
-  if (screenWidth < 600) {
-    progressCircleSize.value = 150;
-  } else if (screenWidth >= 600 && screenWidth < 1024) {
-    progressCircleSize.value = 200;
-  } else {
-    progressCircleSize.value = 250;
-  }
-}
-onMounted(() => {
-  window.addEventListener("resize", () => {
-    updateProgressCircleSize();
-  });
-  updateProgressCircleSize();
-  countdownInterval = setInterval(() => {
-    if (totalTime.value === 0) {
-      clearInterval(countdownInterval);
-      return;
+<script>
+export default {
+  data() {
+    return {
+      countdownSeconds: 10, // Countdown duration in seconds
+      totalTime: 0,
+      progressValue: 100,
+      formattedTime: "",
+      countdownInterval: null,
+      progressCircleSize: 250, // Initial size
+      isBlinking: false,
+      progressColor: "teal",
+    };
+  },
+  mounted() {
+    // Get saved time from localStorage or start a new countdown
+    const savedTime = localStorage.getItem("remainingTime");
+    const lastSavedTimestamp = localStorage.getItem("lastSavedTimestamp");
+    if (savedTime && lastSavedTimestamp) {
+      const elapsed = Math.floor((Date.now() - lastSavedTimestamp) / 1000);
+      const remainingTime = Math.max(savedTime - elapsed, 0);
+      this.totalTime = remainingTime;
+    } else {
+      this.totalTime = this.countdownSeconds;
     }
-    totalTime.value--;
-    progressValue.value = (totalTime.value / countdownSeconds) * 100;
-    formattedTime.value = formatTime(totalTime.value);
 
-    // Blinking effect
-    isBlinking.value = totalTime.value <= 5;
-  }, 1000);
-});
+    // Calculate progressValue based on totalTime
+    this.progressValue = (this.totalTime / this.countdownSeconds) * 100;
 
-onBeforeUnmount(() => {
-  clearInterval(countdownInterval);
-});
+    this.formattedTime = this.formatTime(this.totalTime);
+    window.addEventListener("resize", this.updateProgressCircleSize);
+    this.updateProgressCircleSize();
+    this.startCountdown();
+  },
+  methods: {
+    formatTime(seconds) {
+      const hours = Math.floor(seconds / 3600);
+      const minutes = Math.floor((seconds % 3600) / 60);
+      const remainingSeconds = seconds % 60;
+      return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
+        2,
+        "0"
+      )}:${String(remainingSeconds).padStart(2, "0")}`;
+    },
+    updateProgressCircleSize() {
+      const screenWidth = window.innerWidth;
+      if (screenWidth < 600) {
+        this.progressCircleSize = 150;
+      } else if (screenWidth >= 600 && screenWidth < 1024) {
+        this.progressCircleSize = 200;
+      } else {
+        this.progressCircleSize = 250;
+      }
+    },
+    startCountdown() {
+      this.countdownInterval = setInterval(() => {
+        if (this.totalTime === 0) {
+          this.progressColor = "green"; // Change color to success
+          this.isBlinking = false; // Stop blinking
+          clearInterval(this.countdownInterval);
+          localStorage.removeItem("remainingTime");
+          localStorage.removeItem("lastSavedTimestamp");
+          return;
+        }
+
+        this.totalTime--;
+        this.progressValue = (this.totalTime / this.countdownSeconds) * 100;
+        this.formattedTime = this.formatTime(this.totalTime);
+
+        // Save remaining time and timestamp to localStorage
+        localStorage.setItem("remainingTime", this.totalTime);
+        localStorage.setItem("lastSavedTimestamp", Date.now());
+
+        // Blinking effect and color change
+        if (this.totalTime <= 5) {
+          this.isBlinking = true;
+          this.progressColor = "orange"; // Warn color for last 5 seconds
+        } else {
+          this.isBlinking = false;
+          this.progressColor = "teal"; // Default color
+        }
+      }, 1000);
+    },
+  },
+  beforeDestroy() {
+    clearInterval(this.countdownInterval);
+  },
+};
 </script>
+
 <style scoped>
-.progress {
-  font-size: 4rem;
-  transition: font-size 0.3s ease;
-}
-@media screen and (min-width: 600px) {
-  .progress {
-    font-size: 3rem; /* Font size for smaller screens */
-  }
+.blinking {
+  animation: blink 1s infinite;
 }
 
-@media screen and (min-width: 1024px) {
-  .progress {
-    font-size: 4rem; /* Font size for larger screens */
-  }
-}
-.session-info {
-  margin-top: 2rem;
-}
-
-.blink-bg {
-  font-size: clamp(2rem, 4vw, 4rem);
-  color: #fff;
-  animation: blinkingBackground 2s infinite;
-  border-radius: 12rem;
-}
-
-@keyframes blinkingBackground {
-  0% {
-    background-color: #ef0a1a;
-  }
-  25% {
-    background-color: teal;
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
   }
   50% {
-    background-color: #ef0a1a;
-  }
-  75% {
-    background-color: teal;
-  }
-  100% {
-    background-color: #ef0a1a;
+    opacity: 0.5;
   }
 }
 </style>

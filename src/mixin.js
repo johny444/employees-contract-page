@@ -19,6 +19,14 @@ export default {
         classExam.some((classItem) => classItem.id === exam.classExamid)
       );
     },
+    logout() {
+      localStorage.removeItem("token");
+      try {
+        this.$router.push("/");
+      } catch (error) {
+        console.error("Error during logout redirect:", error);
+      }
+    },
     generatePassword() {
       var length = 10;
       let character = "";

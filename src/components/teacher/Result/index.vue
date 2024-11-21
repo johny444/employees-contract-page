@@ -82,6 +82,7 @@ export default {
     };
   },
   mounted() {
+    console.log("result mount");
     this.ClassExam();
     // this.getExam();
   },

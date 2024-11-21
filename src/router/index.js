@@ -38,27 +38,49 @@
 import { createRouter, createWebHistory } from "vue-router/auto";
 import { setupLayouts } from "virtual:generated-layouts";
 import { routes } from "vue-router/auto-routes"; // Auto-generated routes
-import Teacherlayout from "@/layouts/teacherlayout.vue";
+import TeacherLayout from "@/layouts/teacherlayout.vue";
+import StudentLayout from "@/layouts/studentlayout.vue";
 
-// Manually add `meta` to each route
 const routesWithMeta = routes.map((route) => {
-  // Check if the route is NOT the login route ("/")
-  if (route.path !== "/") {
+  // Assign layouts based on route path
+  if (
+    route.path.startsWith("/dashboard") ||
+    route.path.startsWith("/class") ||
+    route.path.startsWith("/exam") ||
+    route.path.startsWith("/result")
+  ) {
     route.meta = {
       ...(route.meta || {}),
       requiresAuth: true,
-      layout: Teacherlayout, // Add LayoutA as default layout for authenticated routes
+      layout: TeacherLayout, // Assign teacher layout
+    };
+  } else if (
+    route.path.startsWith("/quiz") ||
+    route.path.startsWith("/question") ||
+    route.path.startsWith("/result-student")
+  ) {
+    route.meta = {
+      ...(route.meta || {}),
+      requiresAuth: true,
+      layout: StudentLayout, // Assign student layout
     };
   }
 
-  // Check for child routes and apply meta to them as well
+  // Handle child routes
   if (route.children && route.children.length) {
     route.children = route.children.map((childRoute) => {
-      if (childRoute.path !== "/") {
+      // Explicitly handle `/quiz/:question` child route
+      if (route.path.startsWith("/quiz") && childRoute.path === ":question") {
         childRoute.meta = {
           ...(childRoute.meta || {}),
           requiresAuth: true,
-          layout: Teacherlayout, // Set layout for child routes as well
+          layout: null, // Explicitly remove layout
+        };
+      } else {
+        childRoute.meta = {
+          ...(childRoute.meta || {}),
+          requiresAuth: true,
+          layout: route.meta.layout, // Inherit layout from parent
         };
       }
       return childRoute;
@@ -67,7 +89,7 @@ const routesWithMeta = routes.map((route) => {
 
   return route;
 });
-// console.log("route", routesWithMeta);
+
 const routesWithCatchAll = [
   ...setupLayouts(routesWithMeta),
   {
@@ -76,6 +98,7 @@ const routesWithCatchAll = [
     component: () => import("@/pages/404.vue"), // Lazy-load the 404 page component
   },
 ];
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: setupLayouts(routesWithCatchAll), // Pass the modified routes
@@ -89,6 +112,7 @@ router.beforeEach((to, from, next) => {
     next(); // Proceed to route
   }
 });
+
 router.onError((err, to) => {
   if (err?.message?.includes?.("Failed to fetch dynamically imported module")) {
     if (!localStorage.getItem("vuetify:dynamic-reload")) {
@@ -106,4 +130,5 @@ router.onError((err, to) => {
 router.isReady().then(() => {
   localStorage.removeItem("vuetify:dynamic-reload");
 });
+
 export default router;

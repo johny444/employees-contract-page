@@ -81,14 +81,13 @@ export default {
       storeSTD: useStudentStore(),
       storeUser: useUserStore(),
       storeclass: useClassStore(),
+      loadingStore: useLoadingStore(),
     };
   },
 
   methods: {
     async ClassExam() {
-      // Open loading
-      this.nuxtApp.$openLoading();
-
+      this.loadingStore.openLoading();
       // Fetch data
       await this.store.CRUDEXAM({ ACTION: "GETAll" });
       await this.storeclass.CRUDCLASSEXAM({ ACTION: "GETAll" });
@@ -98,19 +97,17 @@ export default {
       });
 
       // Close loading
-      this.nuxtApp.$closeLoading();
+      this.loadingStore.closeLoading();
 
       // Filter and transform data
       const examTest = this.store.examList.DATA.filter((v) => {
         return v.id === this.storeSTD.getstudentList.DATA[0].ExamId;
       });
-
       examTest.forEach((item) => {
         item.classExamid = this.storeclass.getclassExamList.DATA.find(
           (exam) => exam.id === item.classExamid
         );
       });
-
       // Populate tableData
       const newArray = examTest;
       this.tableData = [];
@@ -162,7 +159,7 @@ export default {
       }
     },
     startExam(examID) {
-      navigateTo(`/quiz/${examID}`);
+      this.$router.push(`/quiz/${examID}`);
     },
   },
   mounted() {

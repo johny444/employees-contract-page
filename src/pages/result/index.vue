@@ -3,7 +3,11 @@
     <Result />
   </div>
 </template>
-  <script setup>
+<script>
+import Result from "@/components/teacher/Result/index.vue";
+export default {
+  components: {
+    Result,
+  },
+};
 </script>
-  <style>
-</style>

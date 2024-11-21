@@ -3,7 +3,7 @@
     <div class="container pa-3" @mouseleave="onMouseLeave">
       <v-row>
         <v-col class="sideleft" cols="2">
-          <STDDashboardQuestionTimer />
+          <timer />
           <div class="my-3"></div>
           <STDDashboardQuestionQshortcut :items="questionList" />
           <div style="height: 58%"></div>
@@ -53,72 +53,84 @@
   </v-app>
 </template>
 
-<script setup>
-import { useQuestionStore } from "@/stores/question";
-const nuxtApp = useNuxtApp();
-const store = useQuestionStore();
-const router = useRouter();
-const currentRoute = router.currentRoute;
-// console.log("currentRoute.path", currentRoute.value.params.question);
-const examID = ref("");
-const questionList = ref([]);
-const page = ref(1);
-const itemsPerPage = 10;
+<script>
+export default {
+  data() {
+    return {
+      examID: "",
+      questionList: [],
+      page: 1,
+      itemsPerPage: 10,
+      countMoveOut: 0,
+      store: useQuestionStore(),
+      loadingStore: useLoadingStore(),
+    };
+  },
+  computed: {
+    totalPages() {
+      return Math.ceil(this.questionList.length / this.itemsPerPage);
+    },
+    paginatedQuestions() {
+      const startIndex = (this.page - 1) * this.itemsPerPage;
+      const endIndex = startIndex + this.itemsPerPage;
+      return this.questionList.slice(startIndex, endIndex);
+    },
+    currentRoute() {
+      return useRouter().currentRoute;
+    },
+  },
+  methods: {
+    async fetchQuestions() {
+      this.loadingStore.openLoading();
+      this.examID = this.$route.params.question;
+      await this.store.CRUDQUESTION({
+        ACTION: "GETBYEXAMID",
+        examID: this.examID,
+      });
 
-const totalPages = computed(() => {
-  return Math.ceil(questionList.value.length / itemsPerPage);
-});
+      this.questionList = this.store.getquestionList.data.DATA;
+      this.questionList.forEach((question) => {
+        question.selectedAnswer = null;
+        question.isOptionSelected = false;
+      });
+      this.loadingStore.closeLoading();
+    },
+    onSubmit() {
+      let correctCount = 0;
+      let isAnyQuestionUnanswered = false;
 
-const paginatedQuestions = computed(() => {
-  const startIndex = (page.value - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  return questionList.value.slice(startIndex, endIndex);
-});
-onMounted(async () => {
-  nuxtApp.$openLoading();
-  examID.value = currentRoute.value.params.question;
-  await store.CRUDQUESTION({ ACTION: "GETBYEXAMID", examID: examID.value });
+      this.questionList.forEach((question) => {
+        if (!question.selectedAnswer) {
+          isAnyQuestionUnanswered = true;
+        } else if (question.selectedAnswer === question.answer) {
+          correctCount++;
+        }
+      });
 
-  questionList.value = store.getquestionList.data.DATA;
-  // console.log("object", questionList.value);
-  questionList.value.forEach((question) => {
-    question.selectedAnswer = null;
-    question.isOptionSelected = false;
-  });
-  nuxtApp.$closeLoading();
-});
-const onSubmit = () => {
-  let correctCount = 0;
-  let isAnyQuestionUnanswered = false;
-  questionList.value.forEach((question) => {
-    if (!question.selectedAnswer) {
-      isAnyQuestionUnanswered = true;
-    } else if (question.selectedAnswer === question.answer) {
-      correctCount++;
-    }
-  });
-
-  if (isAnyQuestionUnanswered) {
-    nuxtApp.$openDialog(
-      "W",
-      nuxtApp.$t("Pleaseanswerallquestionsbeforesubmitting")
-    );
-  } else {
-    // alert(
-    //   `You got ${correctCount} out of ${questionList.value.length} questions correct.`
-    // );
-    nuxtApp.$openDialog("S", `${nuxtApp.$t("submit")}${nuxtApp.$t("success")}`);
-  }
-};
-const setOptionSelected = (question, selectedOption) => {
-  question.isOptionSelected = true; // Set option selection status to true
-  question.selectedAnswer = selectedOption; // Update selected answer
-  // console.log("object", question);
-};
-var countMoveOut = 0;
-const onMouseLeave = () => {
-  // countMoveOut++;
-  // nuxtApp.$openDialog("W", nuxtApp.$t(`NotAllowMoveOut`, { chance: 3 }));
+      if (isAnyQuestionUnanswered) {
+        this.nuxtApp.$openDialog(
+          "W",
+          this.nuxtApp.$t("Pleaseanswerallquestionsbeforesubmitting")
+        );
+      } else {
+        this.nuxtApp.$openDialog(
+          "S",
+          `${this.nuxtApp.$t("submit")}${this.nuxtApp.$t("success")}`
+        );
+      }
+    },
+    setOptionSelected(question, selectedOption) {
+      question.isOptionSelected = true;
+      question.selectedAnswer = selectedOption;
+    },
+    onMouseLeave() {
+      // this.countMoveOut++;
+      // this.nuxtApp.$openDialog("W", this.nuxtApp.$t(`NotAllowMoveOut`, { chance: 3 }));
+    },
+  },
+  mounted() {
+    this.fetchQuestions();
+  },
 };
 </script>
 

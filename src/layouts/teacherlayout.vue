@@ -54,7 +54,7 @@
                     <div class="pa-2" align="center">
                       <template v-if="rail">
                         <v-icon
-                          @click="logout"
+                          @click="logout()"
                           style="font-size: 20px"
                           icon="fa-solid fa-power-off"
                         >
@@ -63,7 +63,7 @@
                           {{ $t("logOut") }}</v-tooltip
                         >
                       </template>
-                      <v-btn v-else block @click="logout">
+                      <v-btn v-else block @click="logout()">
                         {{ $t("logOut") }}
                       </v-btn>
                     </div>
@@ -109,14 +109,14 @@ export default {
     onClick() {
       console.log("route.params", this.route.params);
     },
-    logout() {
-      localStorage.removeItem("token");
-      try {
-        this.$router.push("/");
-      } catch (error) {
-        console.error("Error during logout redirect:", error);
-      }
-    },
+    // logout() {
+    //   localStorage.removeItem("token");
+    //   try {
+    //     this.$router.push("/");
+    //   } catch (error) {
+    //     console.error("Error during logout redirect:", error);
+    //   }
+    // },
   },
 };
 </script>
