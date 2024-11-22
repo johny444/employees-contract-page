@@ -2,18 +2,20 @@
   <v-app>
     <div class="container pa-3" @mouseleave="onMouseLeave">
       <v-row>
-        <v-col class="sideleft" cols="2">
+        <v-col class="sideleft d-flex flex-column" cols="2">
           <timer />
           <div class="my-3"></div>
-          <Qshortcut :items="questionList" />
-          <div style="height: 58%"></div>
-          <v-row>
-            <v-col style="text-align: end">
-              <v-btn class="bg-teal-darken-1" @click="onSubmit()">{{
-                $t("submit")
-              }}</v-btn>
-            </v-col>
-          </v-row>
+          <!-- <Qshortcut :items="questionList" /> -->
+          <checkList :items="questionList" />
+          <!-- <div style="height: 58%"></div> -->
+          <v-spacer></v-spacer>
+          <div style="text-align: end">
+            <v-btn
+              style="background-color: #073a4b; color: white"
+              @click="onSubmit()"
+              >{{ $t("submit") }}</v-btn
+            >
+          </div>
         </v-col>
         <v-col class="pa-0">
           <div class="content">
