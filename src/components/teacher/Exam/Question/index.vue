@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-dialog v-model="dialog" scrollable fullscreen>
+    <v-dialog v-model="dialog" fullscreen>
       <template v-slot:activator="{ props }">
         <v-btn
           variant="text"
@@ -42,7 +42,7 @@
         <v-card-text>
           <v-window v-model="tab">
             <v-window-item value="one" align="center">
-              <QTList :examID="examID" :triggerFetch="fetchDataB1" />
+              <QTList :examID="examID" :triggerFetch="fetchData" />
             </v-window-item>
             <v-window-item value="two">
               <QTImport :examID="examID" @DL="receiveDialog" />
@@ -74,7 +74,7 @@ export default {
       checkbox1: false,
       items: Array.from({ length: 50 }, (k, v) => v + 1),
       tab: "one",
-      fetchData: Boolean,
+      fetchData: true,
     };
   },
   methods: {
@@ -98,11 +98,11 @@ export default {
       // console.log("Tab changed to:", newTab);
       // Add any other logic here based on the new tab value
       if (newTab === "one") {
-        this.fetchDataB1 = true;
+        this.fetchData = true;
         // Code to execute when tab "one" is selected
       } else if (newTab === "two") {
         // Code to execute when tab "two" is selected
-        this.fetchDataB1 = false;
+        this.fetchData = false;
       }
     },
   },

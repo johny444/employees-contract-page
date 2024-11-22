@@ -2,7 +2,7 @@
   <v-app id="inspire">
     <SidebarSTD :user="user" />
     <v-main>
-      <v-container class="py-8 px-6" fluid>
+      <v-container max-width="90%">
         <slot />
       </v-container>
     </v-main>

@@ -1,15 +1,9 @@
 <template>
   <v-row>
     <v-col style="text-align: end">
-      <v-menu v-model="menu" :close-on-content-click="false" location="end">
+      <v-menu location="end">
         <template v-slot:activator="{ props }">
-          <v-btn
-            color="indigo"
-            v-bind="props"
-            icon
-            @mouseenter="menu = true"
-            @mouseleave="menu = false"
-          >
+          <v-btn color="indigo" v-bind="props" icon>
             {{ completedItemCount }} / {{ items.length }}
           </v-btn>
         </template>
@@ -63,6 +57,6 @@ const completedItemCount = computed(() => {
 .card {
   background-color: rgb(230, 213, 213);
   max-width: 600px;
-  border-radius: 3rem 1rem 3rem 1rem;
+  border-radius: 1rem 3rem 1rem 3rem;
 }
 </style>

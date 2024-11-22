@@ -5,7 +5,7 @@
         <v-col class="sideleft" cols="2">
           <timer />
           <div class="my-3"></div>
-          <STDDashboardQuestionQshortcut :items="questionList" />
+          <Qshortcut :items="questionList" />
           <div style="height: 58%"></div>
           <v-row>
             <v-col style="text-align: end">
@@ -17,7 +17,9 @@
         </v-col>
         <v-col class="pa-0">
           <div class="content">
-            <div>
+            <examheader />
+            <div class="py-2"></div>
+            <v-container max-width="95%">
               <template v-if="questionList.length > 0">
                 <div v-for="(item, i) in paginatedQuestions" :key="i">
                   <v-row>
@@ -38,7 +40,7 @@
                   </v-radio-group>
                 </div>
               </template>
-            </div>
+            </v-container>
           </div>
           <div class="footer">
             <v-pagination

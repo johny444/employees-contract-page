@@ -35,13 +35,13 @@
               <template v-if="user.gender === '0'">
                 <v-avatar
                   image="https://th.bing.com/th/id/OIP.6-C1zVUDGDeY-GqQJiuCfAHaHa?w=205&h=205&c=7&r=0&o=5&dpr=1.3&pid=1.7"
-                  size="64"
+                  size="120"
                 ></v-avatar
               ></template>
               <template v-else>
                 <v-avatar
                   image="https://th.bing.com/th/id/OIP.IB0XUg8PV5FGxOf0WWDdOQHaHa?w=206&h=206&c=7&r=0&o=5&dpr=1.3&pid=1.7"
-                  size="64"
+                  size="120"
                 ></v-avatar>
               </template>
             </div>
