@@ -1,11 +1,14 @@
 <template>
   <v-app>
-    <div class="container pa-3" @mouseleave="onMouseLeave">
+    <div class="borderLineCheck pa-3" @mouseleave="onMouseLeave">
       <v-row>
         <v-col class="sideleft d-flex flex-column" cols="2">
           <timer />
-          <div class="my-3"></div>
+          <div class="py-3" align="center">
+            <h2>{{ breakRuleCheck }}</h2>
+          </div>
           <!-- <Qshortcut :items="questionList" /> -->
+
           <checkList :items="questionList" />
           <!-- <div style="height: 58%"></div> -->
           <v-spacer></v-spacer>
@@ -20,8 +23,10 @@
         <v-col class="pa-0">
           <div class="content">
             <examheader />
-            <div class="py-2"></div>
-            <v-container max-width="95%">
+            <div class="py-4">
+              <!-- <v-divider :thickness="2" inset></v-divider> -->
+            </div>
+            <v-container max-width="100%" class="pa-6">
               <template v-if="questionList.length > 0">
                 <div v-for="(item, i) in paginatedQuestions" :key="i">
                   <v-row>
@@ -29,6 +34,7 @@
                     <div class="mx-2"></div>
                     <h2>{{ item.question }}</h2>
                   </v-row>
+                  <div class="py-1"></div>
                   <v-radio-group inline v-model="item.selectedAnswer">
                     <v-radio
                       v-for="(option, j) in item.options.split(',')"
@@ -71,6 +77,9 @@ export default {
     };
   },
   computed: {
+    breakRuleCheck() {
+      return `BREAKING RULE : ${0} TIMES`;
+    },
     totalPages() {
       return Math.ceil(this.questionList.length / this.itemsPerPage);
     },
@@ -148,7 +157,7 @@ export default {
   font-size: 1rem;
   padding: 2rem;
 }
-.container {
+.borderLineCheck {
   border: 0.3rem solid;
   border-color: red;
 }

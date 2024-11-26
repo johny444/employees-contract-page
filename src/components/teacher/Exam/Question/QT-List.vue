@@ -26,22 +26,31 @@
               <template v-if="tableData.length > 0">
                 <tr v-for="(question, i) in tableData" :key="i">
                   <td width="10%">
-                    <v-row class="mt-1">
-                      <h2>{{ i + 1 }}.)</h2>
-                      <h2>{{ question.question }}</h2>
-                    </v-row>
                     <v-row>
-                      <v-radio-group inline v-model="question.answer">
-                        <v-radio
-                          v-for="(option, i) in question.options.split(',')"
-                          :key="i"
-                          color="primary"
-                          :name="i.toString()"
-                          :label="option"
-                          :value="option"
-                          :true-value="option"
-                        ></v-radio> </v-radio-group
-                    ></v-row>
+                      <v-col>
+                        <v-row class="mt-1">
+                          <h2>{{ i + 1 }}.)</h2>
+                          <h2>{{ question.question }}</h2>
+                        </v-row>
+                        <v-row>
+                          <v-radio-group inline v-model="question.answer">
+                            <v-radio
+                              v-for="(option, i) in question.options.split(',')"
+                              :key="i"
+                              color="primary"
+                              :name="i.toString()"
+                              :label="option"
+                              :value="option"
+                              :true-value="option"
+                            ></v-radio> </v-radio-group
+                        ></v-row>
+                      </v-col>
+                      <v-col cols="2">
+                        Type
+                        <span class="font-weight-bold">Single choice</span> |
+                        Points <span class="font-weight-bold">1</span>
+                      </v-col>
+                    </v-row>
                   </td>
                   <td width="1%">
                     <v-row justify="center">

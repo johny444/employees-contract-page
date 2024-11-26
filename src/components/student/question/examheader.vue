@@ -1,9 +1,9 @@
 <template>
-  <div align="center">
-    <h1>SUBJECT</h1>
+  <div class="examheader my-2" align="center">
     <v-row>
       <v-col cols="4"></v-col>
-      <v-col>
+      <v-col class="Title">
+        <h1>SUBJECT</h1>
         <div class="pa-2">
           <v-row>
             <h3>Student Name: chanthakhan</h3>
@@ -26,5 +26,17 @@
 export default {};
 </script>
 
-<style lang="scss" scoped>
+<style  scoped>
+.examheader {
+  /* background-color: #f04770; */
+  font-size: 1rem;
+}
+.Title {
+  /* border: 0.5rem ridge #d3a29d;
+  border-bottom: none; */
+}
 </style>
+
+
+
+                 
