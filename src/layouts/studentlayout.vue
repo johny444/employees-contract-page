@@ -1,7 +1,7 @@
 <template>
   <v-app id="inspire">
     <SidebarSTD :user="user" />
-    <v-main>
+    <v-main class="contain">
       <v-container max-width="90%">
         <slot />
       </v-container>
@@ -57,5 +57,12 @@ export default {
 };
 </script>
 
-  <style></style>
+  <style scoped>
+.contain {
+  background-position: center;
+  background-image: url(@/assets/images/examBG.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+</style>
   

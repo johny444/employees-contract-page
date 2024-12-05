@@ -8,7 +8,6 @@
             <h2>{{ breakRuleCheck }}</h2>
           </div>
           <!-- <Qshortcut :items="questionList" /> -->
-
           <checkList :items="questionList" />
           <!-- <div style="height: 58%"></div> -->
           <v-spacer></v-spacer>
@@ -33,6 +32,8 @@
                     <h2>{{ (page - 1) * itemsPerPage + i + 1 }}.)</h2>
                     <div class="mx-2"></div>
                     <h2>{{ item.question }}</h2>
+                    -
+                    <p>{{ item.answer }}</p>
                   </v-row>
                   <div class="py-1"></div>
                   <v-radio-group inline v-model="item.selectedAnswer">
@@ -74,11 +75,12 @@ export default {
       countMoveOut: 0,
       store: useQuestionStore(),
       loadingStore: useLoadingStore(),
+      AlertStore: useAlertStore(),
     };
   },
   computed: {
     breakRuleCheck() {
-      return `BREAKING RULE : ${0} TIMES`;
+      return `BREAKING RULE : ${this.countMoveOut} TIMES`;
     },
     totalPages() {
       return Math.ceil(this.questionList.length / this.itemsPerPage);
@@ -106,6 +108,7 @@ export default {
         question.selectedAnswer = null;
         question.isOptionSelected = false;
       });
+      console.log("questionList", this.questionList);
       this.loadingStore.closeLoading();
     },
     onSubmit() {
@@ -121,16 +124,17 @@ export default {
       });
 
       if (isAnyQuestionUnanswered) {
-        this.nuxtApp.$openDialog(
+        this.AlertStore.openDialog(
           "W",
-          this.nuxtApp.$t("Pleaseanswerallquestionsbeforesubmitting")
+          this.$t("Pleaseanswerallquestionsbeforesubmitting")
         );
       } else {
-        this.nuxtApp.$openDialog(
+        this.AlertStore.openDialog(
           "S",
-          `${this.nuxtApp.$t("submit")}${this.nuxtApp.$t("success")}`
+          `${this.$t("submit")}${this.$t("success")}`
         );
       }
+      console.log("correctCount", correctCount);
     },
     setOptionSelected(question, selectedOption) {
       question.isOptionSelected = true;
@@ -148,6 +152,11 @@ export default {
 </script>
 
 <style scoped>
+.borderLineCheck {
+  /* background-image: url(@/assets/images/test.jpg);
+  background-size: cover;
+  background-repeat: no-repeat; */
+}
 .sideleft {
   background-color: #f2f2f2; /* Light gray background */
   padding: 20px;
