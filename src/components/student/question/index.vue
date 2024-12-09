@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <div class="borderLineCheck pa-3" @mouseleave="onMouseLeave">
+    <div class="borderLineCheck" @mouseleave="onMouseLeave">
       <v-row>
         <v-col class="sideleft d-flex flex-column" cols="2">
           <timer />
@@ -9,7 +9,6 @@
           </div>
           <!-- <Qshortcut :items="questionList" /> -->
           <checkList :items="questionList" />
-          <!-- <div style="height: 58%"></div> -->
           <v-spacer></v-spacer>
           <div style="text-align: end">
             <v-btn
@@ -153,21 +152,23 @@ export default {
 
 <style scoped>
 .borderLineCheck {
-  /* background-image: url(@/assets/images/test.jpg);
+  background-image: url(@/assets/images/workplace-with-blue-office-supplies.jpg);
   background-size: cover;
-  background-repeat: no-repeat; */
+  background-repeat: no-repeat;
+  background-position: bottom;
+  /* background-size: 100%; */
+  padding: 1rem;
+  border: 0.5rem solid;
+  border-color: red;
+  min-height: 100vh;
 }
 .sideleft {
   background-color: #f2f2f2; /* Light gray background */
   padding: 20px;
 }
 .content {
-  height: 93.7vh;
+  height: calc(100vh - 5.5rem);
   font-size: 1rem;
-  padding: 2rem;
-}
-.borderLineCheck {
-  border: 0.3rem solid;
-  border-color: red;
+  padding: 1rem 2rem;
 }
 </style>
