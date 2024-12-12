@@ -163,7 +163,11 @@ export default {
   min-height: 100vh;
 }
 .sideleft {
-  background-color: #f2f2f2; /* Light gray background */
+  border: 2px groove #d3a29d;
+  border-top: none;
+  border-bottom: none;
+  border-left: none;
+  background-color: #e4dddd; /* Light gray background */
   padding: 20px;
 }
 .content {

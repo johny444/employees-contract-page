@@ -9,7 +9,7 @@
                 class="box ma-2"
                 :style="{
                   'background-color': item.isOptionSelected
-                    ? 'rgb(128, 128, 215)'
+                    ? '#a36361'
                     : '#fffefe',
                 }"
               >
@@ -46,7 +46,7 @@ export default {
   border-radius: 100%;
 }
 .card {
-  background-color: rgb(230, 213, 213);
+  background-color: rgb(240, 202, 202);
   max-width: 600px;
   border-radius: 1rem 1rem 1rem 1rem;
 }
