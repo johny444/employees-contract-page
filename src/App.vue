@@ -4,7 +4,6 @@
   <alert />
   <v-app>
     <v-main>
-      <!-- Dynamically render the layout specified in the route's meta -->
       <component :is="currentLayout">
         <router-view />
       </component>
@@ -23,7 +22,6 @@ export default {
   },
   computed: {
     currentLayout() {
-      // Computed property to get the layout from route meta or fallback to DefaultLayout
       return this.$route.meta.layout || DefaultLayout;
     },
   },
