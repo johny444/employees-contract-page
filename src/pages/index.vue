@@ -86,31 +86,8 @@ export default {
   methods: {
     async onSubmit() {
       try {
-        const response = await axios.post("http://localhost:8080/auth/login", {
-          email: this.txtUseremail,
-          password: this.txtPassword,
-        });
-
-        console.log("response.data.message", response.data);
         this.loadingStore.openLoading();
-        if (response.data.token) {
-          await this.storeUser.acGetuserList(response.data.token);
-          this.storeUser.aclogIn();
-
-          const userRole = this.storeUser.getuserList.user[0].role;
-          localStorage.setItem("token", response.data.token);
-
-          switch (userRole) {
-            case "teacher":
-              this.$router.push("/dashboard");
-              break;
-            case "student":
-              this.$router.push("/quiz");
-              break;
-            default:
-              break;
-          }
-        }
+        this.$router.push("/dashboard");
         this.loadingStore.closeLoading();
       } catch (error) {
         console.error("Error in form login", error);

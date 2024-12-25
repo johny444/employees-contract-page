@@ -11,18 +11,6 @@
                 permanent
                 class="bg-cyan-darken-4"
               >
-                <!-- <v-row class="pt-2">
-                  <v-col align="end">
-                    <v-icon
-                      @click="rail = false"
-                      v-if="rail"
-                      class="px-3"
-                      style="font-size: 20px"
-                      color="white"
-                      >fa-solid fa-square-caret-right</v-icon
-                    >
-                  </v-col>
-                </v-row> -->
                 <v-list>
                   <template v-if="!rail">
                     <profile @toggle-rail="toggleRail" />

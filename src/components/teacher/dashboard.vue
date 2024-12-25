@@ -50,12 +50,11 @@ export default {
     };
   },
   mounted() {
-    console.log("dashboard hello", this.getTime()); // Calls getTime function on mount
-    // console.log("this.$route.pat", this.$route.path);
+    console.log("dashboard hello", this.getTime());
   },
   methods: {
     getTime() {
-      return new Date().toLocaleTimeString(); // Example function to return current time
+      return new Date().toLocaleTimeString();
     },
   },
 };

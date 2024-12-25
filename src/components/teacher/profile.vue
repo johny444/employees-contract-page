@@ -39,8 +39,6 @@
 </template>
 
 <script>
-import { useUserStore } from "@/stores/user";
-
 export default {
   name: "profile",
   data() {
@@ -49,21 +47,9 @@ export default {
     };
   },
   methods: {
-    async fetchUser() {
-      // console.log("profile mount");
-      try {
-        // Assuming you would use `storeUser` to fetch user data
-        const storeUser = useUserStore();
-        await storeUser.acGetuserList(localStorage.getItem("token"));
-        this.user = storeUser.getuserList.user[0];
-        // console.log("user:", this.user);
-      } catch (error) {
-        console.error("Error fetching user:", error);
-        // Optionally open a dialog or handle error as needed
-      }
-    },
+    async fetchUser() {},
     logout() {
-      localStorage.removeItem("token");
+      // localStorage.removeItem("token");
       try {
         this.$router.push("/");
       } catch (error) {

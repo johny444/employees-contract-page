@@ -1,40 +1,3 @@
-// /**
-//  * router/index.ts
-//  *
-//  * Automatic routes for `./src/pages/*.vue`
-//  */
-
-// // Composables auto import without requiresAuth
-// import { createRouter, createWebHistory } from "vue-router/auto";
-// import { setupLayouts } from "virtual:generated-layouts";
-// import { routes } from "vue-router/auto-routes";
-
-// const router = createRouter({
-//   history: createWebHistory(import.meta.env.BASE_URL),
-//   routes: setupLayouts(routes),
-// });
-
-// // Workaround for https://github.com/vitejs/vite/issues/11804
-// router.onError((err, to) => {
-//   if (err?.message?.includes?.("Failed to fetch dynamically imported module")) {
-//     if (!localStorage.getItem("vuetify:dynamic-reload")) {
-//       console.log("Reloading page to fix dynamic import error");
-//       localStorage.setItem("vuetify:dynamic-reload", "true");
-//       location.assign(to.fullPath);
-//     } else {
-//       console.error("Dynamic import error, reloading page did not fix it", err);
-//     }
-//   } else {
-//     console.error(err);
-//   }
-// });
-
-// router.isReady().then(() => {
-//   localStorage.removeItem("vuetify:dynamic-reload");
-// });
-
-// export default router;
-
 import { createRouter, createWebHistory } from "vue-router/auto";
 import { setupLayouts } from "virtual:generated-layouts";
 import { routes } from "vue-router/auto-routes"; // Auto-generated routes
@@ -51,41 +14,42 @@ const routesWithMeta = routes.map((route) => {
   ) {
     route.meta = {
       ...(route.meta || {}),
-      requiresAuth: true,
+      requiresAuth: false,
       layout: TeacherLayout, // Assign teacher layout
     };
-  } else if (
-    route.path.startsWith("/quiz") ||
-    route.path.startsWith("/question") ||
-    route.path.startsWith("/result-student")
-  ) {
-    route.meta = {
-      ...(route.meta || {}),
-      requiresAuth: true,
-      layout: StudentLayout, // Assign student layout
-    };
   }
+  // else if (
+  //   route.path.startsWith("/quiz") ||
+  //   route.path.startsWith("/question") ||
+  //   route.path.startsWith("/result-student")
+  // ) {
+  //   route.meta = {
+  //     ...(route.meta || {}),
+  //     requiresAuth: true,
+  //     layout: StudentLayout, // Assign student layout
+  //   };
+  // }
 
-  // Handle child routes
-  if (route.children && route.children.length) {
-    route.children = route.children.map((childRoute) => {
-      // Explicitly handle `/quiz/:question` child route
-      if (route.path.startsWith("/quiz") && childRoute.path === ":question") {
-        childRoute.meta = {
-          ...(childRoute.meta || {}),
-          requiresAuth: true,
-          layout: null, // Explicitly remove layout
-        };
-      } else {
-        childRoute.meta = {
-          ...(childRoute.meta || {}),
-          requiresAuth: true,
-          layout: route.meta.layout, // Inherit layout from parent
-        };
-      }
-      return childRoute;
-    });
-  }
+  // // Handle child routes
+  // if (route.children && route.children.length) {
+  //   route.children = route.children.map((childRoute) => {
+  //     // Explicitly handle `/quiz/:question` child route
+  //     if (route.path.startsWith("/quiz") && childRoute.path === ":question") {
+  //       childRoute.meta = {
+  //         ...(childRoute.meta || {}),
+  //         requiresAuth: true,
+  //         layout: null, // Explicitly remove layout
+  //       };
+  //     } else {
+  //       childRoute.meta = {
+  //         ...(childRoute.meta || {}),
+  //         requiresAuth: true,
+  //         layout: route.meta.layout, // Inherit layout from parent
+  //       };
+  //     }
+  //     return childRoute;
+  //   });
+  // }
 
   return route;
 });
@@ -93,18 +57,17 @@ const routesWithMeta = routes.map((route) => {
 const routesWithCatchAll = [
   ...setupLayouts(routesWithMeta),
   {
-    path: "/:catchAll(.*)", // Catch-all path for undefined routes
+    path: "/:catchAll(.*)",
     name: "NotFound",
-    component: () => import("@/pages/404.vue"), // Lazy-load the 404 page component
+    component: () => import("@/pages/404.vue"),
   },
 ];
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: setupLayouts(routesWithCatchAll), // Pass the modified routes
+  routes: setupLayouts(routesWithCatchAll),
 });
 
-// Global navigation guard to check for authentication
 router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth && !localStorage.getItem("token")) {
     next("/"); // Redirect to login if not authenticated
