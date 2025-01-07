@@ -1,60 +1,6 @@
 <template>
   <div>
-    <header>
-      <Title>{{ $t("examinationSystem") }}</Title>
-    </header>
-    <div
-      id="particles-js"
-      class="normal_gradient d-flex justify-center align-center"
-    >
-      <v-card class="loginCard rounded-xl" align="center">
-        <v-card-text>
-          <div class="mt-2" style="text-align: center">
-            <h1 class="text-secondary" style="font-size: 2.5rem">
-              {{ $t("examinationSystem") }}
-            </h1>
-          </div>
-          <div style="">
-            <img src="@/assets/images/examLogo.png" :width="300" />
-          </div>
-          <div class="ml-4">
-            <v-form @submit.prevent="onSubmit">
-              <v-text-field
-                v-model="txtUseremail"
-                :label="$t('email')"
-                prepend-inner-icon="fas fa-user"
-                rounded
-                variant="solo"
-              ></v-text-field>
-              <v-text-field
-                v-model="txtPassword"
-                :label="$t('password')"
-                prepend-inner-icon="fas fa-unlock"
-                :append-inner-icon="showPw ? 'fas fa-eye' : 'fas fa-eye-slash'"
-                :type="showPw ? 'text' : 'password'"
-                @click:append-inner="showPw = !showPw"
-                rounded
-                variant="solo"
-              ></v-text-field>
-              <v-row class="ma-0" justify="end">
-                <v-btn
-                  class="rounded-lg"
-                  type="submit"
-                  color="#1565C0"
-                  prepend-icon="fas fa-right-to-bracket"
-                  :loading="loading"
-                  @click="loading = !loading"
-                  >{{ $t("login") }}
-                </v-btn>
-                <template v-slot:loader>
-                  <v-progress-linear indeterminate></v-progress-linear>
-                </template>
-              </v-row>
-            </v-form>
-          </div>
-        </v-card-text>
-      </v-card>
-    </div>
+    <contract />
   </div>
 </template>
 
