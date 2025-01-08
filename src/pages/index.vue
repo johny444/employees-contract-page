@@ -6,8 +6,7 @@
 
 <script>
 import { useUserStore } from "@/stores/user";
-import axios from "axios";
-import { useI18n } from "vue-i18n";
+
 import { useLoadingStore } from "@/stores/loadingStore";
 
 export default {
@@ -53,26 +52,6 @@ export default {
 
 
 <style scoped>
-#particles-js {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: 50% 50%;
-  padding: 0px;
-  overflow: hidden;
-}
-.normal_gradient {
-  background: radial-gradient(circle, #35a2ff 0%, #28c2e5 100%);
-  background-image: url(@/assets/images/background.jpg);
-}
-.loginCard {
-  position: absolute;
-  width: 20%;
-  left: 10%;
-  box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
-}
 </style>
 
 

@@ -1,7 +1,7 @@
 html,
 body {
   height: 100% !important;
-  font-size: 0.8rem !important;
+  /* font-size: 0.8rem !important; */
   font-family: "LaoFont", "phetsarath" !important;
   color: rgb(136, 147, 151);
   /* background-color: '#a1d1f31c' !important; */

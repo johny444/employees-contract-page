@@ -29,8 +29,69 @@
           </v-col>
         </v-row>
       </div>
+      <div class="mt-5">
+        <v-table>
+          <thead>
+            <tr>
+              <th>{{ $t("rowNum") }}</th>
+              <th>{{ $t("subject") }}</th>
+              <th>{{ $t("createDate") }}</th>
+              <th>{{ $t("class") }}</th>
+              <th>{{ $t("term") }}</th>
+              <th>ACTION</th>
+            </tr>
+          </thead>
+          <tbody>
+            <template v-if="tableData.length > 0">
+              <tr v-for="(item, i) in tableData" :key="item.name">
+                <td width="5%" align="center">{{ i + 1 }}</td>
+                <td width="10%">{{ item.classExamid.subjectExam }}</td>
+                <td width="20%">{{ item.time }}</td>
+                <td width="10%">{{ item.classExamid.classExam }}</td>
+                <td width="10%">
+                  {{ item.term === "mid" ? $t("midterm") : $t("finalterm") }}
+                </td>
+                <td width="12%">
+                  <v-row justify="center" style="margin: 1rem">
+                    <!-- <NuxtLink :to="`/quiz/${item.id}`"> -->
+                    <v-btn
+                      variant="text"
+                      density="compact"
+                      icon="fa-solid fa-plus"
+                      size="medium"
+                      @click="startExam(item.id)"
+                    >
+                      <v-icon
+                        style="color: #046b5a"
+                        icon="fa-solid fa-file-circle-question"
+                      />
+                      <v-tooltip activator="parent" location="start">{{
+                        $t("startExam")
+                      }}</v-tooltip>
+                    </v-btn>
+                    <!-- </NuxtLink> -->
+                  </v-row>
+                </td>
+              </tr>
+            </template>
+            <template v-else>
+              <td :colspan="9">
+                <div style="margin-top: 1rem; text-align: center">
+                  <NoData></NoData>
+                </div>
+              </td>
+            </template>
+          </tbody>
+          <template #bottom v-if="tableData.length > 0">
+            <table-pagination
+              :itemList="store.examList.length"
+              :perPage="perPage"
+              @valueChange="onPageChange"
+            ></table-pagination>
+          </template>
+        </v-table>
+      </div>
     </div>
-    <v-icon style="color: #046b5a" icon="fa-solid fa-file-circle-question" />
   </div>
 </template>
 
