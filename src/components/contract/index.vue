@@ -12,6 +12,7 @@
       <datePicker />
       <v-form @submit.prevent="onSubmit">
         <div class="action">
+          <p class="font-italic">Note: Date Format for filter is MM/DD/YYYY</p>
           <v-row align="center">
             <h3 class="label pl-4">{{ $t("from").toUpperCase() }}</h3>
             <v-col cols="2">
