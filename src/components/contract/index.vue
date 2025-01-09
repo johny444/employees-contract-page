@@ -3,16 +3,17 @@
     <div class="header pa-4">
       <v-row>
         <v-col align="start">
-          <h1>Employees Contract list</h1>
+          <h1>{{ $t("empcontractList") }}</h1>
         </v-col>
         <v-col align="end"> <LangSwitcher /> </v-col>
       </v-row>
     </div>
     <v-container max-width="90%">
+      <datePicker />
       <v-form @submit.prevent="onSubmit">
         <div class="action">
           <v-row align="center">
-            <h3 class="label px-5">FROM</h3>
+            <h3 class="label pl-4">{{ $t("from").toUpperCase() }}</h3>
             <v-col cols="2">
               <v-text-field
                 v-model="startDate"
@@ -21,7 +22,7 @@
                 type="date"
               ></v-text-field>
             </v-col>
-            <h3 class="label">TO</h3>
+            <h3 class="label">{{ $t("to").toUpperCase() }}</h3>
             <v-col cols="2">
               <v-text-field
                 v-model="endDate"
@@ -33,7 +34,9 @@
             <v-col>
               <v-row>
                 <v-col>
-                  <v-btn class="mb-6" type="submit">Apply</v-btn>
+                  <v-btn color="teal-darken-3" class="mb-6" type="submit"
+                    >Apply</v-btn
+                  >
                 </v-col>
                 <v-col align="end" justify="center">
                   <h3>{{ $t("total") }}:{{ total }}</h3></v-col
@@ -73,11 +76,13 @@
                 {{ (currentPage - 1) * perPage + i + 1 }}
               </td>
               <td width="15%">{{ item.EMPNAME }}</td>
-              <td width="5%">{{ item.CONTRACTNO }}</td>
-              <td width="5%">{{ item.DURATION }}</td>
-              <td width="5%">{{ formatDateShow(item.STARTDATE) }}</td>
-              <td width="5%">
-                {{ item.ENDDATE ? formatDateShow(item.ENDDATE) : item.ENDDATE }}
+              <td width="5%" align="center">{{ item.CONTRACTNO }}</td>
+              <td width="5%" align="center">{{ item.DURATION }}</td>
+              <td width="5%" align="center">
+                {{ formatDateShow(item.STARTDATE) }}
+              </td>
+              <td width="5%" align="center">
+                {{ item.ENDDATE ? formatDateShow(item.ENDDATE) : "-" }}
               </td>
               <td width="10%">{{ item.POSITION }}</td>
               <td width="20%">{{ item.DEP }}</td>
@@ -112,19 +117,6 @@
           </v-row>
         </v-container>
       </div>
-      <!-- <v-row justify="center" class="mt-4">
-        <v-btn small outlined @click="prevPage" :disabled="currentPage === 1"
-          >Previous</v-btn
-        >
-        <v-btn
-          small
-          outlined
-          @click="nextPage"
-          :disabled="currentPage === totalPages"
-          >Next</v-btn
-        >
-        <span class="ml-2">Page {{ currentPage }} of {{ totalPages }}</span>
-      </v-row> -->
     </v-container>
   </div>
 </template>
@@ -200,7 +192,7 @@ export default {
 
 <style scoped>
 .main-container {
-  /* background-color: rgb(153, 195, 233); */
+  background-color: rgb(242, 243, 247);
   max-height: 100vh;
   min-height: 100vh;
   overflow-x: hidden;

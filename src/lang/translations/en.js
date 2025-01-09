@@ -88,4 +88,7 @@ export default {
   DEPARTMENT: "DEPARTMENT",
   FULLNAME: "FULLNAME",
   total: "Total",
+  empcontractList: "Employees Contract list",
+  from: "from",
+  to: "to",
 };

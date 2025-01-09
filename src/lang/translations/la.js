@@ -88,4 +88,7 @@ export default {
   DEPARTMENT: "ພະແນກ",
   FULLNAME: "ຊື່ແລະນາມສະກຸນ",
   total: "ທັງໝົດ",
+  empcontractList: "ລາຍການສັນຍາພະນັກງານ",
+  from: "ແຕ່ວັນທີ",
+  to: "ຫາ",
 };
