@@ -99,6 +99,7 @@
     "useResultStore": true,
     "useStudentStore": true,
     "useTeacherStore": true,
-    "useUserStore": true
+    "useUserStore": true,
+    "useHRStore": true
   }
 }

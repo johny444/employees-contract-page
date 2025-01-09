@@ -1,9 +1,7 @@
 import moment from "moment";
 export default {
   data() {
-    return {
-      _storeQuestion: useQuestionStore(), // Initialize the store
-    };
+    return {};
   },
   methods: {
     getTime() {
@@ -60,12 +58,14 @@ export default {
         .join("");
       return passwordTemp.substr(0, length.value);
     },
+    // formatDate(date) {
+    //   return moment(date, "DD-MM-YYYY").format("YYYY-MM-DD");
+    // },
     formatDate(date) {
-      return moment(date, "DD-MM-YYYY").format("YYYY-MM-DD");
+      return moment(date).format("DD-MMM-YYYY");
     },
-    async getQT(examID) {
-      await this._storeQuestion.QUESTIONFILER(examID);
-      return this._storeQuestion.questionfilter;
+    formatDateShow(date) {
+      return moment(date).format("DD-MM-YYYY");
     },
   },
 };

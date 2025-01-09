@@ -5,8 +5,6 @@
 </template>
 
 <script>
-import { useUserStore } from "@/stores/user";
-
 import { useLoadingStore } from "@/stores/loadingStore";
 
 export default {
@@ -44,7 +42,6 @@ export default {
     this.$i18n.locale = localStorage.getItem("i18n") || "en"; // Set locale on mounted
   },
   created() {
-    this.storeUser = useUserStore();
     this.loadingStore = useLoadingStore();
   },
 };

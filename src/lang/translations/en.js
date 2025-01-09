@@ -80,4 +80,12 @@ export default {
   Student: "Student",
   Dashboard: "Dashboard",
   user: "User",
+  CONTRACTNO: "CONTRACT NO",
+  DURATION: "DURATION",
+  STARTDATE: "STARTDATE",
+  ENDDATE: " ENDDATE",
+  POSITION: "POSITION",
+  DEPARTMENT: "DEPARTMENT",
+  FULLNAME: "FULLNAME",
+  total: "Total",
 };

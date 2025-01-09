@@ -80,4 +80,12 @@ export default {
   Student: "ນັກຮຽນ",
   Dashboard: "ແຜກຄວມຄູມ",
   user: "ຜູ້ໃຊ້",
+  CONTRACTNO: "ເລກທີສັນຍາ",
+  DURATION: "ໄລຍະເວລາ",
+  STARTDATE: "ມື້ເລີ້ມ",
+  ENDDATE: " ມື້ສິ້ນສຸດ",
+  POSITION: "ຕຳແໜ່ງ",
+  DEPARTMENT: "ພະແນກ",
+  FULLNAME: "ຊື່ແລະນາມສະກຸນ",
+  total: "ທັງໝົດ",
 };

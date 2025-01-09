@@ -1,23 +1,21 @@
 // @ts-ignore
 import { defineStore } from "pinia";
 import axios from "axios";
-export const useExamStore = defineStore("examStore", {
+export const useHRStore = defineStore("HRStore", {
   state: () => ({
-    examList: ref([]),
+    employee: ref([]),
   }),
-  getters: {
-    getexamList: (state) => state.examList,
-  },
+  getters: {},
   actions: {
-    async CRUDEXAM(body: any) {
+    async GET_EMPLOYEELSIT(body: object) {
       const respone = await axios
-        .post("http://localhost:8080/exam", body)
+        .post("http://localhost:8080/employees", body)
         .catch((err) => {
           console.log("ERRO form respone", err);
           return err;
         });
       // console.log("respone", respone);
-      this.examList = respone.data;
+      this.employee = respone.data;
       return respone;
     },
   },

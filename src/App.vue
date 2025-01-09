@@ -1,14 +1,16 @@
 <template>
-  <loading />
-  <alertDialog />
-  <alert />
-  <v-app>
-    <v-main>
-      <component :is="currentLayout">
-        <router-view />
-      </component>
-    </v-main>
-  </v-app>
+  <div>
+    <loading />
+    <alertDialog />
+    <alert />
+    <v-app>
+      <v-main>
+        <component :is="currentLayout">
+          <router-view />
+        </component>
+      </v-main>
+    </v-app>
+  </div>
 </template>
 
 <script>
