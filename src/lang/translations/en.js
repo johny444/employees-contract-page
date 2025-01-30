@@ -91,4 +91,8 @@ export default {
   empcontractList: "Employees Contract list",
   from: "from",
   to: "to",
+  contractList: "Contract List",
+  plist: "Position List",
+  branch: "Branch",
+  EMPID: "Employee ID",
 };

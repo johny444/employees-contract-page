@@ -91,4 +91,8 @@ export default {
   empcontractList: "ລາຍການສັນຍາພະນັກງານ",
   from: "ແຕ່ວັນທີ",
   to: "ຫາ",
+  contractList: "ລາຍການສັນຍາ",
+  plist: "ລາຍການຕຳແໜ່ງ",
+  branch: "ສາຂາ",
+  EMPID: "ເລກລະຫັດພະນັກງານ",
 };

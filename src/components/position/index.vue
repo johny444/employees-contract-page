@@ -2,38 +2,10 @@
   <v-container max-width="90%">
     <v-form @submit.prevent="onSubmit">
       <div class="action">
-        <p class="font-italic">Note: Date Format for filter is MM/DD/YYYY</p>
-        <v-row align="center">
-          <h3 class="label pl-4">{{ $t("from").toUpperCase() }}</h3>
-          <v-col cols="2">
-            <v-text-field
-              v-model="startDate"
-              density="compact"
-              variant="outlined"
-              type="date"
-            ></v-text-field>
-          </v-col>
-          <h3 class="label">{{ $t("to").toUpperCase() }}</h3>
-          <v-col cols="2">
-            <v-text-field
-              v-model="endDate"
-              density="compact"
-              variant="outlined"
-              type="date"
-            ></v-text-field>
-          </v-col>
-          <v-col cols="2">
-            <v-row>
-              <v-col>
-                <v-btn color="teal-darken-3" class="mb-6" type="submit"
-                  >Apply</v-btn
-                >
-              </v-col>
-            </v-row>
-          </v-col>
+        <v-row align="start">
           <v-col class="left">
             <v-row justify="space-between" no-gutters>
-              <v-col cols="9" class="d-flex">
+              <v-col cols="3" class="d-flex">
                 <v-text-field
                   clearable
                   density="comfortable"
@@ -44,7 +16,6 @@
                 ></v-text-field>
                 <h3 class="pa-2">{{ $t("total") }}:{{ total }}</h3></v-col
               >
-
               <v-col align="end">
                 <template v-if="tableData.length > 0">
                   <export :dataExport="tableData" />
@@ -60,12 +31,12 @@
         <tr>
           <th>{{ $t("rowNum") }}</th>
           <th>{{ $t("FULLNAME") }}</th>
-          <th>{{ $t("CONTRACTNO") }}</th>
-          <th>{{ $t("DURATION") }}</th>
-          <th>{{ $t("STARTDATE") }}</th>
-          <th>{{ $t("ENDDATE") }}</th>
+          <th>{{ $t("EMPID") }}</th>
           <th>{{ $t("POSITION") }}</th>
+          <th>{{ $t("STARTDATE") }}</th>
+          <th>{{ $t("TODATE") }}</th>
           <th>{{ $t("DEPARTMENT") }}</th>
+          <th>{{ $t("branch") }}</th>
         </tr>
       </thead>
       <tbody>
@@ -74,17 +45,17 @@
             <td width="2%" align="center">
               {{ (currentPage - 1) * perPage + i + 1 }}
             </td>
-            <td width="15%">{{ item.EMPNAME }}</td>
-            <td width="5%" align="center">{{ item.CONTRACTNO }}</td>
-            <td width="5%" align="center">{{ item.DURATION }}</td>
+            <td width="15%" align="center">{{ item.EMPNAME }}</td>
+            <td width="5%">{{ item.EMPID }}</td>
+            <td width="15%">{{ item.POSITIONTYPENAME }}</td>
             <td width="5%" align="center">
-              {{ formatDateShow(item.STARTDATE) }}
+              {{ formatDateShow(item.FROMDATE) }}
             </td>
             <td width="5%" align="center">
-              {{ item.ENDDATE ? formatDateShow(item.ENDDATE) : "-" }}
+              {{ item.TODATE ? formatDateShow(item.TODATE) : "-" }}
             </td>
-            <td width="10%">{{ item.POSITION }}</td>
-            <td width="20%">{{ item.DEP }}</td>
+            <td width="15%">{{ item.DEPARTMENT }}</td>
+            <td width="17%">{{ item.BRANCH }}</td>
           </tr>
         </template>
         <template v-else>
@@ -117,14 +88,14 @@
     </div>
   </v-container>
 </template>
-
-<script>
+  
+  <script>
 import moment from "moment";
 export default {
   data() {
     return {
       startDate: moment().format("YYYY-MM-DD"),
-      endDate: moment().format("YYYY-MM-DD"),
+      TODate: moment().format("YYYY-MM-DD"),
       tableData: [], // Complete data from the API
       perPage: 10, // Number of rows per page
       currentPage: 1, // Current page
@@ -163,17 +134,18 @@ export default {
   },
   methods: {
     async getList(period) {
-      await this.store.GET_EMPLOYEELSIT(period);
+      await this.store.GET_EMPLOYEEPOSITION({ type: "leader" });
       this.tableData = this.store.employee.DATA;
+      console.log("this.tableData ", this.tableData);
       this.total = this.store.employee.AllRECORD;
     },
     onSubmit() {
       console.log("start", this.formatDate(this.startDate));
-      console.log("start", this.formatDate(this.endDate));
+      console.log("start", this.formatDate(this.TODate));
 
       let period = {
         start: this.formatDate(this.startDate),
-        end: this.formatDate(this.endDate),
+        end: this.formatDate(this.TODate),
       };
 
       // console.log("date:", period);
@@ -182,13 +154,13 @@ export default {
   },
   async mounted() {
     this.loadingStore.openLoading();
-    this.getList(this.startDate, this.endDate);
+    this.getList(this.startDate, this.TODate);
     this.loadingStore.closeLoading();
   },
 };
 </script>
-
-<style scoped>
+  
+  <style scoped>
 .main-container {
   background-color: rgb(242, 243, 247);
   max-height: 100vh;
@@ -200,3 +172,4 @@ export default {
   margin-bottom: 1rem;
 }
 </style>
+  

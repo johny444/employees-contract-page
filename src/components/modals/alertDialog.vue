@@ -33,13 +33,13 @@
       <v-card class="mx-auto" width="400" color="success">
         <v-card-item class="pa-0 ma-2">
           <v-card-title class="d-flex">
-            <v-icon>fa-regular fa-circle-check</v-icon>
+            <v-icon class="mt-2">fa-regular fa-circle-check</v-icon>
             <h2 class="font-weight-black ml-2">{{ $t("success") }}</h2>
           </v-card-title>
         </v-card-item>
         <v-card-text
           class="bg-surface-light text-center"
-          style="font-size: 1.5rem"
+          style="font-size: 2rem"
         >
           {{ AlertStore.message }}!
         </v-card-text>

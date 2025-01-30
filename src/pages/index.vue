@@ -1,6 +1,6 @@
 <template>
   <div>
-    <contract />
+    <main-container />
   </div>
 </template>
 
