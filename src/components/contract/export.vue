@@ -37,6 +37,12 @@ export default {
         if (item.ENDDATE) {
           item.ENDDATE = moment(item.ENDDATE).format("DD-MM-YYYY"); // Format only date if not null
         }
+        if (item.FROMDATE) {
+          item.FROMDATE = moment(item.FROMDATE).format("DD-MM-YYYY"); // Format only date
+        }
+        if (item.TODATE) {
+          item.TODATE = moment(item.TODATE).format("DD-MM-YYYY"); // Format only date if not null
+        }
       });
 
       console.log("dateFormat", clonedData);

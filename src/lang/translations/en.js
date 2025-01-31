@@ -95,4 +95,6 @@ export default {
   plist: "Position List",
   branch: "Branch",
   EMPID: "Employee ID",
+  leader: "Leader",
+  all: "All",
 };

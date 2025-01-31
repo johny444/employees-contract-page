@@ -95,4 +95,6 @@ export default {
   plist: "ລາຍການຕຳແໜ່ງ",
   branch: "ສາຂາ",
   EMPID: "ເລກລະຫັດພະນັກງານ",
+  leader: "ຫົວໜ້າ",
+  all: "ທັງໝົດ",
 };

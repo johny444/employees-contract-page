@@ -37,7 +37,7 @@
                 <v-text-field
                   clearable
                   density="comfortable"
-                  label="Search"
+                  :label="$t('search')"
                   prepend-inner-icon="fa-solid fa-magnifying-glass"
                   variant="outlined"
                   v-model="search"
@@ -97,23 +97,26 @@
       </tbody>
     </v-table>
     <!-- Pagination Controls -->
-    <div class="text-center">
-      <v-container class="py-0">
-        <v-row justify="center">
-          <v-col cols="8">
-            <v-container class="max-width">
-              <v-pagination
-                v-model="currentPage"
-                :length="totalPages"
-                rounded="circle"
-              ></v-pagination>
-              <span class="ml-2"
-                >Page {{ currentPage }} of {{ totalPages }}</span
-              >
-            </v-container>
-          </v-col>
-        </v-row>
-      </v-container>
+    <div>
+      <v-row justify="space-between" no-gutters>
+        <v-col>
+          <item-page
+            :pageProp="perPage"
+            @update-pageProp="perPageChange"
+            class="pa-5"
+          />
+        </v-col>
+        <v-col cols="4">
+          <v-container class="max-width text-center">
+            <v-pagination
+              v-model="currentPage"
+              :length="totalPages"
+              rounded="circle"
+            ></v-pagination>
+            <span class="ml-2">Page {{ currentPage }} of {{ totalPages }}</span>
+          </v-container>
+        </v-col>
+      </v-row>
     </div>
   </v-container>
 </template>
@@ -178,6 +181,10 @@ export default {
 
       // console.log("date:", period);
       this.getList(period);
+    },
+    perPageChange(v) {
+      console.log("v", v);
+      this.perPage = v;
     },
   },
   async mounted() {

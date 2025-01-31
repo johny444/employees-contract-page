@@ -20,8 +20,9 @@ export const useHRStore = defineStore("HRStore", {
       this.employee = respone.data;
       return respone;
     },
-    async GET_EMPLOYEEPOSITION(type: object) {
+    async GET_EMPLOYEEPOSITION(type: string) {
       // console.log("API", import.meta.env.VITE_API);
+      console.log("type", type);
       let API = import.meta.env.VITE_API;
       const respone = await axios
         .post(`${API}/employees-position`, type)

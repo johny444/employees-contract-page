@@ -5,20 +5,28 @@
         <v-row align="start">
           <v-col class="left">
             <v-row justify="space-between" no-gutters>
-              <v-col cols="3" class="d-flex">
+              <v-col cols="4" class="d-flex">
                 <v-text-field
                   clearable
                   density="comfortable"
-                  label="Search"
+                  :label="$t('search')"
                   prepend-inner-icon="fa-solid fa-magnifying-glass"
                   variant="outlined"
                   v-model="search"
                 ></v-text-field>
-                <h3 class="pa-2">{{ $t("total") }}:{{ total }}</h3></v-col
-              >
+                <h3 class="pa-2">{{ $t("total") }}:{{ total }}</h3>
+              </v-col>
               <v-col align="end">
                 <template v-if="tableData.length > 0">
-                  <export :dataExport="tableData" />
+                  <div class="d-flex flex-row-reverse">
+                    <export :dataExport="tableData" />
+                    <div class="mx-2"></div>
+                    <list-type
+                      :Type="typeList"
+                      @update-type="TypeListChange"
+                      class="mx-3"
+                    />
+                  </div>
                 </template>
               </v-col>
             </v-row>
@@ -34,7 +42,7 @@
           <th>{{ $t("EMPID") }}</th>
           <th>{{ $t("POSITION") }}</th>
           <th>{{ $t("STARTDATE") }}</th>
-          <th>{{ $t("TODATE") }}</th>
+          <th>{{ $t("ENDDATE") }}</th>
           <th>{{ $t("DEPARTMENT") }}</th>
           <th>{{ $t("branch") }}</th>
         </tr>
@@ -45,10 +53,10 @@
             <td width="2%" align="center">
               {{ (currentPage - 1) * perPage + i + 1 }}
             </td>
-            <td width="15%" align="center">{{ item.EMPNAME }}</td>
-            <td width="5%">{{ item.EMPID }}</td>
+            <td width="15%">{{ item.EMPNAME }}</td>
+            <td width="2%">{{ item.EMPID }}</td>
             <td width="15%">{{ item.POSITIONTYPENAME }}</td>
-            <td width="5%" align="center">
+            <td width="6%" align="center">
               {{ formatDateShow(item.FROMDATE) }}
             </td>
             <td width="5%" align="center">
@@ -68,30 +76,36 @@
       </tbody>
     </v-table>
     <!-- Pagination Controls -->
-    <div class="text-center">
-      <v-container class="py-0">
-        <v-row justify="center">
-          <v-col cols="8">
-            <v-container class="max-width">
-              <v-pagination
-                v-model="currentPage"
-                :length="totalPages"
-                rounded="circle"
-              ></v-pagination>
-              <span class="ml-2"
-                >Page {{ currentPage }} of {{ totalPages }}</span
-              >
-            </v-container>
-          </v-col>
-        </v-row>
-      </v-container>
+    <div>
+      <v-row justify="space-between" no-gutters>
+        <v-col>
+          <item-page
+            :pageProp="perPage"
+            @update-pageProp="perPageChange"
+            class="pa-5"
+          />
+        </v-col>
+        <v-col cols="4">
+          <v-container class="max-width text-center">
+            <v-pagination
+              v-model="currentPage"
+              :length="totalPages"
+              rounded="circle"
+            ></v-pagination>
+            <span class="ml-2">Page {{ currentPage }} of {{ totalPages }}</span>
+          </v-container>
+        </v-col>
+      </v-row>
     </div>
   </v-container>
 </template>
   
   <script>
 import moment from "moment";
+import ItemPage from "../Item-page.vue";
+import ListType from "../ListType.vue";
 export default {
+  components: { ItemPage, ListType },
   data() {
     return {
       startDate: moment().format("YYYY-MM-DD"),
@@ -105,6 +119,7 @@ export default {
       search: "",
       total: 0,
       tab: null,
+      typeList: "leader",
     };
   },
 
@@ -133,28 +148,26 @@ export default {
     },
   },
   methods: {
-    async getList(period) {
-      await this.store.GET_EMPLOYEEPOSITION({ type: "leader" });
+    async getList(typelist) {
+      await this.store.GET_EMPLOYEEPOSITION({ type: typelist });
       this.tableData = this.store.employee.DATA;
       console.log("this.tableData ", this.tableData);
       this.total = this.store.employee.AllRECORD;
     },
-    onSubmit() {
-      console.log("start", this.formatDate(this.startDate));
-      console.log("start", this.formatDate(this.TODate));
-
-      let period = {
-        start: this.formatDate(this.startDate),
-        end: this.formatDate(this.TODate),
-      };
-
-      // console.log("date:", period);
-      this.getList(period);
+    onSubmit() {},
+    TypeListChange(v) {
+      console.log("v", v);
+      this.typeList = v;
+      this.getList(v);
+    },
+    perPageChange(v) {
+      console.log("v", v);
+      this.perPage = v;
     },
   },
   async mounted() {
     this.loadingStore.openLoading();
-    this.getList(this.startDate, this.TODate);
+    this.getList(this.typeList);
     this.loadingStore.closeLoading();
   },
 };
