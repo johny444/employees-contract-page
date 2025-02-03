@@ -8,14 +8,18 @@
         <v-col align="end"> <LangSwitcher /> </v-col>
       </v-row>
     </div>
+
     <v-tabs v-model="tab" align-tabs="center" color="deep-purple-accent-4">
-      <v-tab :value="1" prepend-icon="fa-solid fa-file-contract">
-        {{ $t("contractList") }}</v-tab
-      >
-      <v-tab :value="2" prepend-icon="fa-solid fa-users">
-        {{ $t("plist") }}</v-tab
-      >
+      <div class="tab">
+        <v-tab :value="1" prepend-icon="fa-solid fa-file-contract">
+          {{ $t("contractList") }}</v-tab
+        >
+        <v-tab :value="2" prepend-icon="fa-solid fa-users">
+          {{ $t("plist") }}</v-tab
+        >
+      </div>
     </v-tabs>
+    <v-divider :thickness="2" inset color="info"></v-divider>
     <!-- <v-layout class="overflow-visible" style="height: 56px">
       <v-bottom-navigation v-model="tab" mode="shift">
         <v-btn :value="1">
@@ -68,5 +72,9 @@ export default {
   max-height: 100vh;
   min-height: 100vh;
   overflow-x: hidden;
+}
+.tab {
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 }
 </style>

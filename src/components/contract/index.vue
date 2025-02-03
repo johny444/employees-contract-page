@@ -35,7 +35,6 @@
             <v-row justify="space-between" no-gutters>
               <v-col cols="9" class="d-flex">
                 <v-text-field
-                  clearable
                   density="comfortable"
                   :label="$t('search')"
                   prepend-inner-icon="fa-solid fa-magnifying-glass"
