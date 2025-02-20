@@ -9,7 +9,7 @@
           isOpen ? 'fa-solid fa-angle-up' : 'fa-solid fa-angle-down'
         "
       >
-        {{ Type }}
+        {{ defalutTitle }}
       </v-btn>
     </template>
     <v-list>
@@ -26,11 +26,10 @@
     
     <script>
 export default {
-  props: ["Type"],
+  props: ["defalutTitle", "items"],
   emits: ["update-Type"], // Declare the emitted event
   data() {
     return {
-      items: [{ title: "leader" }, { title: "all" }],
       isOpen: false,
     };
   },

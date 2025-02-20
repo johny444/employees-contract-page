@@ -18,10 +18,11 @@
               <v-col align="end">
                 <template v-if="tableData.length > 0">
                   <div class="d-flex flex-row-reverse">
-                    <export :dataExport="tableData" />
+                    <Export-excel :dataExport="tableData" />
                     <div class="mx-2"></div>
-                    <list-type
-                      :Type="typeList"
+                    <ListType
+                      :defalutTitle="typeList"
+                      :items="itemList"
                       @update-type="TypeListChange"
                       class="mx-3"
                     />
@@ -78,7 +79,7 @@
     <div>
       <v-row justify="space-between" no-gutters>
         <v-col>
-          <item-page
+          <ItemPage
             :pageProp="perPage"
             @update-pageProp="perPageChange"
             class="pa-5"
@@ -119,9 +120,9 @@ export default {
       total: 0,
       tab: null,
       typeList: "leader",
+      itemList: [{ title: "leader" }, { title: "all" }],
     };
   },
-
   computed: {
     filteredData() {
       const searchTerm = this.search.trim().toLowerCase();
@@ -133,7 +134,6 @@ export default {
       return Math.ceil(this.tableData.length / this.perPage); // Calculate total pages
     },
     paginatedData() {
-      // Slice the tableData for the current page
       const start = (this.currentPage - 1) * this.perPage;
       const end = start + this.perPage;
       return this.filteredData.slice(start, end);
@@ -150,7 +150,6 @@ export default {
     async getList(typelist) {
       await this.store.GET_EMPLOYEEPOSITION({ type: typelist });
       this.tableData = this.store.employee.DATA;
-      console.log("this.tableData ", this.tableData);
       this.total = this.store.employee.AllRECORD;
     },
     onSubmit() {},

@@ -3,7 +3,7 @@
     <div class="header pa-4">
       <v-row>
         <v-col align="start">
-          <h1>{{ $t("empcontractList") }}</h1>
+          <h1>{{ $t("empReportList") }}</h1>
         </v-col>
         <v-col align="end"> <LangSwitcher /> </v-col>
       </v-row>
@@ -17,32 +17,21 @@
         <v-tab :value="2" prepend-icon="fa-solid fa-users">
           {{ $t("plist") }}</v-tab
         >
+        <v-tab :value="3" prepend-icon="fa-solid fa-clock-rotate-left">
+          {{ $t("dayoffHist") }}</v-tab
+        >
       </div>
     </v-tabs>
     <v-divider :thickness="2" inset color="info"></v-divider>
-    <!-- <v-layout class="overflow-visible" style="height: 56px">
-      <v-bottom-navigation v-model="tab" mode="shift">
-        <v-btn :value="1">
-          <v-icon>fa-solid fa-file-contract</v-icon>
-          <span>Contract</span>
-        </v-btn>
-        <v-btn :value="2">
-          <v-icon>fa-solid fa-user-tie</v-icon>
-          <span>Leader</span>
-        </v-btn>
-
-        <v-btn :value="3">
-          <v-icon>fa-solid fa-users</v-icon>
-          <span>All employees</span>
-        </v-btn>
-      </v-bottom-navigation>
-    </v-layout> -->
     <v-tabs-window v-model="tab">
       <v-tabs-window-item :value="1">
         <contract />
       </v-tabs-window-item>
       <v-tabs-window-item :value="2">
         <position />
+      </v-tabs-window-item>
+      <v-tabs-window-item :value="3">
+        <dayoff />
       </v-tabs-window-item>
     </v-tabs-window>
   </div>

@@ -12,6 +12,12 @@ export default {
         date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
       return t + " " + d;
     },
+    getYear(length) {
+      const currentYear = new Date().getFullYear();
+      return Array.from({ length: length }, (_, i) => ({
+        title: (currentYear - i).toString(),
+      }));
+    },
     InsertClassExamInfoToExam(Exams, classExam) {
       return Exams.filter((exam) =>
         classExam.some((classItem) => classItem.id === exam.classExamid)

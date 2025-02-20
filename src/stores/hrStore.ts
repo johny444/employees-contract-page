@@ -34,5 +34,33 @@ export const useHRStore = defineStore("HRStore", {
       this.employee = respone.data;
       return respone;
     },
+    async GET_DayoffHist(body: object) {
+      // console.log("API", import.meta.env.VITE_API);
+      console.log("type", body);
+      let API = import.meta.env.VITE_API;
+      const respone = await axios
+        .post(`${API}/employees-DayoffHist`, body)
+        .catch((err) => {
+          console.log("ERRO form respone", err);
+          return err;
+        });
+      // console.log("respone", respone);
+      this.employee = respone.data;
+      return respone;
+    },
+    async GET_BranchUnit(body: object) {
+      // console.log("API", import.meta.env.VITE_API);
+      console.log("type", body);
+      let API = import.meta.env.VITE_API;
+      const respone = await axios
+        .post(`${API}/employees-BranchUnit`, body)
+        .catch((err) => {
+          console.log("ERRO form respone", err);
+          return err;
+        });
+      // console.log("respone", respone);
+      this.employee = respone.data;
+      return respone;
+    },
   },
 });

@@ -46,7 +46,7 @@
 
               <v-col align="end">
                 <template v-if="tableData.length > 0">
-                  <export :dataExport="tableData" />
+                  <Export-excel :dataExport="tableData" />
                 </template>
               </v-col>
             </v-row>

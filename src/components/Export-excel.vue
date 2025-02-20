@@ -22,7 +22,7 @@ export default {
     };
   },
   mounted() {
-    console.log("dataExport", this.dataExport);
+    // console.log("dataExport", this.dataExport);
   },
   methods: {
     onExport() {

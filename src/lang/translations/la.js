@@ -88,7 +88,7 @@ export default {
   DEPARTMENT: "ພະແນກ",
   FULLNAME: "ຊື່ແລະນາມສະກຸນ",
   total: "ທັງໝົດ",
-  empcontractList: "ລາຍການສັນຍາພະນັກງານ",
+  empReportList: "ບົດລາຍງານພະນັກງານ",
   from: "ແຕ່ວັນທີ",
   to: "ຫາ",
   contractList: "ລາຍການສັນຍາ",
@@ -97,4 +97,8 @@ export default {
   EMPID: "ເລກລະຫັດພະນັກງານ",
   leader: "ຫົວໜ້າ",
   all: "ທັງໝົດ",
+  dayoffHist: "ປະຫວັດວັນລາພັກ",
+  DAYOFFAMOUNT: "ຈຳນວນມື້ພັກ",
+  PARTOFDAY: "ຊ່ວງວັນທີຂໍລາພັກ",
+  DESC: "ຄຳອະທິບາຍ",
 };
