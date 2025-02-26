@@ -20,6 +20,9 @@
         <v-tab :value="3" prepend-icon="fa-solid fa-clock-rotate-left">
           {{ $t("dayoffHist") }}</v-tab
         >
+        <v-tab :value="4" prepend-icon="fa-solid fa-fingerprint">
+          {{ $t("FingerReport") }}</v-tab
+        >
       </div>
     </v-tabs>
     <v-divider :thickness="2" inset color="info"></v-divider>
@@ -32,6 +35,9 @@
       </v-tabs-window-item>
       <v-tabs-window-item :value="3">
         <dayoff />
+      </v-tabs-window-item>
+      <v-tabs-window-item :value="4">
+        <fingerReport />
       </v-tabs-window-item>
     </v-tabs-window>
   </div>

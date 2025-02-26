@@ -104,4 +104,13 @@ export default {
   MAKER: "Maker",
   AUTHID: "Authorized",
   HR_AUTHID: "HR Authorized",
+  FingerReport: "FingerReport List",
+  // Report Finger
+
+  USERNAME: "USERNAME",
+  DEPARTMENTNAME: "DEPARTMENTNAME",
+  DATEVALUE: "DATEVALUE",
+  CLOCKIN: "CLOCKIN",
+  CLOCKOUT: "CLOCKOUT",
+  STATUS: "STATUS",
 };

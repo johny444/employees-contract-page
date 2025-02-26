@@ -178,9 +178,9 @@ export default {
   methods: {
     async getList() {
       let body = {
-        brn_code: "LVB010",
-        dep_code: "LVB010016",
-        leaveyear: "2025",
+        brn_code: "LVB100",
+        dep_code: "LVB100003",
+        leaveyear: new Date().getFullYear(),
       };
       await this.store.GET_DayoffHist(body);
       this.tableData = this.store.employee.DATA;

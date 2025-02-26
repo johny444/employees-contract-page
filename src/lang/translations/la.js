@@ -100,5 +100,12 @@ export default {
   dayoffHist: "ປະຫວັດວັນລາພັກ",
   DAYOFFAMOUNT: "ຈຳນວນມື້ພັກ",
   PARTOFDAY: "ຊ່ວງວັນທີຂໍລາພັກ",
-  DESC: "ຄຳອະທິບາຍ",
+  DESC: "ຄຳອະທິບາຍ", // Report Finger
+  FingerReport: "ລາຍການເຂົ້າວຽກ",
+  USERNAME: "ຊື່",
+  DEPARTMENTNAME: "ຂະແໜງ",
+  DATEVALUE: "ວັນທີ",
+  CLOCKIN: "ຕອນເຊົ້າ",
+  CLOCKOUT: "ຕອນແລງ",
+  STATUS: "ສະຖານະ",
 };
