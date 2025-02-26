@@ -127,10 +127,12 @@
 <script>
 import axios from "axios";
 import moment from "moment";
+import { useFingerStore } from "@/stores/fingerStore";
 
 export default {
   data() {
     return {
+      fingerStore: useFingerStore(),
       startDate: moment().format("YYYY-MM-DD"),
       endDate: moment().format("YYYY-MM-DD"),
       tableData: [],
@@ -165,9 +167,15 @@ export default {
     async fetchData() {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API}/api/finger`
+          `${import.meta.env.VITE_API}/api/finger`, {
+            params: { 
+              branch: 'LVB050', // เพิ่ม branch ตามที่ต้องการ
+              startDate: this.startDate,
+              endDate: this.endDate
+            }
+          }
         );
-        console.log("response.data.message", response.data.message);
+        console.log("response.data.message", response.data);
         if (response.data.message === "Data retrieved successfully") {
           this.tableData = response.data.data;
         }
@@ -181,10 +189,10 @@ export default {
     },
 
     onSubmit() {
-      // Implement filtering based on startDate and endDate
+      // เรียกใช้ fetchData เมื่อผู้ใช้กดปุ่ม Apply
       console.log("Selected Start Date:", this.startDate);
       console.log("Selected End Date:", this.endDate);
-      this.fetchData(); // Call fetch data here if needed
+      this.fetchData(); // ดึงข้อมูลตามวันที่ที่เลือก
     },
 
     perPageChange(newPerPage) {
