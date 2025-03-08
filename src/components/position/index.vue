@@ -148,9 +148,15 @@ export default {
   },
   methods: {
     async getList(typelist) {
-      await this.store.GET_EMPLOYEEPOSITION({ type: typelist });
+      let body = {
+        positionType: typelist.toUpperCase(),
+        ACTION: "GET_POSITION",
+      };
+      console.log("body: ", body);
+      await this.store.GET_HRData(body);
+      // await this.store.GET_EMPLOYEEPOSITION({ type: typelist });
       this.tableData = this.store.employee.DATA;
-      this.total = this.store.employee.AllRECORD;
+      this.total = this.store.employee.LENGTH;
     },
     onSubmit() {},
     TypeListChange(v) {
@@ -172,15 +178,5 @@ export default {
 </script>
   
   <style scoped>
-.main-container {
-  background-color: rgb(242, 243, 247);
-  max-height: 100vh;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-.label {
-  margin-bottom: 1rem;
-}
 </style>
   

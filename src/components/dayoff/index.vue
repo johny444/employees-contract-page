@@ -181,11 +181,13 @@ export default {
         brn_code: "LVB100",
         dep_code: "LVB100003",
         leaveyear: new Date().getFullYear(),
+        ACTION: "GET_DAYOFF",
       };
-      await this.store.GET_DayoffHist(body);
+      await this.store.GET_HRData(body);
+      // await this.store.GET_DayoffHist(body);
       this.tableData = this.store.employee.DATA;
-
-      this.total = this.store.employee.AllRECORD;
+      console.log("Dayoff: ", this.tableData);
+      this.total = this.store.employee.LENGTH;
     },
     async getBranch() {
       let body = {
@@ -222,10 +224,12 @@ export default {
         leaveyear: this.year,
         brn_code: "LVB" + this.branchDefault,
         dep_code: selectedUnit ? selectedUnit.unitCode : null, // Get unitCode from unit list
+        ACTION: "GET_DAYOFF",
       };
 
       console.log("object", body);
-      await this.store.GET_DayoffHist(body);
+      await this.store.GET_HRData(body);
+      // await this.store.GET_DayoffHist(body);
       this.tableData = this.store.employee.DATA;
 
       this.total = this.store.employee.AllRECORD;
@@ -251,7 +255,7 @@ export default {
   },
   async mounted() {
     this.loadingStore.openLoading();
-    this.getList(this.typeList);
+    this.getList();
     this.getBranch();
     console.log("mount", this.branchDefault);
 

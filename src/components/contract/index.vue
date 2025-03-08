@@ -164,10 +164,17 @@ export default {
     },
   },
   methods: {
-    async getList(period) {
-      await this.store.GET_EMPLOYEELSIT(period);
+    async getList(startDate, endDate) {
+      let body = {
+        start: this.formatDate(startDate),
+        end: this.formatDate(endDate),
+        ACTION: "GET_CONTRACT",
+      };
+      console.log("body: ", body);
+      await this.store.GET_HRData(body);
       this.tableData = this.store.employee.DATA;
-      this.total = this.store.employee.AllRECORD;
+      // console.log("object", this.store.employee);
+      this.total = this.store.employee.LENGTH;
     },
     onSubmit() {
       console.log("start", this.formatDate(this.startDate));
@@ -179,7 +186,7 @@ export default {
       };
 
       // console.log("date:", period);
-      this.getList(period);
+      this.getList(period.start, period.end);
     },
     perPageChange(v) {
       console.log("v", v);
@@ -187,6 +194,7 @@ export default {
     },
   },
   async mounted() {
+    console.log("Date:", this.startDate);
     this.loadingStore.openLoading();
     this.getList(this.startDate, this.endDate);
     this.loadingStore.closeLoading();
@@ -195,14 +203,4 @@ export default {
 </script>
 
 <style scoped>
-.main-container {
-  background-color: rgb(242, 243, 247);
-  max-height: 100vh;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-.label {
-  margin-bottom: 1rem;
-}
 </style>
