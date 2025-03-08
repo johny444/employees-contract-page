@@ -23,9 +23,7 @@
             ></v-text-field>
           </v-col>
           <v-col cols="2">
-            <v-btn color="teal-darken-3" class="mb-6" type="submit"
-              >Apply</v-btn
-            >
+            <v-btn color="teal-darken-3" class="mb-6" type="submit">Apply</v-btn>
           </v-col>
           <v-col class="left">
             <v-row justify="space-between" no-gutters>
@@ -78,24 +76,18 @@
             <td class="text-center">{{ item.BRANCH }}</td>
             <td class="text-center">{{ item.DEPARTMENTNAME }}</td>
             <td class="text-center">{{ formatDate(item.DATEVALUE) }}</td>
-            <td class="text-center">
-              {{ item.CLOCKIN ? formatDate(item.CLOCKIN) : "-" }}
-            </td>
-            <td class="text-center">
-              {{ item.CLOCKOUT ? formatDate(item.CLOCKOUT) : "-" }}
-            </td>
+            <td class="text-center">{{ item.CLOCKIN ? formatDate(item.CLOCKIN) : "-" }}</td>
+            <td class="text-center">{{ item.CLOCKOUT ? formatDate(item.CLOCKOUT) : "-" }}</td>
             <td class="text-center">{{ item.STATUS }}</td>
           </tr>
         </template>
-        <template v-else>
-          <tr>
-            <td colspan="8">
-              <div style="margin-top: 1rem; text-align: center">
-                <NoData />
-              </div>
-            </td>
-          </tr>
-        </template>
+        <tr v-if="paginatedData.length === 0">
+          <td colspan="9">
+            <div style="margin-top: 1rem; text-align: center">
+              <NoData />
+            </div>
+          </td>
+        </tr>
       </tbody>
     </v-table>
 
@@ -127,16 +119,18 @@
 <script>
 import axios from "axios";
 import moment from "moment";
+import { useFingerStore } from "@/stores/fingerStore";
 
 export default {
   data() {
     return {
+      fingerStore: useFingerStore(),
       startDate: moment().format("YYYY-MM-DD"),
       endDate: moment().format("YYYY-MM-DD"),
       tableData: [],
       search: "",
-      rowsPerPage: 10, // Default rows per page
-      currentPage: 1, // Current page number
+      rowsPerPage: 10,
+      currentPage: 1,
     };
   },
 
@@ -165,11 +159,18 @@ export default {
     async fetchData() {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API}/api/finger`
+          `${import.meta.env.VITE_API}/api/finger`, {
+            params: { 
+              branch: 'LVB050', // Specify branch if necessary
+              startDate: this.startDate,
+              endDate: this.endDate
+            }
+          }
         );
-        console.log("response.data.message", response.data.message);
-        if (response.data.message === "Data retrieved successfully") {
+        if (response.data.message === "ดึงข้อมูลสำเร็จ") {
           this.tableData = response.data.data;
+        } else {
+          console.error("Unexpected response message:", response.data.message);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -181,10 +182,7 @@ export default {
     },
 
     onSubmit() {
-      // Implement filtering based on startDate and endDate
-      console.log("Selected Start Date:", this.startDate);
-      console.log("Selected End Date:", this.endDate);
-      this.fetchData(); // Call fetch data here if needed
+      this.fetchData(); // Fetch data according to selected dates
     },
 
     perPageChange(newPerPage) {
