@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <main-container />
-  </div>
+  <div><h1>Test Dynamic page</h1></div>
 </template>
 
 <script>
@@ -21,8 +19,5 @@ export default {
 };
 </script>
 
-
-<style scoped>
+<style lang="scss" scoped>
 </style>
-
-

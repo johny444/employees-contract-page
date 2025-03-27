@@ -23,7 +23,9 @@
             ></v-text-field>
           </v-col>
           <v-col cols="2">
-            <v-btn color="teal-darken-3" class="mb-6" type="submit">Apply</v-btn>
+            <v-btn color="teal-darken-3" class="mb-6" type="submit"
+              >Apply</v-btn
+            >
           </v-col>
           <v-col class="left">
             <v-row justify="space-between" no-gutters>
@@ -42,7 +44,7 @@
 
               <v-col align="end">
                 <template v-if="paginatedData.length > 0">
-                  <export :dataExport="paginatedData" />
+                  <Export-excel :dataExport="paginatedData" />
                 </template>
               </v-col>
             </v-row>
@@ -76,8 +78,12 @@
             <td class="text-center">{{ item.BRANCH }}</td>
             <td class="text-center">{{ item.DEPARTMENTNAME }}</td>
             <td class="text-center">{{ formatDate(item.DATEVALUE) }}</td>
-            <td class="text-center">{{ item.CLOCKIN ? formatDate(item.CLOCKIN) : "-" }}</td>
-            <td class="text-center">{{ item.CLOCKOUT ? formatDate(item.CLOCKOUT) : "-" }}</td>
+            <td class="text-center">
+              {{ item.CLOCKIN ? formatDate(item.CLOCKIN) : "-" }}
+            </td>
+            <td class="text-center">
+              {{ item.CLOCKOUT ? formatDate(item.CLOCKOUT) : "-" }}
+            </td>
             <td class="text-center">{{ item.STATUS }}</td>
           </tr>
         </template>
@@ -159,12 +165,13 @@ export default {
     async fetchData() {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API}/api/finger`, {
-            params: { 
-              branch: 'LVB050', // Specify branch if necessary
+          `${import.meta.env.VITE_API}/api/finger`,
+          {
+            params: {
+              branch: "LVB050", // Specify branch if necessary
               startDate: this.startDate,
-              endDate: this.endDate
-            }
+              endDate: this.endDate,
+            },
           }
         );
         if (response.data.message === "ดึงข้อมูลสำเร็จ") {

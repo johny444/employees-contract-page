@@ -55,18 +55,7 @@
       </div>
     </v-form>
     <v-table>
-      <thead>
-        <tr>
-          <th>{{ $t("rowNum") }}</th>
-          <th>{{ $t("FULLNAME") }}</th>
-          <th>{{ $t("CONTRACTNO") }}</th>
-          <th>{{ $t("DURATION") }}</th>
-          <th>{{ $t("STARTDATE") }}</th>
-          <th>{{ $t("ENDDATE") }}</th>
-          <th>{{ $t("POSITION") }}</th>
-          <th>{{ $t("DEPARTMENT") }}</th>
-        </tr>
-      </thead>
+      <table-header :data-header="header" />
       <tbody>
         <template v-if="paginatedData.length > 0">
           <tr v-for="(item, i) in paginatedData" :key="item.name">
@@ -136,6 +125,16 @@ export default {
       search: "",
       total: 0,
       tab: null,
+      header: [
+        "rowNum",
+        "FULLNAME",
+        "CONTRACTNO",
+        "DURATION",
+        "STARTDATE",
+        "ENDDATE",
+        "POSITION",
+        "DEPARTMENT",
+      ],
     };
   },
 

@@ -51,22 +51,7 @@
       </div>
     </v-form>
     <v-table>
-      <thead>
-        <tr>
-          <th>{{ $t("rowNum") }}</th>
-          <th>{{ $t("FULLNAME") }}</th>
-          <th>{{ $t("STARTDATE") }}</th>
-          <th>{{ $t("ENDDATE") }}</th>
-          <th>{{ $t("DAYOFFAMOUNT") }}</th>
-          <th>{{ $t("PARTOFDAY") }}</th>
-          <th>{{ $t("DESC") }}</th>
-          <th>{{ $t("status") }}</th>
-          <!-- <th>{{ $t("MAKER") }}</th> -->
-          <th>{{ $t("AUTHID") }}</th>
-          <th>{{ $t("HR_AUTHID") }}</th>
-          <th>{{ $t("DEPARTMENT") }}</th>
-        </tr>
-      </thead>
+      <table-header :data-header="header" />
       <tbody>
         <template v-if="paginatedData.length > 0">
           <tr v-for="(item, i) in paginatedData" :key="item.name">
@@ -149,6 +134,19 @@ export default {
       unitDefault: "",
       branch: [],
       unit: [],
+      header: [
+        "rowNum",
+        "FULLNAME",
+        "STARTDATE",
+        "ENDDATE",
+        "DAYOFFAMOUNT",
+        "PARTOFDAY",
+        "DESC",
+        "status",
+        "AUTHID",
+        "HR_AUTHID",
+        "DEPARTMENT",
+      ],
     };
   },
 
